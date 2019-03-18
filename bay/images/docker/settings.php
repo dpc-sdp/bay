@@ -41,7 +41,7 @@ $settings['file_scan_ignore_directories'] = [
 $settings['entity_update_batch_size'] = 50;
 
 // Environment indicator settings.
-$config['environment_indicator.indicator']['name'] = $config['environment'];
+$config['environment_indicator.indicator']['name'] = isset($settings['environment']) ? $settings['environment'] : 'local';
 $config['environment_indicator.indicator']['bg_color'] = !empty($config['environment_indicator.indicator']['bg_color']) ? $config['environment_indicator.indicator']['bg_color'] : 'green';
 
 // Disable local split.
