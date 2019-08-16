@@ -76,7 +76,12 @@ if (getenv('ENABLE_REDIS')) {
     $settings['container_yamls'][] = $contrib_path . '/redis/example.services.yml';
   }
   catch (\Exception $error) {
-    // Use default cache settings.
+    // Make the reqeust unacacheable until redis is available.
+    // This will ensure that cache partials are not added to separate bins,
+    // Drupal is available even when Redis is down and that when redis is
+    // available again we can start filling the correct bins up again.
+    $settings['container_yamls'][] = '/bay/redis-unavailable.services.yml';
+    $settings['cache']['default'] = 'cache.backend.null';
   }
 }
 
