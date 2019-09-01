@@ -1,4 +1,4 @@
-FROM amazeeio/php:7.1-fpm-v0.24.0
+FROM amazeeio/php:7.1-fpm
 
 # Add ClamAV.
 RUN apk add --update clamav clamav-libunrar \
