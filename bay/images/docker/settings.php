@@ -48,41 +48,17 @@ $config['environment_indicator.indicator']['bg_color'] = !empty($config['environ
 $config['config_split.config_split.local']['status'] = FALSE;
 
 // Redis.
-if (getenv('ENABLE_REDIS')) {
-  $redis_host = getenv('REDIS_HOST') ?: 'redis';
-  $redis_port = getenv('REDIS_PORT') ?: '6379';
-  try {
-    if (drupal_installation_attempted()) {
-      throw new \Exception('Drupal installation underway.');
-    }
-
-    $redis = new \Redis();
-    $redis->connect($redis_host, $redis_port);
-    $response = $redis->ping();
-
-    if (strpos($response, 'PONG') === 'FALSE') {
-      throw new \Exception('Redis reachable but is not responding correctly.');
-    }
-
-    $settings['redis.connection']['host'] = 'redis';
-    $settings['redis.connection']['port'] = '6379';
-    $settings['redis.connection']['password'] = '';
-    $settings['redis.connection']['base'] = 0;
-    $settings['redis.connection']['interface'] = 'PhpRedis';
-    $settings['cache']['default'] = 'cache.backend.redis';
-    $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
-    $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
-    $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
-    $settings['container_yamls'][] = $contrib_path . '/redis/example.services.yml';
-  }
-  catch (\Exception $error) {
-    // Make the reqeust unacacheable until redis is available.
-    // This will ensure that cache partials are not added to separate bins,
-    // Drupal is available even when Redis is down and that when redis is
-    // available again we can start filling the correct bins up again.
-    $settings['container_yamls'][] = '/bay/redis-unavailable.services.yml';
-    $settings['cache']['default'] = 'cache.backend.null';
-  }
+if (!drupal_installation_attempted()) {
+  $settings['redis.connection']['host'] = 'redis';
+  $settings['redis.connection']['port'] = '6379';
+  $settings['redis.connection']['password'] = '';
+  $settings['redis.connection']['base'] = 0;
+  $settings['redis.connection']['interface'] = 'PhpRedis';
+  $settings['cache']['default'] = 'cache.backend.redis';
+  $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+  $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+  $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+  $settings['container_yamls'][] = $contrib_path . '/redis/example.services.yml';
 }
 
 // Expiration of cached pages on Varnish to 15 min
