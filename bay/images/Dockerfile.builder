@@ -22,4 +22,5 @@ RUN apk update \
 # Add common drupal config.
 RUN mkdir /bay
 COPY docker/services.yml /bay
+COPY docker/redis-unavailable.services.yml /bay
 COPY docker/settings.php /bay
