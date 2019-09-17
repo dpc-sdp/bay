@@ -49,7 +49,8 @@ $config['config_split.config_split.local']['status'] = FALSE;
 
 if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
-  $redis_port = getenv('REDIS_PORT') ?: '6379';
+  // Kube service discovery sets REDIS_PORT to a TCP address.
+  $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
   try {
     if (drupal_installation_attempted()) {
       throw new \Exception('Drupal installation underway.');
