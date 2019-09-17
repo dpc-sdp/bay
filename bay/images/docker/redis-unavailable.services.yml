@@ -1,0 +1,7 @@
+### Lagoon Drupal 8 redis unavailable services.
+#
+# Add the cache backend null service to be used if redis is unavailable.
+#
+services:
+  cache.backend.null:
+    class: Drupal\Core\Cache\NullBackendFactory
