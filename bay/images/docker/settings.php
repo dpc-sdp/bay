@@ -171,3 +171,13 @@ if (getenv('LAGOON_ENVIRONMENT_TYPE')) {
     $settings['container_yamls'][] = $settings_path . '/envs/' . getenv('LAGOON_ENVIRONMENT_TYPE') . '/services.yml';
   }
 }
+
+// Include branch specific settings and services files.
+if (getenv('LAGOON_GIT_SAFE_BRANCH')) {
+  if (file_exists($settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/settings.php')) {
+    include $settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/settings.php';
+  }
+  if (file_exists($settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/services.yml')) {
+    $settings['container_yamls'][] = $settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/services.yml';
+  }
+}
