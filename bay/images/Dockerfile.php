@@ -1,4 +1,4 @@
-FROM amazeeio/php:7.1-fpm
+FROM amazeeio/php:7.2-fpm
 
 # Add blackfire probe.
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
