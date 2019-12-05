@@ -1,7 +1,0 @@
-**/node_modules
-.dockerignore
-.git
-tests
-.cache
-Makefile
-local-dev/minishift

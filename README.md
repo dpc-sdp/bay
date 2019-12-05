@@ -12,8 +12,8 @@
 * [Attribution](#Attribution)
 
 # About
-Bay is a fully managed platform and hosting environment that provides an open Platform as a Service model managed by SDP. It: 
- - is an open-source hosting platform based on Lagoon. 
+Bay is a fully managed platform and hosting environment that provides an open Platform as a Service model managed by SDP. It:
+ - is an open-source hosting platform based on Lagoon.
  - allows agencies to build, test and deliver websites via the cloud.
  - is a Kubernetes-based (OpenShift) Docker container hosting platform with auto-scaling, auto-recovery and high-availability at core.
  - is based on open-source project Lagoon.
@@ -28,7 +28,7 @@ Learn more from https://lagoon.readthedocs.io/en/latest/
 [Open an issue](https://github.com/dpc-sdp/bay) on GitHub or submit a pull request with suggested changes.
 
 # Support
-[Digital Engagement, Department of Premier and Cabinet, Victoria, Australia](https://github.com/dpc-sdp) 
+[Digital Engagement, Department of Premier and Cabinet, Victoria, Australia](https://github.com/dpc-sdp)
 is a maintainer of this package.
 
 # License

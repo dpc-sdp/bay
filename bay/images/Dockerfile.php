@@ -16,6 +16,7 @@ COPY docker/redis-unavailable.services.yml /bay
 COPY docker/settings.php /bay
 
 ENV TZ=Australia/Melbourne
+
 RUN  apk add --no-cache tzdata \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
