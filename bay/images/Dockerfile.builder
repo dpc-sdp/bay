@@ -1,4 +1,4 @@
-FROM amazeeio/php:7.1-cli-drupal
+FROM amazeeio/php:7.2-cli-drupal
 
 ENV WEBROOT=docroot \
     COMPOSER_ALLOW_SUPERUSER=1 \
@@ -11,13 +11,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 RUN apk update \
     && apk del nodejs nodejs-current yarn \
-    && apk add nodejs-npm patch rsync --update-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/ \
-    && rm -rf /var/cache/apk/* \
-    && apk add --update jq clamav clamav-libunrar \
-    && rm -rf /var/lib/clamav/daily.cvd \
-    && freshclam --no-warnings || true \
-    && apk del --no-cache curl \
-    && apk add --no-cache "curl=7.61.1-r2" --repository http://dl-cdn.alpinelinux.org/alpine/v3.8/main/
+    && apk add nodejs-npm patch rsync --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/
 
 # Add common drupal config.
 RUN mkdir /bay

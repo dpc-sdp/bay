@@ -1,9 +1,0 @@
-#dependencies
-node_modules
-
-#artifacts
-.next
-build
-
-#environment
-.env

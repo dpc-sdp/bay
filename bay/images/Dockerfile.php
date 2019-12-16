@@ -1,11 +1,4 @@
-FROM amazeeio/php:7.1-fpm
-
-# Add ClamAV.
-RUN apk add --update clamav clamav-libunrar \
-    && rm -rf /var/lib/clamav/daily.cvd \
-    && freshclam --no-warnings || true \
-    && apk del --no-cache curl \
-    && apk add --no-cache "curl=7.61.1-r2" --repository http://dl-cdn.alpinelinux.org/alpine/v3.8/main/
+FROM amazeeio/php:7.2-fpm
 
 # Add blackfire probe.
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
@@ -23,6 +16,7 @@ COPY docker/redis-unavailable.services.yml /bay
 COPY docker/settings.php /bay
 
 ENV TZ=Australia/Melbourne
+
 RUN  apk add --no-cache tzdata \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone

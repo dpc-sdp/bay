@@ -47,6 +47,9 @@ $config['environment_indicator.indicator']['bg_color'] = !empty($config['environ
 // Disable local split.
 $config['config_split.config_split.local']['status'] = FALSE;
 
+// Set Stage File Proxy to use hotlink platform-wide
+$config['stage_file_proxy.settings']['hotlink'] = TRUE;
+
 if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
   // Kube service discovery sets REDIS_PORT to a TCP address.
@@ -169,5 +172,15 @@ if (getenv('LAGOON_ENVIRONMENT_TYPE')) {
   }
   if (file_exists($settings_path . '/envs/' . getenv('LAGOON_ENVIRONMENT_TYPE') . '/services.yml')) {
     $settings['container_yamls'][] = $settings_path . '/envs/' . getenv('LAGOON_ENVIRONMENT_TYPE') . '/services.yml';
+  }
+}
+
+// Include branch specific settings and services files.
+if (getenv('LAGOON_GIT_SAFE_BRANCH')) {
+  if (file_exists($settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/settings.php')) {
+    include $settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/settings.php';
+  }
+  if (file_exists($settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/services.yml')) {
+    $settings['container_yamls'][] = $settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/services.yml';
   }
 }
