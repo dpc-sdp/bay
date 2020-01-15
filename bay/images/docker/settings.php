@@ -10,7 +10,7 @@ $settings_path = $app_root . DIRECTORY_SEPARATOR . 'sites/default';
 $contrib_path = $app_root . DIRECTORY_SEPARATOR . (is_dir('modules/contrib') ? 'modules/contrib' : 'modules');
 
 // Database connection.
-$databases['default']['default'] = [
+$connection_info = [
   'driver' => 'mysql',
   'database' => getenv('MARIADB_DATABASE') ?: 'drupal',
   'username' => getenv('MARIADB_USERNAME') ?: 'drupal',
@@ -19,6 +19,33 @@ $databases['default']['default'] = [
   'port' => 3306,
   'prefix' => '',
 ];
+
+$databases['default']['default'] = $connection_info;
+
+// If Lagoon defines the DB_READREPLICA_HOSTS we add this to the available
+// database connections. This allows core services to offload some
+// queries to the replica.
+//
+// @see core/services.yml database.replica
+if (getenv('DB_READREPLICA_HOSTS')) {
+  $replica_hosts = explode(' ', getenv('DB_READREPLICA_HOSTS'));
+  $replica_hosts = array_map('trim', $replica_hosts);
+
+  // This allows --database=reader so Drush can be set to target the
+  // reader (specifically for sql-dump and sql-sync).
+  $database['reader']['default'] = array_merge(
+    $connection_info,
+    ['host' => $replica_hosts[0]]
+  );
+
+  foreach ($replica_hosts as $replica_host) {
+    $databases['default']['replica'][] = array_merge(
+      $connection_info,
+      ['host' => $replica_host]
+    );
+  }
+
+}
 
 // Varnish & Reverse proxy settings.
 $settings['reverse_proxy'] = TRUE;
