@@ -183,6 +183,46 @@ if (getenv('TMP')) {
 // Hash Salt.
 $settings['hash_salt'] = hash('sha256', getenv('LAGOON_PROJECT'));
 
+// Configure platformwide cache tag blacklists.
+// These will be excluded when Drupal outputs the cache tag list
+// and will not be forwarded to the reverse proxy.
+$tag_list = [
+  '4xx-response',
+  'theme_registry',
+  'route_match',
+  'routes',
+  'config:filter.format',
+  'config:filter.settings',
+  'config:jsonapi_extras',
+  'config:jsonapi_resource_config_list',
+  'config:paragraphs',
+  'config:system.menu.site-main',
+  'config:user.role.anonymous',
+  'extensions',
+  'media_view',
+  'http_response',
+];
+
+// Allow projects to extend the blacklist.
+$tag_additions = getenv('SDP_CACHE_TAG_BLACKLIST');
+
+if (!empty($tag_additions)) {
+  $tag_additions = explode(',', $tag_additions);
+  $tag_additions = array_map('trim', $tag_additions);
+  $tag_list = array_merge($tag_list, $tag_additions);
+}
+
+// Allow projects to remove tags from the blacklist.
+$tag_whitelist = getenv('SDP_CACHE_TAG_WHITELIST');
+
+if (!empty($tag_whitelist)) {
+  $tag_whitelist = explode(',', $tag_whitelist);
+  $tag_whitelist = array_map('trim', $tag_whitelist);
+  $tag_list = array_diff($tag_list, $tag_whitelist);
+}
+
+$config['purge_queuer_coretags.settings']['blacklist'] = $tag_list;
+
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
