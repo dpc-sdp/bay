@@ -1,9 +1,9 @@
 FROM php:7.2-cli
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
-    DOCKER_VERSION=17.03.2 \
-    DOCKER_COMPOSE_VERSION=1.19.0 \
-    HUB_VERSION=2.2.9
+    DOCKER_VERSION=19.03.8 \
+    DOCKER_COMPOSE_VERSION=1.25.5 \
+    HUB_VERSION=2.14.2
 
 # Install git
 RUN apt-get update -qq && apt-get install -qqy \
@@ -15,7 +15,7 @@ RUN apt-get update -qq && apt-get install -qqy \
     zip
 
 # Install docker.
-RUN curl -L -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION-ce.tgz \
+RUN curl -L -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz \
     && tar -xz -C /tmp -f /tmp/docker.tgz \
     && mv /tmp/docker/* /usr/bin
 
