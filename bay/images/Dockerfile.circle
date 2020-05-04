@@ -35,3 +35,6 @@ RUN composer global require danielbachhuber/composer-lock-updater
 RUN curl -L -o /tmp/hub.tgz https://github.com/github/hub/releases/download/v$HUB_VERSION/hub-linux-amd64-$HUB_VERSION.tgz \
     && tar -xz -C /tmp -f /tmp/hub.tgz \
     && mv /tmp/hub-linux-amd64-$HUB_VERSION/bin/* /usr/bin
+
+# Set bash as the default shell for php.
+RUN rm -f /bin/sh && ln -s /bin/bash /bin/sh
