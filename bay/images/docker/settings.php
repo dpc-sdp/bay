@@ -8,6 +8,7 @@
 $bay_settings_path = __DIR__;
 $settings_path = $app_root . DIRECTORY_SEPARATOR . 'sites/default';
 $contrib_path = $app_root . DIRECTORY_SEPARATOR . (is_dir('modules/contrib') ? 'modules/contrib' : 'modules');
+$lagoon_env_type = getenv('LAGOON_ENVIRONMENT_TYPE') ?: 'local';
 
 // Database connection.
 $connection_info = [
@@ -223,6 +224,22 @@ if (!empty($tag_whitelist)) {
 
 $config['purge_queuer_coretags.settings']['blacklist'] = $tag_list;
 
+// Configure the elast search hash.
+if ($lagoon_env_type != 'local') {
+  // The hash is used to provide multi-tenancy for the ES index.
+  $hash = getenv('SEARCH_HASH');
+  $search_url = getenv('SEARCH_URL') ?: 'nginx.sdp-elastic-nonprod.svc:8080';
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', $hash, $search_url);
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['username'] = getenv('SEARCH_AUTH_USER');
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
+}
+
+// Configure the ClamAV defaults.
+if ($lagoon_env_type != 'local') {
+  $config['clamav.settings']['scan_mode'] = getenv('CLAMAV_SCANMODE') ?: 0;
+  $config['clamav.settings']['mode_daemon_tcpip']['hostname'] = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
+  $config['clamav.settings']['mode_daemon_tcpip']['port'] = getenv('CLAMAV_PORT') ?: 3310;
+}
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
