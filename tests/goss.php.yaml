@@ -1,0 +1,10 @@
+file:
+  /usr/local/etc/php/conf.d/00-bay.ini:
+    exists: true
+    mode: "0644"
+    size: 31
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - upload_max_filesize=100M

@@ -1,5 +1,12 @@
 FROM amazeeio/php:7.2-fpm
 
+# PHP ini files cannot be updated at runtime so the standard
+# env entrypoint that calls envplate cannot be used. As a
+# result we need to include ARG/ENV support for the varibales
+# so that this limit can be overridden per project if required.
+ARG BAY_UPLOAD_LIMIT
+ENV BAY_UPLOAD_LIMIT=${BAY_UPLOAD_LIMIT:-100M}
+
 # Add blackfire probe.
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && mkdir -p /blackfire \
@@ -8,6 +15,9 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && mv /blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
     rm -rf /blackfire
+
+COPY php/00-bay.ini /usr/local/etc/php/conf.d/
+RUN ep /usr/local/etc/php/conf.d/00-bay.ini
 
 # Add common drupal config.
 RUN mkdir /bay

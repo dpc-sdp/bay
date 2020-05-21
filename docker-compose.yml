@@ -1,0 +1,56 @@
+version: '2.3'
+
+x-environment:
+  &default-environment
+    LAGOON_ROUTE: ${LOCALDEV_URL:-http://bay.docker.amazee.io}
+
+x-args:
+  &default-args
+    LAGOON_IMAGE_VERSION: ${LAGOON_IMAGE_VERSION:-latest}
+
+services:
+  cli:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.builder
+      args:
+        << : *default-args
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/cli
+    environment:
+      << : *default-environment
+
+  nginx:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.nginx
+      args:
+        << : *default-args
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx
+    environment:
+      << : *default-environment
+
+  php:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.php
+      args:
+        << : *default-args
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/php
+    environment:
+      << : *default-environment
+
+  node:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.node-slim
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/node
+    environment:
+      << : *default-environment
+
+  mariadb:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.mariadb
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/mariadb
+    environment:
+      << : *default-environment
