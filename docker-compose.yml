@@ -54,3 +54,12 @@ services:
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/mariadb
     environment:
       << : *default-environment
+
+
+  circle:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.circle
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/circle
+    environment:
+      << : *default-environment

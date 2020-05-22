@@ -1,4 +1,4 @@
-FROM amazeeio/php:7.2-cli-drupal
+FROM amazeeio/php:7.3-cli-drupal
 
 ENV WEBROOT=docroot \
     COMPOSER_ALLOW_SUPERUSER=1 \

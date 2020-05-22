@@ -1,4 +1,4 @@
-FROM amazeeio/php:7.2-fpm
+FROM amazeeio/php:7.3-fpm
 
 # PHP ini files cannot be updated at runtime so the standard
 # env entrypoint that calls envplate cannot be used. As a
