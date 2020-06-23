@@ -1,0 +1,4 @@
+[client]
+# This needs to match RDS max allowed packets otherwise we
+# can create backups that cannot be imported.
+max_allowed_packet=${MARIADB_MAX_ALLOWED_PACKET:-16M}

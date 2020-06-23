@@ -13,6 +13,9 @@ RUN apk update \
     && apk del nodejs nodejs-current yarn \
     && apk add nodejs-npm patch rsync jq --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/
 
+# Add MySQL client configuration.
+COPY php/mariadb-client.cnf /etc/my.cnf.d/
+
 # Add common drupal config.
 RUN mkdir /bay
 COPY docker/services.yml /bay

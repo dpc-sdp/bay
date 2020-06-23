@@ -19,6 +19,8 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 COPY php/00-bay.ini /usr/local/etc/php/conf.d/
 RUN ep /usr/local/etc/php/conf.d/00-bay.ini
 
+COPY php/mariadb-client.cnf /etc/my.cnf.d/
+
 # Add common drupal config.
 RUN mkdir /bay
 COPY docker/services.yml /bay
