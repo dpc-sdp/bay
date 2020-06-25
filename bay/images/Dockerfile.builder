@@ -15,6 +15,7 @@ RUN apk update \
 
 # Add MySQL client configuration.
 COPY php/mariadb-client.cnf /etc/my.cnf.d/
+RUN fix-permissions /etc/my.cnf.d/
 
 # Add common drupal config.
 RUN mkdir /bay
