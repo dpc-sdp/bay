@@ -1,0 +1,9 @@
+FROM hashicorp/terraform:light AS terraform
+FROM integratedexperts/ci-builder:latest
+
+# Install SDP ci dependencies.
+COPY --from=terraform /bin/terraform /bin/terraform
+RUN apt-get update && \
+    apt-get install ansible python python3-distutils ansible-lint python-pip rsync jq hub -y && \
+    apt-get clean -y
+RUN pip install flake8 awscli yamllint
