@@ -24,3 +24,34 @@ jobs:
       - run:
           name: Test images
           command: tests/run.sh
+
+  trigger_dockerhub:
+    docker:
+      - image: integratedexperts/ci-builder
+        environment:
+          DOCKER_VERSION: 18.09.2
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Trigger a Docker Hub build for the images
+          command: .circleci/scripts/trigger-dockerhub.sh
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+
+  weekly_build:
+    jobs:
+      - build
+      - trigger_dockerhub
+    triggers:
+      - schedule:
+          cron: 0 20 * * 0
+          filters:
+            branches:
+              only:
+                - develop
+
