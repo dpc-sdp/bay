@@ -63,3 +63,12 @@ services:
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/circle
     environment:
       << : *default-environment
+
+  ci-builder:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.ci-builder
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/ci-builder
+    command: tail -F anything
+    environment:
+      << : *default-environment
