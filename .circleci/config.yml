@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: integratedexperts/ci-builder
+      - image: singledigital/bay-ci-builder:edge
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKER_VERSION: 18.09.2
@@ -27,7 +27,7 @@ jobs:
 
   trigger_dockerhub:
     docker:
-      - image: integratedexperts/ci-builder
+      - image: singledigital/bay-ci-builder:edge
         environment:
           DOCKER_VERSION: 18.09.2
     steps:
