@@ -154,7 +154,11 @@ if (getenv('TMP')) {
 }
 
 // Hash Salt.
-$settings['hash_salt'] = hash('sha256', getenv('LAGOON_PROJECT'));
+$settings['hash_salt'] = getenv('DRUPAL_HASH_SALT');
+if (empty($settings['hash_salt'])) {
+  throw new \Exception('DRUPAL_HASH_SALT missing.');
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
