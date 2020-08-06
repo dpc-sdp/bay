@@ -4,9 +4,21 @@ FROM integratedexperts/ci-builder:latest
 # Install SDP ci dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
 RUN apt-get update && \
-    apt-get install ansible python python3-distutils ansible-lint python-pip rsync jq hub -y && \
+    apt-get install python3 python3-distutils python3-pip rsync jq hub -y && \
     apt-get clean -y
-RUN pip install flake8 awscli yamllint
+
+# Support the python shebang.
+# @DEPRECATED
+RUN ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+
+# Manage python deps via pip rather than apt.
+# ansible via apt is 2.7.7 rather than 2.8+
+RUN pip install ansible ansible-lint flake8 awscli yamllint
+
+# yamllint install pyyaml@3.13 - we have been using 5+ this is backwards
+# compatible for yamllint and ansible and means our inventory scripts will
+# work as expected.
+RUN pip install -U pyyaml==5.3.1 --force-reinstall
 
 # Install Lagoon CLI.
 RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.9.2/lagoon-cli-0.9.2-linux-amd64" -o /usr/local/bin/lagoon && \
