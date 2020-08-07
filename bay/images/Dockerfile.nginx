@@ -3,7 +3,13 @@ FROM amazeeio/nginx-drupal
 ENV WEBROOT=docroot
 ENV TZ=Australia/Melbourne
 
+# Add ingress protection environment variable supprot to nginx.
+RUN sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_ENABLED\;' /etc/nginx/nginx.conf \
+    && sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_HEADER\;' /etc/nginx/nginx.conf \
+    && sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_PSK\;' /etc/nginx/nginx.conf
+
 COPY nginx/helpers/ /etc/nginx/helpers/
+COPY nginx/prepend/ /etc/nginx/conf.d/drupal/
 
 RUN fix-permissions /etc/nginx \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
