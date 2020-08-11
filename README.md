@@ -24,6 +24,24 @@ Lagoon solves what developers are dreaming about: A system that allows developer
 # Use
 Learn more from https://lagoon.readthedocs.io/en/latest/
 
+# Bay Features
+
+## Lock-down Ingress with Pre-Shared Key
+
+Using the nginx image, you can lock down access to your application with using a pre-shared key added at your CDN. 
+
+Set these environment variables in your nginx deployment:
+
+- `BAY_INGRESS_HEADER` defines the header which has the pre-shared key.
+- `BAY_INGRESS_PSK` is the token / PSK value.
+- `BAY_INGRESS_ENABLED` is a toggle for this feature, must be set to `"true"`.
+
+In your CDN configuration, set the header defined in `BAY_INGRESS_HEADER` with the token defined in `BAY_INGRESS_PSK`.
+
+- [Cloudfront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html)
+
+Once deployed, if the header is missing in the request nginx will return a `405 Not Allowed` HTTP response.
+
 # Contribute
 [Open an issue](https://github.com/dpc-sdp/bay) on GitHub or submit a pull request with suggested changes.
 
