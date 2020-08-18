@@ -10,6 +10,7 @@ RUN sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_ENABLED\;' /etc/ng
 
 COPY nginx/helpers/ /etc/nginx/helpers/
 COPY nginx/prepend/ /etc/nginx/conf.d/drupal/
+COPY nginx/content /etc/nginx/conf.d/drupal/content
 
 RUN fix-permissions /etc/nginx \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
