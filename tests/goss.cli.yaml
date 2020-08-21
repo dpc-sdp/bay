@@ -1,0 +1,9 @@
+file:
+  /usr/local/etc/php/conf.d/00-bay.ini:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+      - max_allowed_packet=16M
