@@ -1,0 +1,57 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: singledigital/bay-ci-builder:edge
+        environment:
+          GOSS_FILE_STRATEGY: cp
+          DOCKER_VERSION: 18.09.2
+    steps:
+      - checkout
+      - setup_remote_docker
+      # nginx specifically requires a running php
+      # container to run correctly.
+      - run:
+          name: Bring the containers up.
+          command: docker-compose up -d
+      - run:
+          name: Install goss
+          command: curl -fsSL https://goss.rocks/install | sh && goss --version
+      - run:
+          name: Build images
+          command: tests/build.sh
+      - run:
+          name: Test images
+          command: tests/run.sh
+
+  trigger_dockerhub:
+    docker:
+      - image: singledigital/bay-ci-builder:edge
+        environment:
+          DOCKER_VERSION: 18.09.2
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Trigger a Docker Hub build for the images
+          command: .circleci/scripts/trigger-dockerhub.sh
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+
+  weekly_build:
+    jobs:
+      - build
+      - trigger_dockerhub
+    triggers:
+      - schedule:
+          cron: 0 20 * * 0
+          filters:
+            branches:
+              only:
+                - develop
+
