@@ -4,7 +4,6 @@
 ##
 
 BASEDIR=$(dirname "$0")
-fails=0
 
 for file in $BASEDIR/goss.*.yaml; do
   prefix=$BASEDIR/goss.
@@ -13,8 +12,6 @@ for file in $BASEDIR/goss.*.yaml; do
 
   echo "==> Running tests for $service..."
   cp $file $PWD/goss.yaml
-  dgoss run -i bay/$service:latest || fails++
+  dgoss run -i bay/$service:latest
   rm $PWD/goss.yaml
 done
-
-exit $fails
