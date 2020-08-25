@@ -4,7 +4,7 @@
 # Trigger a dockerhub build for all supported tags.
 #
 
-SUPPORTED_TAGS=(1.x 2.x edge)
+SUPPORTED_TAGS=(1.x 2.x)
 
 for ENDPOINT in "${!DOCKERHUB_TRIGGER_@}"; do
   for TAG in "${SUPPORTED_TAGS[@]}"; do
