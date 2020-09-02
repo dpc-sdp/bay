@@ -1,7 +1,7 @@
 FROM amazeeio/php:7.2-fpm
 
 # Disable calling phpinfo().
-RUN sed -i 's/disable_functions =/disable_functions = phpinfo,/' /usr/local/etc/php/php.ini
+COPY php/php.ini /usr/local/etc/php/conf.d/01-bay-php.ini
 
 # Add blackfire probe.
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
