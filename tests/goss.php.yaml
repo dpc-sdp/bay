@@ -3,3 +3,8 @@ command:
     exit-status: 0
     stdout:
       - 7.2.32
+  # Ensure phpinfo() disabled by disable_functions config.
+  php -r "phpinfo();":
+    exit-status: 0
+    stderr:
+      - "PHP Warning:  phpinfo() has been disabled for security reasons in Command line code on line 1"
