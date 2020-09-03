@@ -2,14 +2,16 @@ command:
   php -r "echo phpversion();":
     exit-status: 0
     stdout:
-      - 7.3.17
+      - 7.3.20
 file:
   /usr/local/etc/php/conf.d/00-bay.ini:
     exists: true
     mode: "0644"
-    size: 31
     owner: root
     group: root
     filetype: file
     contains:
-      - upload_max_filesize=100M
+      - upload_max_filesize = 100M
+      - session.cookie_secure = 1
+      - session.cookie_httponly = 1
+      - session.cookie_samesite = Strict

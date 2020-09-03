@@ -24,6 +24,11 @@ jobs:
       - run:
           name: Test images
           command: tests/run.sh
+      # Sleeping to ensure the supervisord has started.
+      - run: sleep 15s
+      - run:
+          name: Unit tests for clamav
+          command: docker-compose exec test sh -c 'cd /app/clamav && ./vendor/bin/phpunit'
 
   trigger_dockerhub:
     docker:

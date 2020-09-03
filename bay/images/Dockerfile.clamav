@@ -1,0 +1,32 @@
+FROM amazeeio/commons
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+  clamav-daemon \
+  clamav-libunrar \
+  unrar \
+  supervisor
+
+# Initial update of av databases
+RUN curl -sLo /var/lib/clamav/main.cvd http://database.clamav.net/main.cvd && \
+  curl -sLo /var/lib/clamav/daily.cvd http://database.clamav.net/daily.cvd && \
+  curl -sLo /var/lib/clamav/bytecode.cvd http://database.clamav.net/bytecode.cvd && \
+  chown clamav:clamav /var/lib/clamav/*.cvd && \
+  mkdir /run/clamav
+
+COPY clamav/clamd.conf /etc/clamav
+COPY clamav/freshclam.conf /etc/clamav
+COPY clamav/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN touch /supervisord.log
+RUN fix-permissions /run/clamav && fix-permissions /dev/stdout && fix-permissions /supervisord.log
+
+# Fetch a new virus DB while the image builds.
+RUN freshclam -u root --stdout
+
+RUN fix-permissions /var/lib/clamav
+
+EXPOSE 3310
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]

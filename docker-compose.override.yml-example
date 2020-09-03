@@ -1,0 +1,12 @@
+version: "2.3"
+
+x-volumes: &default-volumes
+  volumes:
+    - ./tests/unit:/app:delegated
+
+services:
+  test:
+    << : *default-volumes
+
+volumes:
+  app: {}
