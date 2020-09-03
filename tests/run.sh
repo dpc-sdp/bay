@@ -14,7 +14,7 @@ for file in $BASEDIR/goss.*.yaml; do
   echo "==> Running tests for $service..."
   cp $file $PWD/goss.yaml
 
-  if ! dgoss run -i singledigital/$service:latest; then
+  if ! dgoss run -i $DOCKERHUB_NAMESPACE/$service:latest; then
     fails=$((fails+1))
   fi
 

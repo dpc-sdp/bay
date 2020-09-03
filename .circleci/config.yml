@@ -7,11 +7,10 @@ jobs:
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKER_VERSION: 18.09.2
+          DOCKERHUB_NAMESPACE: bay_ci
     steps:
       - checkout
       - setup_remote_docker
-      # nginx specifically requires a running php
-      # container to run correctly.
       - run:
           name: Bring the containers up.
           command: docker-compose up -d
@@ -25,7 +24,7 @@ jobs:
           name: Test images
           command: tests/run.sh
       # Sleeping to ensure the supervisord has started.
-      - run: sleep 15s
+      - run: sleep 30s
       - run:
           name: Unit tests for clamav
           command: docker-compose exec test sh -c 'cd /app/clamav && ./vendor/bin/phpunit'
