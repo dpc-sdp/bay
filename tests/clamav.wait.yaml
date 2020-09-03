@@ -1,0 +1,5 @@
+port:
+  tcp:3310:
+    listening: true
+    ip:
+    - 0.0.0.0
