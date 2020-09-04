@@ -1,0 +1,41 @@
+package:
+  clamav-daemon:
+    installed: true
+    versions:
+    - 0.102.4-r1
+  clamav-libunrar:
+    installed: true
+    versions:
+    - 0.102.4-r1
+port:
+  tcp:3310:
+    listening: true
+    ip:
+    - 0.0.0.0
+process:
+  clamd:
+    running: true
+  freshclam:
+    running: true
+file:
+  /etc/clamav/clamd.conf:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains:
+    - '# Debug yes'
+    - LogSyslog yes
+    - '# LogFile /dev/stdout'
+    - StreamMaxLength 260M
+    - Foreground yes
+    - MaxScanSize 256M
+    - MaxFileSize 256M
+  /etc/clamav/freshclam.conf:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
