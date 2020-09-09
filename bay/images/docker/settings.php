@@ -86,7 +86,11 @@ if (getenv('ENABLE_REDIS')) {
       throw new \Exception('Drupal installation underway.');
     }
     $redis = new \Redis();
-    $redis->connect($redis_host, $redis_port);
+
+    if ($redis->connect($redis_host, $redis_port, 1) === FALSE) {
+      throw new \Exception('Redis service unreachable');
+    }
+
     $response = $redis->ping();
     if (strpos($response, 'PONG') === 'FALSE') {
       throw new \Exception('Redis reachable but is not responding correctly.');
