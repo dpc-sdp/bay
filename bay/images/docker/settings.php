@@ -105,6 +105,7 @@ if (getenv('ENABLE_REDIS')) {
     $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
     $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
     $settings['container_yamls'][] = $contrib_path . '/redis/example.services.yml';
+    $settings['cache_prefix']['default'] = getenv('REDIS_CACHE_PREFIX') ?: getenv('LAGOON_PROJECT') . '_' . getenv('LAGOON_GIT_SAFE_BRANCH');
   } catch (\Exception $error) {
     // Make the reqeust unacacheable until redis is available.
     // This will ensure that cache partials are not added to separate bins,
