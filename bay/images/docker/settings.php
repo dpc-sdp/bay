@@ -17,7 +17,7 @@ $databases['default']['default'] = [
   'password' => getenv('MARIADB_PASSWORD') ?: 'drupal',
   'host' => getenv('MARIADB_HOST') ?: 'mariadb',
   'port' => 3306,
-  'b' => '',
+  'prefix' => '',
 ];
 
 // Varnish & Reverse proxy settings.
