@@ -79,15 +79,16 @@ $config['stage_file_proxy.settings']['hotlink'] = TRUE;
 
 if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
-  // Kube service discovery sets REDIS_PORT to a TCP address.
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
+  $redis_timeout = getenv('REDIS_TIMEOUT') ?: 2;
+
   try {
     if (drupal_installation_attempted()) {
       throw new \Exception('Drupal installation underway.');
     }
     $redis = new \Redis();
 
-    if ($redis->connect($redis_host, $redis_port, 1) === FALSE) {
+    if ($redis->connect($redis_host, $redis_port, $redis_timeout) === FALSE) {
       throw new \Exception('Redis service unreachable');
     }
 
