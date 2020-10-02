@@ -2,7 +2,7 @@ command:
   php -r "echo phpversion();":
     exit-status: 0
     stdout:
-      - 7.2.32
+      - 7.2.33
   # Ensure phpinfo() disabled by disable_functions config.
   php -r "phpinfo();":
     exit-status: 0

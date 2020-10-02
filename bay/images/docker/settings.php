@@ -52,14 +52,17 @@ $config['stage_file_proxy.settings']['hotlink'] = TRUE;
 
 if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
-  // Kube service discovery sets REDIS_PORT to a TCP address.
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
+  $redis_timeout = getenv('REDIS_TIMEOUT') ?: 2;
+
   try {
     if (drupal_installation_attempted()) {
       throw new \Exception('Drupal installation underway.');
     }
     $redis = new \Redis();
-    $redis->connect($redis_host, $redis_port);
+    if ($redis->connect($redis_host, $redis_port, $redis_timeout) === FALSE) {
+      throw new \Exception('Redis service unreachable');
+    }
     $response = $redis->ping();
     if (strpos($response, 'PONG') === 'FALSE') {
       throw new \Exception('Redis reachable but is not responding correctly.');
@@ -74,6 +77,7 @@ if (getenv('ENABLE_REDIS')) {
     $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
     $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
     $settings['container_yamls'][] = $contrib_path . '/redis/example.services.yml';
+    $settings['cache_prefix']['default'] = getenv('REDIS_CACHE_PREFIX') ?: getenv('LAGOON_PROJECT') . '_' . getenv('LAGOON_GIT_SAFE_BRANCH');
   } catch (\Exception $error) {
     // Make the reqeust unacacheable until redis is available.
     // This will ensure that cache partials are not added to separate bins,
