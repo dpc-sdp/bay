@@ -2,7 +2,11 @@ command:
   php -r "echo phpversion();":
     exit-status: 0
     stdout:
-      - 7.3.20
+      - 7.3.22
+  php -r "phpinfo();":
+    exit-status: 0
+    stderr:
+      - "PHP Warning:  phpinfo() has been disabled for security reasons in Command line code on line 1"
 file:
   /usr/local/etc/php/conf.d/00-bay.ini:
     exists: true

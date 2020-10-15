@@ -11,11 +11,17 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 RUN apk update \
     && apk del nodejs nodejs-current yarn \
-    && apk add nodejs-npm patch rsync jq redis --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/
+    && apk add nodejs-npm patch rsync redis --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/
 
 # Add MySQL client configuration.
 COPY php/mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
+
+# Install gojq.
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11.2_linux_amd64.tar.gz --output /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v0.11.2_linux_amd64/gojq && \
+    mv /tmp/gojq_v0.11.2_linux_amd64/gojq /usr/local/bin
 
 # Add common drupal config.
 RUN mkdir /bay

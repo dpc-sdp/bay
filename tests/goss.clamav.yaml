@@ -2,16 +2,11 @@ package:
   clamav-daemon:
     installed: true
     versions:
-    - 0.102.4-r1
+    - 0.103.0-r0
   clamav-libunrar:
     installed: true
     versions:
-    - 0.102.4-r1
-port:
-  tcp:3310:
-    listening: true
-    ip:
-    - 0.0.0.0
+    - 0.103.0-r0
 process:
   clamd:
     running: true
