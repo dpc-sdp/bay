@@ -85,6 +85,17 @@ services:
     networks:
       - default
 
+  builder:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.builder
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/builder
+    command: tail -F anything
+    environment:
+      << : *default-environment
+    networks:
+      - default
+
   clamav:
     build:
       context: ./bay/images
