@@ -278,3 +278,8 @@ if (getenv('LAGOON_GIT_SAFE_BRANCH')) {
     $settings['container_yamls'][] = $settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/services.yml';
   }
 }
+
+if ($lagoon_env_type != 'production') {
+  // Ensure that shield is disabled on non-production environments.
+  $settings['shield.settings']['shield_enable'] = FALSE;
+}
