@@ -8,24 +8,33 @@ RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge
   unrar \
   supervisor
 
+# Add clamav user
+RUN mkdir -p /var/lib/clamav && \
+  mkdir /usr/local/share/clamav && \
+  chown -R clamav:clamav /var/lib/clamav /usr/local/share/clamav /etc/clamav
+
 # Initial update of av databases
 RUN curl -sLo /var/lib/clamav/main.cvd http://database.clamav.net/main.cvd && \
   curl -sLo /var/lib/clamav/daily.cvd http://database.clamav.net/daily.cvd && \
   curl -sLo /var/lib/clamav/bytecode.cvd http://database.clamav.net/bytecode.cvd && \
   chown clamav:clamav /var/lib/clamav/*.cvd && \
-  mkdir /run/clamav
+  mkdir /run/clamav && \
+  chown -R clamav:clamav /run/clamav
 
-COPY clamav/clamd.conf /etc/clamav
-COPY clamav/freshclam.conf /etc/clamav
-COPY clamav/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --chown=clamav:clamav clamav/eicar.com /
+COPY --chown=clamav:clamav clamav/readiness.sh /
+
+COPY --chown=clamav:clamav clamav/clamd.conf /etc/clamav
+COPY --chown=clamav:clamav clamav/freshclam.conf /etc/clamav
+COPY --chown=clamav:clamav clamav/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN touch /supervisord.log
 RUN fix-permissions /run/clamav && fix-permissions /dev/stdout && fix-permissions /supervisord.log
 
-# Fetch a new virus DB while the image builds.
-RUN freshclam -u root --stdout
+USER clamav
 
-RUN fix-permissions /var/lib/clamav
+# Fetch a new virus DB while the image builds.
+RUN freshclam --stdout
 
 EXPOSE 3310
 
