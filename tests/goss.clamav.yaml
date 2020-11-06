@@ -16,8 +16,8 @@ file:
   /etc/clamav/clamd.conf:
     exists: true
     mode: "0644"
-    owner: root
-    group: root
+    owner: clamav
+    group: clamav
     filetype: file
     contains:
     - '# Debug yes'
@@ -30,7 +30,7 @@ file:
   /etc/clamav/freshclam.conf:
     exists: true
     mode: "0644"
-    owner: root
-    group: root
+    owner: clamav
+    group: clamav
     filetype: file
     contains: []
