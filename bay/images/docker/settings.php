@@ -244,17 +244,17 @@ if (!empty($tag_whitelist)) {
 $config['purge_queuer_coretags.settings']['blacklist'] = $tag_list;
 
 // Configure ClamAV connections.
-$clam_scan = getenv('CLAMAV_SCANMODE') ?: 0;
-$clamv_host = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
-$clam_port = getenv('CLAMAV_PORT') ?: 3310;
+$clamav_scan = getenv('CLAMAV_SCANMODE') ?: 0;
+$clamav_host = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
+$clamav_port = getenv('CLAMAV_PORT') ?: 3310;
 
 if ($lagoon_env_type == 'local') {
-  $clam_host = getenv('CLAMAV_HOST') ?: 'clamav';
+  $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav';
 }
 
-$config['clamav.settings']['scan_mode'] = $clam_scan;
-$config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clam_host;
-$config['clamav.settings']['mode_daemon_tcpip']['port'] = $clam_port;
+$config['clamav.settings']['scan_mode'] = $clamav_scan;
+$config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clamav_host;
+$config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
