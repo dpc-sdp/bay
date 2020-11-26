@@ -176,6 +176,25 @@ if (empty($settings['hash_salt'])) {
   throw new \Exception('DRUPAL_HASH_SALT missing.');
 }
 
+// Configure ClamAV connections.
+if ($lagoon_env_type != 'local') {
+  $clamav_scan = getenv('CLAMAV_SCANMODE') ?: 0;
+  $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
+  $clamav_port = getenv('CLAMAV_PORT') ?: 3310;
+  $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav';
+
+  $config['clamav.settings']['scan_mode'] = $clamav_scan;
+  $config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clamav_host;
+  $config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
+}
+
+if ($lagoon_env_type != 'local' && getenv('SEARCH_AUTH_USER') && getenv('SEARCH_AUTH_PASSWORD')) {
+  $hash = getenv('SEARCH_HASH');
+  $search_url = getenv('SEARCH_URL') ?: 'nginx.sdp-elastic-nonprod.svc:8080';
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', $hash, $search_url);
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['username'] = getenv('SEARCH_AUTH_USER');
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
