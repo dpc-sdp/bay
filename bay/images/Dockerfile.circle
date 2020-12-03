@@ -35,3 +35,9 @@ RUN composer global require danielbachhuber/composer-lock-updater
 RUN curl -L -o /tmp/hub.tgz https://github.com/github/hub/releases/download/v$HUB_VERSION/hub-linux-amd64-$HUB_VERSION.tgz \
     && tar -xz -C /tmp -f /tmp/hub.tgz \
     && mv /tmp/hub-linux-amd64-$HUB_VERSION/bin/* /usr/bin
+
+# Install gojq.
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11.2_linux_amd64.tar.gz --output /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v0.11.2_linux_amd64/gojq && \
+    mv /tmp/gojq_v0.11.2_linux_amd64/gojq /usr/local/bin
