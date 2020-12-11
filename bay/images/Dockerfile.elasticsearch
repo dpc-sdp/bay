@@ -1,4 +1,4 @@
-FROM amazeeio/elasticsearch
+FROM uselagoon/elasticsearch-6:latest
 
 WORKDIR /tmp
 

@@ -1,4 +1,4 @@
-FROM amazeeio/php:7.4-fpm
+FROM uselagoon/php-7.4-fpm:latest
 
 # PHP ini files cannot be updated at runtime so the standard
 # env entrypoint that calls envplate cannot be used. As a

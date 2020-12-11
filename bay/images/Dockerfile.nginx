@@ -1,4 +1,4 @@
-FROM amazeeio/nginx-drupal
+FROM uselagoon/nginx-drupal:latest
 
 ENV WEBROOT=docroot
 ENV TZ=Australia/Melbourne

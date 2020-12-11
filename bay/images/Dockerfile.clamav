@@ -1,4 +1,4 @@
-FROM amazeeio/commons
+FROM uselagoon/commons:latest
 
 ENV DEBIAN_FRONTEND noninteractive
 
