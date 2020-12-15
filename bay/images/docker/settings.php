@@ -78,6 +78,9 @@ $config['config_split.config_split.local']['status'] = FALSE;
 // Set Stage File Proxy to use hotlink platform-wide
 $config['stage_file_proxy.settings']['hotlink'] = TRUE;
 
+// Skip unprotected files error.
+$settings['skip_permissions_hardening'] = TRUE;
+
 if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
