@@ -46,7 +46,7 @@ Once deployed, if the header is missing in the request nginx will return a `405 
 [Open an issue](https://github.com/dpc-sdp/bay) on GitHub or submit a pull request with suggested changes.
 
 ## Image versioning and release management
-Bay image versioning follows an abstracted semantic versioning model.
+Bay images use the following versioning model, tied to git branches of the same name.
 
 A major version is identified with a numeral and the minor version is abstracted to `x`. This provides flexibility for 
 future versioning requirements.
