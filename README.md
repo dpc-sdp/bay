@@ -2,7 +2,7 @@
 <p align="center"><i>Bay is the hosting and infrastructure layer for Single Digital Presence, delivered using amazee.io Lagoon.</i></p>
 
 <!-- TABLE OF CONTENTS -->
-# Table of Contents
+## Table of Contents
 * [About](#About)
   * [amazee.io Lagoon](#amazeeio-lagoon)
 * [Use](#use)
@@ -11,22 +11,22 @@
 * [License](#license)
 * [Attribution](#Attribution)
 
-# About
+## About
 Bay is a fully managed platform and hosting environment that provides an open Platform as a Service model managed by SDP. It:
  - is an open-source hosting platform based on Lagoon.
  - allows agencies to build, test and deliver websites via the cloud.
  - is a Kubernetes-based (OpenShift) Docker container hosting platform with auto-scaling, auto-recovery and high-availability at core.
  - is based on open-source project Lagoon.
 
-## amazee.io Lagoon
+### amazee.io Lagoon
 Lagoon solves what developers are dreaming about: A system that allows developers to locally develop their code and their services with Docker and run the exact same system in production. The same Docker images, the same service configurations and the same code.
 
-# Use
+## Use
 Learn more from https://lagoon.readthedocs.io/en/latest/
 
-# Bay Features
+## Bay Features
 
-## Lock-down Ingress with Pre-Shared Key
+### Lock-down Ingress with Pre-Shared Key
 
 Using the nginx image, you can lock down access to your application with using a pre-shared key added at your CDN. 
 
@@ -42,17 +42,24 @@ In your CDN configuration, set the header defined in `BAY_INGRESS_HEADER` with t
 
 Once deployed, if the header is missing in the request nginx will return a `405 Not Allowed` HTTP response.
 
-# Contribute
+## Contribute
 [Open an issue](https://github.com/dpc-sdp/bay) on GitHub or submit a pull request with suggested changes.
 
-# Support
+### Builds
+Dockerhub is configured to automatically build images for pull requests that use the branch naming convention `build/<docker_image_tag>`. This will generate the tag `pr-<docker_image_tag>`.
+
+For example
+
+`build/2.x-updated-cli` will generate the tag `pr-2.x-updated-cli` and would be referenced as `singledigital/<bay-image>:pr-2.x-updated-cli`.
+
+## Support
 [Digital Engagement, Department of Premier and Cabinet, Victoria, Australia](https://github.com/dpc-sdp)
 is a maintainer of this package.
 
-# License
+## License
 This project is licensed under [GPL2](https://github.com/dpc-sdp/bay/blob/master/LICENSE)
 
-# Attribution
+## Attribution
 Single Digital Presence offers government agencies an open and flexible toolkit to build websites quickly and cost-effectively.
 <p align="center"><a href="https://www.vic.gov.au/what-single-digital-presence-offers" target="_blank"><img src="docs/images/SDP_Logo_VicGov_RGB.jpg" alt="SDP logo" height="150"></a></p>
 
