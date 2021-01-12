@@ -17,8 +17,9 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     rm -rf /blackfire
 
 COPY php/00-bay.ini /usr/local/etc/php/conf.d/
-
-COPY php/70-bay-php-config.sh /lagoon/entrypoints
+COPY php/bay-php-config.sh /bay
+RUN chmod +x /bay/bay-php-config.sh
+ONBUILD /bay/bay-php-config.sh
 
 COPY php/mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
