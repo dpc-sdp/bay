@@ -7,6 +7,8 @@ FROM amazeeio/php:7.3-fpm
 ARG BAY_UPLOAD_LIMIT
 ENV BAY_UPLOAD_LIMIT=${BAY_UPLOAD_LIMIT:-100M}
 
+RUN mkdir /bay
+
 # Add blackfire probe.
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && mkdir -p /blackfire \
@@ -25,7 +27,6 @@ COPY php/mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
 
 # Add common drupal config.
-RUN mkdir /bay
 COPY docker/services.yml /bay
 COPY docker/redis-unavailable.services.yml /bay
 COPY docker/settings.php /bay
