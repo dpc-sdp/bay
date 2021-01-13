@@ -37,7 +37,6 @@ services:
     build:
       context: ./bay/images
       dockerfile: $PWD/bay/images/Dockerfile.php
-      target: ci_php
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/php
@@ -51,11 +50,13 @@ services:
       context: ./bay/images
       dockerfile: $PWD/bay/images/Dockerfile.php_goss
       args:
-        BASE_IMAGE: "ci_php"
+        BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/php
     environment:
       << : *default-environment
     networks:
       - default
+    depends_on:
+      - php
 
   node:
     build:
