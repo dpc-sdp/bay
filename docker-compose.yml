@@ -51,6 +51,7 @@ services:
       dockerfile: $PWD/bay/images/Dockerfile.php_goss
       args:
         BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/php
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/php_goss
     environment:
       << : *default-environment
     networks:
