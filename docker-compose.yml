@@ -1,4 +1,4 @@
-version: '2.3'
+version: '3.4'
 
 x-environment:
   &default-environment
@@ -37,6 +37,7 @@ services:
     build:
       context: ./bay/images
       dockerfile: $PWD/bay/images/Dockerfile.php
+      target: ci_php
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/php
@@ -44,6 +45,18 @@ services:
       << : *default-environment
     networks:
       - default
+
+  php_goss:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.php_goss
+      args:
+        BASE_IMAGE: "ci_php"
+    environment:
+      << : *default-environment
+    networks:
+      - default
+
   node:
     build:
       context: ./bay/images
@@ -115,4 +128,3 @@ services:
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/test
     networks:
       - default
-
