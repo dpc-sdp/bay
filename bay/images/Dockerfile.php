@@ -21,7 +21,6 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 COPY php/00-bay.ini /usr/local/etc/php/conf.d/
 COPY php/bay-php-config.sh /bay
 RUN chmod +x /bay/bay-php-config.sh
-ONBUILD RUN /bay/bay-php-config.sh
 
 COPY php/mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
@@ -36,3 +35,7 @@ ENV TZ=Australia/Melbourne
 RUN  apk add --no-cache tzdata \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
+
+ONBUILD ARG BAY_DISABLE_FUNCTIONS
+ONBUILD ENV BAY_DISABLE_FUNCTIONS $BAY_DISABLE_FUNCTIONS
+ONBUILD RUN /bay/bay-php-config.sh
