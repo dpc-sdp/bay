@@ -2,11 +2,11 @@ package:
   clamav-daemon:
     installed: true
     versions:
-    - 0.103.0-r0
+    - 0.103.0-r1
   clamav-libunrar:
     installed: true
     versions:
-    - 0.103.0-r0
+    - 0.103.0-r1
 process:
   clamd:
     running: true

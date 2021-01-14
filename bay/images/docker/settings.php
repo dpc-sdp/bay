@@ -89,16 +89,24 @@ $config['config_split.config_split.local']['status'] = FALSE;
 // Set Stage File Proxy to use hotlink platform-wide
 $config['stage_file_proxy.settings']['hotlink'] = TRUE;
 
+// Skip unprotected files error.
+$settings['skip_permissions_hardening'] = TRUE;
+
 if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
-  // Kube service discovery sets REDIS_PORT to a TCP address.
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
+  $redis_timeout = getenv('REDIS_TIMEOUT') ?: 2;
+
   try {
     if (drupal_installation_attempted()) {
       throw new \Exception('Drupal installation underway.');
     }
     $redis = new \Redis();
-    $redis->connect($redis_host, $redis_port);
+
+    if ($redis->connect($redis_host, $redis_port, $redis_timeout) === FALSE) {
+      throw new \Exception('Redis service unreachable');
+    }
+
     $response = $redis->ping();
     if (strpos($response, 'PONG') === 'FALSE') {
       throw new \Exception('Redis reachable but is not responding correctly.');
@@ -113,6 +121,7 @@ if (getenv('ENABLE_REDIS')) {
     $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
     $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
     $settings['container_yamls'][] = $contrib_path . '/redis/example.services.yml';
+    $settings['cache_prefix']['default'] = getenv('REDIS_CACHE_PREFIX') ?: getenv('LAGOON_PROJECT') . '_' . getenv('LAGOON_GIT_SAFE_BRANCH');
   } catch (\Exception $error) {
     // Make the reqeust unacacheable until redis is available.
     // This will ensure that cache partials are not added to separate bins,
@@ -249,17 +258,17 @@ if (!empty($tag_whitelist)) {
 $config['purge_queuer_coretags.settings']['blacklist'] = $tag_list;
 
 // Configure ClamAV connections.
-$clam_scan = getenv('CLAMAV_SCANMODE') ?: 0;
-$clamv_host = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
-$clam_port = getenv('CLAMAV_PORT') ?: 3310;
+$clamav_scan = getenv('CLAMAV_SCANMODE') ?: 0;
+$clamav_host = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
+$clamav_port = getenv('CLAMAV_PORT') ?: 3310;
 
 if ($lagoon_env_type == 'local') {
-  $clam_host = getenv('CLAMAV_HOST') ?: 'clamav';
+  $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav';
 }
 
-$config['clamav.settings']['scan_mode'] = $clam_scan;
-$config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clam_host;
-$config['clamav.settings']['mode_daemon_tcpip']['port'] = $clam_port;
+$config['clamav.settings']['scan_mode'] = $clamav_scan;
+$config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clamav_host;
+$config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
