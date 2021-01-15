@@ -36,5 +36,8 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11
     chmod +x /tmp/gojq_v0.11.2_linux_amd64/gojq && \
     mv /tmp/gojq_v0.11.2_linux_amd64/gojq /usr/local/bin
 
+# Install bats.
+RUN npm install -g bats@1.2.1
+
 # Cleanup tmp when we're done.
 RUN rm -rf /tmp/*
