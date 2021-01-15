@@ -1,12 +1,5 @@
 FROM amazeeio/php:7.3-fpm
 
-# PHP ini files cannot be updated at runtime so the standard
-# env entrypoint that calls envplate cannot be used. As a
-# result we need to include ARG/ENV support for the varibales
-# so that this limit can be overridden per project if required.
-ARG BAY_UPLOAD_LIMIT
-ENV BAY_UPLOAD_LIMIT=${BAY_UPLOAD_LIMIT:-100M}
-
 RUN mkdir /bay
 
 # Add blackfire probe.
