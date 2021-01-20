@@ -6,7 +6,8 @@ RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge
   clamav-daemon \
   clamav-libunrar \
   unrar \
-  supervisor
+  supervisor \
+  nodejs
 
 # Add clamav user
 RUN mkdir -p /var/lib/clamav && \
@@ -21,9 +22,6 @@ RUN curl -sLo /var/lib/clamav/main.cvd http://database.clamav.net/main.cvd && \
   mkdir /run/clamav && \
   chown -R clamav:clamav /run/clamav
 
-COPY --chown=clamav:clamav clamav/eicar.com /
-COPY --chown=clamav:clamav clamav/readiness.sh /
-
 COPY --chown=clamav:clamav clamav/clamd.conf /etc/clamav
 COPY --chown=clamav:clamav clamav/freshclam.conf /etc/clamav
 COPY --chown=clamav:clamav clamav/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -35,7 +33,9 @@ USER clamav
 
 # Fetch a new virus DB while the image builds.
 RUN freshclam --stdout
-
 EXPOSE 3310
+
+COPY clamav/healthz /app
+EXPOSE 3000
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]
