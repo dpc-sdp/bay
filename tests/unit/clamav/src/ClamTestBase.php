@@ -48,7 +48,7 @@ class ClamTestBase extends TestCase {
    */
   public function __construct() {
     $this->host = getenv('CLAMAV_HOST') ?: 'clamav';
-    $this->port = getenv('CLAMAV_PORT') ?: 3310;
+    $this->port = getenv('CLAMAV_PORT') ?: 3000;
     parent::__construct();
   }
 
