@@ -2,11 +2,11 @@ package:
   clamav-daemon:
     installed: true
     versions:
-    - 0.103.0-r0
+    - 0.103.0-r1
   clamav-libunrar:
     installed: true
     versions:
-    - 0.103.0-r0
+    - 0.103.0-r1
 process:
   clamd:
     running: true
@@ -16,8 +16,8 @@ file:
   /etc/clamav/clamd.conf:
     exists: true
     mode: "0644"
-    owner: clamav
-    group: clamav
+    owner: root
+    group: root
     filetype: file
     contains:
     - '# Debug yes'
@@ -30,7 +30,7 @@ file:
   /etc/clamav/freshclam.conf:
     exists: true
     mode: "0644"
-    owner: clamav
-    group: clamav
+    owner: root
+    group: root
     filetype: file
     contains: []
