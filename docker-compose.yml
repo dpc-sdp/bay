@@ -102,7 +102,6 @@ services:
       dockerfile: $PWD/bay/images/Dockerfile.clamav
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/clamav
     ports:
-      - 3310
       - 3000
     environment:
       << : *default-environment

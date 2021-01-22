@@ -29,9 +29,6 @@ RUN fix-permissions /run/clamav && fix-permissions /dev/stdout && fix-permission
 
 # Fetch a new virus DB while the image builds.
 RUN freshclam --stdout --config-file=/etc/clamav/freshclam.conf
-EXPOSE 3310
-
-COPY clamav/healthz /app
 EXPOSE 3000
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf", "-n"]

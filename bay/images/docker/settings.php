@@ -246,7 +246,7 @@ $config['purge_queuer_coretags.settings']['blacklist'] = $tag_list;
 // Configure ClamAV connections.
 $clamav_scan = getenv('CLAMAV_SCANMODE') ?: 0;
 $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
-$clamav_port = getenv('CLAMAV_PORT') ?: 3310;
+$clamav_port = getenv('CLAMAV_PORT') ?: 3000;
 
 if ($lagoon_env_type == 'local') {
   $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav';
