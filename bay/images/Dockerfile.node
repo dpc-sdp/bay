@@ -39,15 +39,4 @@ ONBUILD ENV SEARCH_AUTH_PASSWORD=$SEARCH_AUTH_PASSWORD
 ONBUILD ENV LAGOON_ENVIRONMENT_TYPE=$LAGOON_ENVIRONMENT_TYPE
 # End of build time env vars
 
-# Build app
-COPY . /app/
-
 RUN apk --update add curl
-RUN . /home/.bashrc \
-    && npm ci \
-    && npm run build
-
-ENV HOST 0.0.0.0
-EXPOSE 3000
-
-CMD ["./node_modules/.bin/nuxt", "start", "--modern=client"]
