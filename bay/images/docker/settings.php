@@ -260,7 +260,7 @@ $config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clamav_host;
 $config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
 
 // Configure elasticsearch connections from environment variables.
-if ($lagoon_env_type !in_array(['local', 'ci'])) {
+if (!in_array($lagoon_env_type, ['local', 'ci'])) {
   if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
     $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
   }
