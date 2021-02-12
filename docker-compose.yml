@@ -108,6 +108,24 @@ services:
     networks:
       - default
 
+  nginx-node:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.nginx-node
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx-node
+    ports:
+      - 8080
+    environment:
+      << : *default-environment
+      BASIC_AUTH: 'on'
+      BASIC_AUTH_USERNAME: 'dpc'
+      BASIC_AUTH_PASSWORD: 'sdp'
+      BAY_INGRESS_ENABLED: 'true'
+      BAY_INGRESS_HEADER: 'bip'
+      BAY_INGRESS_PSK: 'test'
+    networks:
+      - default
+
   test:
     build:
       context: $PWD
@@ -115,4 +133,5 @@ services:
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/test
     networks:
       - default
+
 

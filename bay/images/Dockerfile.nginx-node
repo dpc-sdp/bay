@@ -1,0 +1,17 @@
+FROM uselagoon/nginx:latest
+
+COPY nginx-node/app.conf /etc/nginx/conf.d/app.conf
+
+# Add ingress protection environment variable supprot to nginx.
+RUN sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_ENABLED\;' /etc/nginx/nginx.conf \
+  && sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_HEADER\;' /etc/nginx/nginx.conf \
+  && sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_PSK\;' /etc/nginx/nginx.conf
+
+RUN mkdir /etc/nginx/conf.d/nginx-node && fix-permissions /etc/nginx/conf.d/nginx-node
+
+COPY nginx/prepend/ /etc/nginx/conf.d/nginx-node/
+COPY nginx/content /etc/nginx/conf.d/helpers/content
+
+RUN fix-permissions /etc/nginx \
+  && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+  && echo $TZ > /etc/timezone
