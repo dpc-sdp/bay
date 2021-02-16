@@ -85,6 +85,7 @@ if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
   $redis_timeout = getenv('REDIS_TIMEOUT') ?: 2;
+  $redis_password = getenv('REDIS_PASSWORD');
 
   try {
     if (drupal_installation_attempted()) {
@@ -94,6 +95,10 @@ if (getenv('ENABLE_REDIS')) {
 
     if ($redis->connect($redis_host, $redis_port, $redis_timeout) === FALSE) {
       throw new \Exception('Redis service unreachable');
+    }
+
+    if (!empty($redis_password)) {
+      $redis->auth($redis_password);
     }
 
     $response = $redis->ping();
