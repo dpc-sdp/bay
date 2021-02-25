@@ -131,11 +131,14 @@ if (getenv('ENABLE_REDIS')) {
     $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
     $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
     $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
-    $settings['container_yamls'][] = $contrib_path . '/redis/example.services.yml';
+
     $settings['cache_prefix']['default'] = getenv('REDIS_CACHE_PREFIX') ?: getenv('LAGOON_PROJECT') . '_' . getenv('LAGOON_GIT_SAFE_BRANCH');
 
     if ($redis_interface == 'PhpRedisCluster') {
       $settings['redis.connection']['seeds'] = ["$redis_host:$redis_port"];
+      $settings['container_yamls'][] = '/bay/redis-cluster.services.yml';
+    } else {
+      $settings['container_yamls'][] = '/bay/redis-single.services.yml';
     }
 
   } catch (\Exception $error) {
