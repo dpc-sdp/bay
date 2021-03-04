@@ -78,10 +78,14 @@ $config['config_split.config_split.local']['status'] = FALSE;
 // Set Stage File Proxy to use hotlink platform-wide
 $config['stage_file_proxy.settings']['hotlink'] = TRUE;
 
+// Skip unprotected files error.
+$settings['skip_permissions_hardening'] = TRUE;
+
 if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
   $redis_timeout = getenv('REDIS_TIMEOUT') ?: 2;
+  $redis_password = getenv('REDIS_PASSWORD');
 
   try {
     if (drupal_installation_attempted()) {
@@ -91,6 +95,10 @@ if (getenv('ENABLE_REDIS')) {
 
     if ($redis->connect($redis_host, $redis_port, $redis_timeout) === FALSE) {
       throw new \Exception('Redis service unreachable');
+    }
+
+    if (!empty($redis_password)) {
+      $redis->auth($redis_password);
     }
 
     $response = $redis->ping();
@@ -255,6 +263,28 @@ if ($lagoon_env_type == 'local') {
 $config['clamav.settings']['scan_mode'] = $clamav_scan;
 $config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clamav_host;
 $config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
+
+// Configure elasticsearch connections from environment variables.
+if (!in_array($lagoon_env_type, ['local', 'ci'])) {
+  if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
+  }
+
+  if (getenv('SEARCH_INDEX')) {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['rewrite_index'] = 1;
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
+      'prefix' => getenv('SEARCH_INDEX'),
+      'suffix' => '',
+    ];
+  }
+
+  if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['username'] = getenv('SEARCH_AUTH_USERNAME');
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 1;
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
