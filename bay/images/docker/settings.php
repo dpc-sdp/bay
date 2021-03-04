@@ -85,7 +85,7 @@ if (getenv('ENABLE_REDIS')) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
   $redis_timeout = getenv('REDIS_TIMEOUT') ?: 2;
-  $redis_password = getenv('REDIS_PASSWORD');
+  $redis_password = getenv('REDIS_PASSWORD') ?: '';
 
   try {
     if (drupal_installation_attempted()) {
@@ -107,7 +107,7 @@ if (getenv('ENABLE_REDIS')) {
     }
     $settings['redis.connection']['host'] = $redis_host;
     $settings['redis.connection']['port'] = $redis_port;
-    $settings['redis.connection']['password'] = '';
+    $settings['redis.connection']['password'] = $redis_password;
     $settings['redis.connection']['base'] = 0;
     $settings['redis.connection']['interface'] = 'PhpRedis';
     $settings['cache']['default'] = 'cache.backend.redis';
