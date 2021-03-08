@@ -1,5 +1,10 @@
 FROM uselagoon/node-14:20.12.0
 
+RUN apk add --no-cache --virtual .gyp \
+        python \
+        make \
+        g++
+
 ENV CYPRESS_INSTALL_BINARY 0
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
 
