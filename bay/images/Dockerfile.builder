@@ -27,4 +27,6 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11
 RUN mkdir /bay
 COPY docker/services.yml /bay
 COPY docker/redis-unavailable.services.yml /bay
+COPY docker/redis-cluster.services.yml /bay
+COPY docker/redis-single.services.yml /bay
 COPY docker/settings.php /bay
