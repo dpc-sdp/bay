@@ -1,5 +1,5 @@
 FROM hashicorp/terraform:light AS terraform
-FROM integratedexperts/ci-builder:latest
+FROM uselagoon/php-7.4-cli-drupal:latest
 
 # Install SDP ci dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
@@ -18,7 +18,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
 
 # Manage python deps via pip rather than apt.
 # ansible via apt is 2.7.7 rather than 2.8+
-RUN pip install ansible ansible-galaxy ansible-lint flake8 awscli yamllint boto3
+RUN pip install ansible ansible-lint flake8 awscli yamllint boto3
 
 # yamllint install pyyaml@3.13 - we have been using 5+ this is backwards
 # compatible for yamllint and ansible and means our inventory scripts will
