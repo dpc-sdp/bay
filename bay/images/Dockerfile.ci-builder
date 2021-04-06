@@ -1,18 +1,34 @@
 FROM hashicorp/terraform:light AS terraform
 FROM uselagoon/php-7.4-cli:latest
 
-# Install SDP ci dependencies.
-COPY --from=terraform /bin/terraform /bin/terraform
-RUN apk add --no-cache python3 \
-    python3-distutils \
-    python3-pip \
-    rsync \
-    hub \
-    shellcheck
+ARG LAGOON_CLI_VERSION:${LAGOON_CLI_VERSION:-0.10.0}
+ARG GOJQ_VERSION:${GOJQ_VERSION:-0.11.2}
 
+# Install SDP ci dependencies.
+## Add Python dependencies.
+COPY --from=terraform /bin/terraform /bin/terraform
+RUN apk add --no-cache
+    python3 \
+    py3-distutils \
+    py3-pip
 # Support the python shebang.
 # @DEPRECATED
 RUN ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+
+## Install GitHub CLI tool - Hub and it's dependencies.
+RUN apk add --no-cache \
+    util-linux \
+    groff \
+    go \
+    make
+
+RUN git clone \
+    --config transfer.fsckobjects=false \
+    --config receive.fsckobjects=false \
+    --config fetch.fsckobjects=false \
+    https://github.com/github/hub.git
+
+RUN cd hub && make install prefix=/usr/local
 
 # Manage python deps via pip rather than apt.
 # ansible via apt is 2.7.7 rather than 2.8+
@@ -24,15 +40,15 @@ RUN pip install ansible ansible-lint flake8 awscli yamllint boto3
 RUN pip install -U pyyaml==5.3.1 --force-reinstall
 
 # Install Lagoon CLI.
-RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon && \
+RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-linux-amd64" -o /usr/local/bin/lagoon && \
     chmod +x /usr/local/bin/lagoon
 RUN lagoon config feature --disable-project-directory-check true
 
 # Install gojq.
-RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11.2_linux_amd64.tar.gz --output /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    tar -C /tmp -xvf /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    chmod +x /tmp/gojq_v0.11.2_linux_amd64/gojq && \
-    mv /tmp/gojq_v0.11.2_linux_amd64/gojq /usr/local/bin
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
+    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
 
 # Install bats.
 RUN npm install -g bats@1.2.1
