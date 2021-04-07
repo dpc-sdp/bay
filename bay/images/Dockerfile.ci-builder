@@ -7,7 +7,7 @@ ARG GOJQ_VERSION:${GOJQ_VERSION:-0.11.2}
 # Install SDP ci dependencies.
 ## Add Python dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
-RUN apk add --no-cache
+RUN apk add --no-cache \
     python3 \
     py3-distutils \
     py3-pip
