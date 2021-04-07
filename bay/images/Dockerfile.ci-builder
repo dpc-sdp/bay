@@ -1,19 +1,23 @@
 FROM hashicorp/terraform:light AS terraform
 FROM uselagoon/php-7.4-cli:latest
 
-ARG LAGOON_CLI_VERSION:${LAGOON_CLI_VERSION:-0.10.0}
-ARG GOJQ_VERSION:${GOJQ_VERSION:-0.11.2}
+ARG LAGOON_CLI_VERSION=0.10.0
+ARG GOJQ_VERSION=0.11.2
 
 # Install SDP ci dependencies.
 ## Add Python dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
-RUN apk add --no-cache \
+RUN apk update \
+    && apk add --no-cache \
+    musl-dev \
+    libffi-dev \
+    openssl-dev \
+    make \
+    gcc \
     python3 \
-    py3-distutils \
-    py3-pip
-# Support the python shebang.
-# @DEPRECATED
-RUN ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+    py3-pip \
+    python3-dev \
+    cargo
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
@@ -32,7 +36,13 @@ RUN cd hub && make install prefix=/usr/local
 
 # Manage python deps via pip rather than apt.
 # ansible via apt is 2.7.7 rather than 2.8+
-RUN pip install ansible ansible-lint flake8 awscli yamllint boto3
+RUN pip install \
+    ansible \
+    ansible-lint \
+    flake8 \
+    awscli \
+    yamllint \
+    boto3
 
 # yamllint install pyyaml@3.13 - we have been using 5+ this is backwards
 # compatible for yamllint and ansible and means our inventory scripts will
