@@ -44,4 +44,4 @@ file:
       - upload_max_filesize = 100M
       - session.cookie_secure = 1
       - session.cookie_httponly = 1
-      - session.cookie_samesite = Strict
+      - session.cookie_samesite = Lax
