@@ -16,3 +16,4 @@ RUN fix-permissions /etc/nginx \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
+ONBUILD copy .docker/redirects-map.conf /etc/nginx/redirects-map.conf

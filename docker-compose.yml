@@ -33,6 +33,22 @@ services:
     networks:
       - default
 
+  nginx_goss:
+    build:
+      context: ./bay/images
+      dockerfile: $PWD/bay/images/Dockerfile.php_goss
+      args:
+        BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx_goss
+    environment:
+      << : *default-environment
+    networks:
+      - default
+    ports:
+      - 8080
+    depends_on:
+      - nginx
+
   php:
     build:
       context: ./bay/images

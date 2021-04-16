@@ -32,7 +32,7 @@ command:
   php -r "echo phpversion();":
     exit-status: 0
     stdout:
-      - 7.4.13
+      - 7.4.14
 file:
   /usr/local/etc/php/conf.d/00-bay.ini:
     exists: true
