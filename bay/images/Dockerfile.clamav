@@ -6,8 +6,8 @@ RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge
   clamav-daemon \
   clamav-libunrar \
   unrar \
-  supervisor \
-  nodejs
+  py3-setuptools \
+  supervisor
 
 # Add clamav user
 RUN mkdir -p /var/lib/clamav && \
