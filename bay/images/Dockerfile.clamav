@@ -6,6 +6,7 @@ RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge
   clamav-daemon \
   clamav-libunrar \
   unrar \
+  py3-setuptools \
   supervisor
 
 # Initial update of av databases
