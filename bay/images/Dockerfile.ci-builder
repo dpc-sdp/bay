@@ -19,7 +19,8 @@ RUN apk update \
     cargo \
     git \
     npm \
-    bash
+    bash \
+    openssh-client
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
