@@ -1,6 +1,6 @@
 FROM hashicorp/terraform:light AS terraform
 FROM php:7.4-cli
-
+VOLUME /tmp
 ARG LAGOON_CLI_VERSION=0.10.0
 ARG GOJQ_VERSION=0.11.2
 
