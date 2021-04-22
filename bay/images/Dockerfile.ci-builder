@@ -1,5 +1,5 @@
 FROM hashicorp/terraform:light AS terraform
-FROM uselagoon/php-7.4-cli:latest
+FROM php:7.4-cli
 
 ARG LAGOON_CLI_VERSION=0.10.0
 ARG GOJQ_VERSION=0.11.2
