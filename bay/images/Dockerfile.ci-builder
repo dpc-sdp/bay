@@ -17,7 +17,9 @@ RUN apk update \
     py3-pip \
     python3-dev \
     cargo \
-    git
+    git \
+    npm \
+    bash
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
