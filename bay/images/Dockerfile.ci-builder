@@ -1,4 +1,6 @@
 FROM hashicorp/terraform:light AS terraform
+ARG COMPOSER_VERSION=1.10.21
+FROM composer:1.10.21
 FROM php:7.4-cli-alpine
 ARG LAGOON_CLI_VERSION=0.10.0
 ARG GOJQ_VERSION=0.11.2
@@ -6,6 +8,7 @@ ARG GOJQ_VERSION=0.11.2
 # Install SDP ci dependencies.
 ## Add Python dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN apk update \
     && apk add --no-cache \
     musl-dev \
@@ -23,9 +26,9 @@ RUN apk update \
     openssh
 
 ## Install a 1.x version of Composer to satisfy plugin dependencies.
-RUN apk add --no-cache composer=1.10.19-r0 --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main \
-    && composer global require hirak/prestissimo \
-    && composer clear-cache
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer global require hirak/prestissimo \
+    &&  composer clear-cache
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
