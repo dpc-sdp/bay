@@ -20,7 +20,8 @@ RUN apk update \
     git \
     npm \
     bash \
-    openssh
+    openssh \
+    composer
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
