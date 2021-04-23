@@ -20,8 +20,12 @@ RUN apk update \
     git \
     npm \
     bash \
-    openssh \
-    composer
+    openssh
+
+## Install a 1.x version of Composer to satisfy plugin dependencies.
+RUN apk add --no-cache composer=1.10.19-r0 --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main \
+    && composer global require hirak/prestissimo \
+    && composer clear-cache
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
