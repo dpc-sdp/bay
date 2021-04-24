@@ -50,19 +50,7 @@ RUN pip install \
     boto3
 
 ## Install required PHP extensions for Drupal
-RUN docker-php-ext-install date
-RUN docker-php-ext-install dom
-RUN docker-php-ext-install filter
 RUN docker-php-ext-install gd
-RUN docker-php-ext-install hash
-RUN docker-php-ext-install json
-RUN docker-php-ext-install pcre
-RUN docker-php-ext-install PDO
-RUN docker-php-ext-install session
-RUN docker-php-ext-install SimpleXML
-RUN docker-php-ext-install SPL
-RUN docker-php-ext-install tokenizer
-RUN docker-php-ext-install xml
 
 # yamllint install pyyaml@3.13 - we have been using 5+ this is backwards
 # compatible for yamllint and ansible and means our inventory scripts will
