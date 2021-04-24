@@ -22,8 +22,7 @@ RUN apk update \
     npm \
     bash \
     openssh \
-    composer \
-    zlib
+    composer
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
@@ -51,7 +50,15 @@ RUN pip install \
     boto3
 
 ## Install required PHP extensions for Drupal
-RUN docker-php-ext-install gd
+RUN apk add --no-cache \
+    libpng \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    zlib-dev \
+    libxpm-dev \
+    && docker-php-ext-configure gd \
+    && docker-php-ext-install -j$(nproc) gd
 
 # yamllint install pyyaml@3.13 - we have been using 5+ this is backwards
 # compatible for yamllint and ansible and means our inventory scripts will
