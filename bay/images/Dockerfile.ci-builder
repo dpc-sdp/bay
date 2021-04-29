@@ -22,7 +22,8 @@ RUN apk update \
     npm \
     bash \
     openssh \
-    composer
+    composer \
+    patch
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
@@ -56,8 +57,7 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     libwebp-dev \
     zlib-dev \
-    libxpm-dev \
-    && docker-php-ext-configure gd \
+    && docker-php-ext-configure gd --enable-gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
 # yamllint install pyyaml@3.13 - we have been using 5+ this is backwards
