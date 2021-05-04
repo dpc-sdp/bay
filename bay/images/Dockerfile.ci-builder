@@ -1,7 +1,8 @@
 FROM hashicorp/terraform:light AS terraform
 FROM php:7.4-cli-alpine
-ARG LAGOON_CLI_VERSION=0.10.0
+ARG AHOY_VERSION=2.0.0
 ARG GOJQ_VERSION=0.11.2
+ARG LAGOON_CLI_VERSION=0.10.0
 
 # Install SDP ci dependencies.
 ## Add Python dependencies.
@@ -75,6 +76,12 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/g
     tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
     chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
     mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
+
+# Install Ahoy.
+# @see https://github.com/ahoy-cli/ahoy/releases
+RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/download/${AHOY_VERSION}/ahoy-bin-$(uname -s)-amd64" \
+  && chmod +x /usr/local/bin/ahoy \
+  && ahoy --version
 
 # Install bats.
 RUN npm install -g bats@1.2.1
