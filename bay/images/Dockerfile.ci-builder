@@ -86,5 +86,10 @@ RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/
 # Install bats.
 RUN npm install -g bats@1.2.1
 
+# Install Docker
+apk add docker \
+    docker-compose
+
+
 # Cleanup tmp when we're done.
 RUN rm -rf /tmp/*
