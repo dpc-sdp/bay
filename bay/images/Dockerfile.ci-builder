@@ -26,7 +26,8 @@ RUN apk update \
     composer \
     patch \
     docker \
-    docker-compose
+    docker-compose \
+    ncurses
 
 ## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
