@@ -2,55 +2,41 @@ FROM hashicorp/terraform:light AS terraform
 FROM php:7.4-cli-alpine
 ARG AHOY_VERSION=2.0.0
 ARG GOJQ_VERSION=0.11.2
+ARG HUB_VERSION=2.14.12
 ARG LAGOON_CLI_VERSION=0.10.0
 
 # Install SDP ci dependencies.
 ## Add Python dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
 
-RUN apk update \
-    && apk add --no-cache \
-    musl-dev \
-    libffi-dev \
-    openssl-dev \
-    make \
-    gcc \
-    python3 \
-    py3-pip \
-    python3-dev \
-    cargo \
-    git \
-    npm \
-    bash \
-    openssh \
-    composer \
-    patch \
-    docker \
-    docker-compose \
-    ncurses
-
-## Install GitHub CLI tool - Hub and it's dependencies.
 RUN apk add --no-cache \
-    util-linux \
-    groff \
-    go \
-    make
-
-RUN git clone \
-    --config transfer.fsckobjects=false \
-    --config receive.fsckobjects=false \
-    --config fetch.fsckobjects=false \
-    https://github.com/github/hub.git
-
-RUN cd hub && make install prefix=/usr/local
-
-# Manage python deps via pip rather than apt.
-# ansible via apt is 2.7.7 rather than 2.8+
-RUN pip install \
     ansible \
     ansible-lint \
-    flake8 \
     awscli \
+    bash \
+    cargo \
+    composer \
+    docker \
+    docker-compose \
+    git \
+    libffi-dev \
+    musl-dev \
+    ncurses \
+    npm \
+    openssl-dev \
+    openssh \
+    patch \
+    py3-pip \
+    python3 \
+    python3-dev
+
+## Install GitHub CLI tool - Hub and it's dependencies.
+RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz" -o /usr/local/bin/hub && \
+    chmod +x /usr/local/bin/hub
+
+# Install Python dependencies not available in apk.
+RUN pip install \
+    flake8 \
     yamllint \
     boto3
 
@@ -63,8 +49,6 @@ RUN apk add --no-cache \
     zlib-dev \
     && docker-php-ext-configure gd --enable-gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
-
-RUN pip show pyyaml
 
 # Install Lagoon CLI.
 RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-linux-amd64" -o /usr/local/bin/lagoon && \
