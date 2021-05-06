@@ -12,7 +12,7 @@ COPY --from=terraform /bin/terraform /bin/terraform
 RUN apk add --no-cache \
     ansible \
     ansible-lint \
-    awscli \
+    aws-cli \
     bash \
     cargo \
     composer \
