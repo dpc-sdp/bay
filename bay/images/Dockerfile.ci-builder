@@ -2,7 +2,7 @@ FROM hashicorp/terraform:light AS terraform
 FROM php:7.4-cli-alpine
 ARG AHOY_VERSION=2.0.0
 ARG GOJQ_VERSION=0.11.2
-ARG HUB_VERSION=2.14.12
+ARG HUB_VERSION=2.14.2
 ARG LAGOON_CLI_VERSION=0.10.0
 
 # Install SDP ci dependencies.
@@ -30,11 +30,11 @@ RUN apk add --no-cache \
     python3 \
     python3-dev
 
-## Install GitHub CLI tool - Hub and it's dependencies.
+## Install GitHub CLI tool.
 RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz" -o /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
-    tar -C /tmp -xvf /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
-    chmod +x /tmp/hub-linux-amd64-${HUB_VERSION}/hub && \
-    mv /tmp/hub-linux-amd64-${HUB_VERSION}/hub /usr/local/bin
+    tar -C /tmp -xzvf /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
+    chmod +x /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub && \
+    mv /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub /usr/local/bin
 
 # Install Python dependencies not available in apk.
 RUN pip install \
