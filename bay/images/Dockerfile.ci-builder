@@ -1,40 +1,76 @@
 FROM hashicorp/terraform:light AS terraform
-FROM integratedexperts/ci-builder:latest
+FROM php:7.4-cli-alpine
+ARG AHOY_VERSION=2.0.0
+ARG GOJQ_VERSION=0.11.2
+ARG HUB_VERSION=2.14.2
+ARG LAGOON_CLI_VERSION=0.10.0
+
+# Ensure temp files dont end up in image.
+VOLUME /tmp
 
 # Install SDP ci dependencies.
+## Add Python dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
-RUN apt-get update && \
-    apt-get install python3 python3-distutils python3-pip rsync hub shellcheck -y && \
-    apt-get clean -y
 
-RUN curl -sSL https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz -o /tmp/openshift.tgz && \
-    tar -vxxzf /tmp/openshift.tgz -C /tmp && \
-    mv /tmp/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit/oc /bin/oc && \
-    chmod +x /bin/oc
+RUN apk add --no-cache \
+    ansible \
+    ansible-lint \
+    aws-cli \
+    bash \
+    cargo \
+    composer \
+    docker \
+    docker-compose \
+    git \
+    libffi-dev \
+    musl-dev \
+    ncurses \
+    npm \
+    openssl-dev \
+    openssh \
+    patch \
+    py3-pip \
+    python3 \
+    python3-dev
 
-# Support the python shebang.
-# @DEPRECATED
-RUN ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
+## Install GitHub CLI tool.
+RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz" -o /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
+    tar -C /tmp -xzvf /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
+    chmod +x /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub && \
+    mv /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub /usr/local/bin
 
-# Manage python deps via pip rather than apt.
-# ansible via apt is 2.7.7 rather than 2.8+
-RUN pip install ansible ansible-lint flake8 awscli yamllint boto3
+# Install Python dependencies not available in apk.
+RUN pip install \
+    flake8 \
+    yamllint \
+    boto3
 
-# yamllint install pyyaml@3.13 - we have been using 5+ this is backwards
-# compatible for yamllint and ansible and means our inventory scripts will
-# work as expected.
-RUN pip install -U pyyaml==5.3.1 --force-reinstall
+## Install required PHP extensions for Drupal
+RUN apk add --no-cache \
+    libpng \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    zlib-dev \
+    && docker-php-ext-configure gd --enable-gd --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
 
 # Install Lagoon CLI.
-RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon && \
+RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-linux-amd64" -o /usr/local/bin/lagoon && \
     chmod +x /usr/local/bin/lagoon
 RUN lagoon config feature --disable-project-directory-check true
 
 # Install gojq.
-RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11.2_linux_amd64.tar.gz --output /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    tar -C /tmp -xvf /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    chmod +x /tmp/gojq_v0.11.2_linux_amd64/gojq && \
-    mv /tmp/gojq_v0.11.2_linux_amd64/gojq /usr/local/bin
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
+    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
+
+# Install Ahoy.
+# @see https://github.com/ahoy-cli/ahoy/releases
+RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/download/${AHOY_VERSION}/ahoy-bin-$(uname -s)-amd64" \
+  && chmod +x /usr/local/bin/ahoy \
+  && ahoy --version
 
 # Install bats.
 RUN npm install -g bats@1.2.1
