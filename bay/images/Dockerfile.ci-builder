@@ -34,7 +34,7 @@ RUN apk add --no-cache \
     python3-dev
 
 ## Python3 by default.
-ln -s /usr/bin/python3 /usr/bin/python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ## Install GitHub CLI tool.
 RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz" -o /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
