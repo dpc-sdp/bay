@@ -79,14 +79,14 @@ for file in bay/images/Dockerfile*; do
   docker tag "$DOCKERHUB_NAMESPACE/$service" "$DOCKERHUB_NAMESPACE/$service:$IMAGE_TAG"
 
   echo "==> Pushing $service to $DOCKERHUB_NAMESPACE/$service:$IMAGE_TAG"
-  # docker push "$DOCKERHUB_NAMESPACE/$service:$IMAGE_TAG"
+  docker push "$DOCKERHUB_NAMESPACE/$service:$IMAGE_TAG"
 
   if [[ "$service" == "bay-node" ]]; then
     # Replicate the bay-node image to ripple-node.
     echo "==> Tagging $service to $DOCKERHUB_NAMESPACE/ripple-node:$IMAGE_TAG"
     docker tag "$DOCKERHUB_NAMESPACE/$service" "$DOCKERHUB_NAMESPACE/ripple-node:$IMAGE_TAG"
   echo "==> Pushing $service to $DOCKERHUB_NAMESPACE/ripple-node:$IMAGE_TAG"
-    # docker push "$DOCKERHUB_NAMESPACE/ripple-node:$IMAGE_TAG"
+    docker push "$DOCKERHUB_NAMESPACE/ripple-node:$IMAGE_TAG"
   fi
 
 done
