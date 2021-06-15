@@ -51,6 +51,17 @@ if (getenv('DB_READREPLICA_HOSTS')) {
 // Varnish & Reverse proxy settings.
 $settings['reverse_proxy'] = TRUE;
 
+if (isset($_SERVER['HTTP_X_ORIGINAL_FORWARDED_FOR'])) {
+  // Section sets the x-original-forwarded-for header which contains the
+  // connecting clients IP address. REMOTE_ADDR will contain the last hop
+  // proxy IP rather than the client IP, to ensure that we can track
+  // a request/submission we need to ensure that this is captured as
+  // the connecting IP.
+  //
+  // @see \Symfony\Component\HttpFoundation\Request::createFromGlobals()
+  $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_ORIGINAL_FORWARDED_FOR'];
+}
+
 $settings['update_free_access'] = FALSE;
 
 // Defines where the sync folder of your configuration lives. In this case it's
