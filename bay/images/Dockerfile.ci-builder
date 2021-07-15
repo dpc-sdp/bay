@@ -54,7 +54,9 @@ RUN apk add --no-cache \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
+    libxml2-dev \
     zlib-dev \
+    && docker-php-ext-install soap \
     && docker-php-ext-configure gd --enable-gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
