@@ -13,8 +13,6 @@ VOLUME /tmp
 COPY --from=terraform /bin/terraform /bin/terraform
 
 RUN apk add --no-cache \
-    ansible \
-    ansible-lint \
     aws-cli \
     bash \
     cargo \
@@ -44,10 +42,12 @@ RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub
 
 # Install Python dependencies not available in apk.
 RUN pip install \
+    ansible \
+    ansible-lint \
     flake8 \
     yamllint \
     boto3
-
+    
 ## Install required PHP extensions for Drupal
 RUN apk add --no-cache \
     libpng \
