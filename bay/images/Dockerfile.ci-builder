@@ -13,7 +13,6 @@ VOLUME /tmp
 COPY --from=terraform /bin/terraform /bin/terraform
 
 RUN apk add --no-cache \
-    ansible \
     aws-cli \
     bash \
     cargo \
@@ -43,6 +42,8 @@ RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub
 
 # Install Python dependencies not available in apk.
 RUN pip install \
+    ansible \
+    ansible-lint \
     flake8 \
     yamllint \
     ansible-lint \
