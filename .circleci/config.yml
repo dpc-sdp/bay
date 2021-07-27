@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: singledigital/bay-ci-builder:edge
+      - image: singledigital/bay-ci-builder:3.x
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKER_VERSION: 18.09.2
@@ -31,7 +31,7 @@ jobs:
 
   deploy:
     docker:
-      - image: singledigital/bay-ci-builder:edge
+      - image: singledigital/bay-ci-builder:3.x
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKER_VERSION: 18.09.2
@@ -68,4 +68,3 @@ workflows:
             branches:
               only:
                 - 3.x
-
