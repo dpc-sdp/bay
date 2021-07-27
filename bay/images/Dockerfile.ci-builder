@@ -1,5 +1,6 @@
 FROM hashicorp/terraform:light AS terraform
 FROM integratedexperts/ci-builder:latest
+ARG GOJQ_VERSION=0.12.4
 
 # Install SDP ci dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
@@ -31,10 +32,10 @@ RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lag
 RUN lagoon config feature --disable-project-directory-check true
 
 # Install gojq.
-RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.12.4/gojq_v0.12.4_linux_amd64.tar.gz --output /tmp/gojq_v0.12.4_linux_amd64.tar.gz && \
-    tar -C /tmp -xvf /tmp/gojq_v0.12.4_linux_amd64.tar.gz && \
-    chmod +x /tmp/gojq_v0.12.4_linux_amd64/gojq && \
-    mv /tmp/gojq_v0.12.4_linux_amd64/gojq /usr/local/bin
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
+    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
 
 # Install bats.
 RUN npm install -g bats@1.2.1

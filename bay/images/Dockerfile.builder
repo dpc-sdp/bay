@@ -1,4 +1,5 @@
 FROM amazeeio/php:7.3-cli-drupal
+ARG GOJQ_VERSION=0.12.4
 
 ENV WEBROOT=docroot \
     COMPOSER_ALLOW_SUPERUSER=1 \
@@ -18,10 +19,10 @@ COPY php/mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
 
 # Install gojq.
-RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11.2_linux_amd64.tar.gz --output /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    tar -C /tmp -xvf /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    chmod +x /tmp/gojq_v0.11.2_linux_amd64/gojq && \
-    mv /tmp/gojq_v0.11.2_linux_amd64/gojq /usr/local/bin
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
+    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
 
 # Add common drupal config.
 RUN mkdir /bay

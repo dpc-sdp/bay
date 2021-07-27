@@ -1,4 +1,5 @@
 FROM php:7.2-cli
+ARG GOJQ_VERSION=0.12.4
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     DOCKER_VERSION=19.03.8 \
@@ -37,7 +38,7 @@ RUN curl -L -o /tmp/hub.tgz https://github.com/github/hub/releases/download/v$HU
     && mv /tmp/hub-linux-amd64-$HUB_VERSION/bin/* /usr/bin
 
 # Install gojq.
-RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.11.2/gojq_v0.11.2_linux_amd64.tar.gz --output /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    tar -C /tmp -xvf /tmp/gojq_v0.11.2_linux_amd64.tar.gz && \
-    chmod +x /tmp/gojq_v0.11.2_linux_amd64/gojq && \
-    mv /tmp/gojq_v0.11.2_linux_amd64/gojq /usr/local/bin
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
+    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
