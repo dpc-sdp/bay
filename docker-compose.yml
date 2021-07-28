@@ -28,6 +28,10 @@ services:
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx
+    ports:
+      - 8080
+    depends_on:
+      - php
     environment:
       << : *default-environment
     networks:
