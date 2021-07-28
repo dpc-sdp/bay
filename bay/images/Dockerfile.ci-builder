@@ -58,7 +58,7 @@ RUN pip install \
     flake8 \
     yamllint \
     boto3
-    
+
 ## Install required PHP extensions for Drupal
 RUN apk add --no-cache \
     libpng \
