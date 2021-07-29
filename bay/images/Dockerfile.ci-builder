@@ -18,6 +18,8 @@ RUN apk add --no-cache \
     cargo \
     composer \
     git \
+    libc6-compat \
+    libgcc \
     libffi-dev \
     musl-dev \
     ncurses \
@@ -75,9 +77,10 @@ RUN apk add --no-cache \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
-    zlib-dev \
-    && docker-php-ext-configure gd --enable-gd --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+    zlib-dev
+
+RUN docker-php-ext-configure gd --enable-gd --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd
 
 # Install Lagoon CLI.
 RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-linux-amd64" -o /usr/local/bin/lagoon && \
