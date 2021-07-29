@@ -3,10 +3,9 @@ version: 2
 jobs:
   build:
     docker:
-      - image: singledigital/bay-ci-builder:edge
+      - image: singledigital/bay-ci-builder:docker-20
         environment:
           GOSS_FILE_STRATEGY: cp
-          DOCKER_VERSION: 18.09.2
           DOCKERHUB_NAMESPACE: bay_ci
     steps:
       - checkout
@@ -31,10 +30,9 @@ jobs:
 
   deploy:
     docker:
-      - image: singledigital/bay-ci-builder:edge
+      - image: singledigital/bay-ci-builder:docker-20
         environment:
           GOSS_FILE_STRATEGY: cp
-          DOCKER_VERSION: 18.09.2
           DOCKERHUB_NAMESPACE: singledigital
     steps:
       - checkout

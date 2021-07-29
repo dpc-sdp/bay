@@ -37,10 +37,10 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # @see https://github.com/docker/compose/releases
 ENV DOCKER_VERSION=20.10.7
 ENV DOCKER_COMPOSE_VERSION=1.29.2
-RUN curl -L -o "/tmp/docker-${DOCKER_VERSION}.tgz" "https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz"
-RUN tar -xz -C /tmp -f "/tmp/docker-${DOCKER_VERSION}.tgz"
-RUN mv /tmp/docker/* /usr/bin
-RUN docker --version
+RUN curl -L -o "/home/docker-${DOCKER_VERSION}.tgz" "https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" \
+    && tar -xz -C /home -f "/home/docker-${DOCKER_VERSION}.tgz" \
+    && mv /home/docker/* /usr/bin \
+    && docker --version
 RUN cd /tmp/ && \
     wget --no-check-certificate -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
     wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.31-r0/glibc-2.31-r0.apk && \
