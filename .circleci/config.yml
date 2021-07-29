@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: singledigital/bay-ci-builder:docker-20
+      - image: circleci/buildpack-deps:zesty-scm-dind
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKERHUB_NAMESPACE: bay_ci
@@ -30,7 +30,7 @@ jobs:
 
   deploy:
     docker:
-      - image: singledigital/bay-ci-builder:docker-20
+      - image: singledigital/bay-ci-builder:edge
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKERHUB_NAMESPACE: singledigital
