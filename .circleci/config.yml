@@ -16,7 +16,7 @@ jobs:
           command: docker-compose up -d
       - run:
           name: Install goss
-          command: curl -fsSL https://goss.rocks/install | sh && goss --version
+          command: curl -fsSL https://goss.rocks/install | sudo sh && goss --version
       - run:
           name: Build images
           command: tests/build.sh
