@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/php
+      - image: cimg/php:7.4.22
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKERHUB_NAMESPACE: bay_ci
