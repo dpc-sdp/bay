@@ -3,13 +3,14 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/buildpack-deps:zesty-scm-dind
+      - image: cimg/php
         environment:
           GOSS_FILE_STRATEGY: cp
           DOCKERHUB_NAMESPACE: bay_ci
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.6
       - run:
           name: Bring the containers up.
           command: docker-compose up -d
