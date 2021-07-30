@@ -21,7 +21,7 @@ jobs:
           name: Build images
           command: tests/build.sh
       # Sleeping to ensure the supervisord has started.
-      - run: sleep 30s
+      - run: sleep 120s
       - run:
           name: Test images
           command: tests/run.sh
