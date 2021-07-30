@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: singledigital/bay-ci-builder:docker-20
         environment:
-          GOSS_FILE_STRATEGY: cp
+          GOSS_FILES_STRATEGY: cp
           DOCKERHUB_NAMESPACE: bay_ci
     steps:
       - checkout
@@ -33,7 +33,7 @@ jobs:
     docker:
       - image: singledigital/bay-ci-builder:edge
         environment:
-          GOSS_FILE_STRATEGY: cp
+          GOSS_FILES_STRATEGY: cp
           DOCKERHUB_NAMESPACE: singledigital
     steps:
       - checkout
