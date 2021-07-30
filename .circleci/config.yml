@@ -9,13 +9,14 @@ jobs:
           DOCKERHUB_NAMESPACE: bay_ci
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.6
       - run:
           name: Bring the containers up.
           command: docker-compose up -d
       - run:
           name: Install goss
-          command: curl -fsSL https://goss.rocks/install | sudo sh && goss --version
+          command: curl -fsSL https://goss.rocks/install | sh && goss --version
       - run:
           name: Build images
           command: tests/build.sh
