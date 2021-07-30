@@ -21,7 +21,7 @@ jobs:
           name: Build images
           command: tests/build.sh
       # Sleeping to ensure the supervisord has started.
-      - run: sleep 120s
+      - run: sleep 30s
       - run:
           name: Test images
           command: tests/run.sh
@@ -37,7 +37,8 @@ jobs:
           DOCKERHUB_NAMESPACE: singledigital
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.6
       - run:
           name: Log in to dockerhub
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD

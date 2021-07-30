@@ -18,8 +18,6 @@ RUN apk add --no-cache \
     cargo \
     composer \
     git \
-    libc6-compat \
-    libgcc \
     libffi-dev \
     musl-dev \
     ncurses \
