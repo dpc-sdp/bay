@@ -69,7 +69,10 @@ $settings['update_free_access'] = FALSE;
 // so it cannot be read via the browser. If your Drupal root is inside a
 // subfolder (like 'web') you can put the config folder outside this subfolder
 // for an advanced security measure: '../config/sync'.
-$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+if (defined('CONFIG_SYNC_DIRECTORY')) {
+  $config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+}
+$settings['config_sync_directory'] = '../config/sync';
 
 // The default list of directories that will be ignored by Drupal's file API.
 $settings['file_scan_ignore_directories'] = [
