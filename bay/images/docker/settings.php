@@ -2,7 +2,18 @@
 
 /**
  * @file
- * Bay Drupal 8 configuration file.
+ * Bay Drupal configuration file.
+ *
+ * @var string $app_root
+ *   The path to the application root.
+ * @var string $site_path
+ *   The active site directory for a request, relative to '$app_root'.
+ * @var array $databases
+ *   The database connections that Drupal may use.
+ * @var array $settings
+ *   Settings for read-only, low bootstrap, environment specific configuration.
+ * @var array $config
+ *   Configuration overrides.
  */
 
 $bay_settings_path = __DIR__;
