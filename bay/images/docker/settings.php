@@ -58,7 +58,7 @@ $settings['update_free_access'] = FALSE;
 // so it cannot be read via the browser. If your Drupal root is inside a
 // subfolder (like 'web') you can put the config folder outside this subfolder
 // for an advanced security measure: '../config/sync'.
-$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+$config_directories[\Drupal\Core\Site\Settings::get('config_sync_directory')] = '../config/sync';
 
 // The default list of directories that will be ignored by Drupal's file API.
 $settings['file_scan_ignore_directories'] = [
@@ -88,7 +88,7 @@ if (getenv('ENABLE_REDIS')) {
   $redis_password = getenv('REDIS_PASSWORD') ?: '';
 
   try {
-    if (drupal_installation_attempted()) {
+    if (\Drupal\Core\Installer\InstallerKernel::installationAttempted()) {
       throw new \Exception('Drupal installation underway.');
     }
 
