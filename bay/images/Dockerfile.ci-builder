@@ -21,6 +21,7 @@ RUN apk add --no-cache \
     composer \
     docker \
     docker-compose \
+    gcompat \
     git \
     libffi-dev \
     musl-dev \
