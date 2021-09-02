@@ -161,7 +161,7 @@ $config['system.performance']['css']['preprocess'] = 1;
 $config['system.performance']['js']['preprocess'] = 1;
 
 if ($smtp_on = getenv('ENABLE_SMTP')) {
-  $config['smtp.settings']['smtp_on'] = (bool) $smtp_on;
+  $config['smtp.settings']['smtp_on'] = ($smtp_on == "true") ? TRUE : FALSE;
   $config['smtp.settings']['smtp_host'] = getenv('SMTP_HOST') ?: 'email-smtp.ap-southeast-2.amazonaws.com';
   $config['smtp.settings']['smtp_port'] = getenv('SMTP_PORT') ?: '587';
   $config['smtp.settings']['smtp_protocol'] = getenv('SMTP_PROTOCOL') ?: 'tls';
