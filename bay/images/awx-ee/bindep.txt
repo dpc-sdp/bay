@@ -1,0 +1,5 @@
+python38-devel      [platform:rpm compile]
+python38-dev        [platform:dpkg]
+gcc-c++             [platform:rpm]
+git
+git-lfs             [platform:rpm]

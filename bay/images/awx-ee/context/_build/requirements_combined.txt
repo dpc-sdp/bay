@@ -1,0 +1,5 @@
+ansible-builder  # from collection user
+boto>=2.49.0  # from collection user
+botocore>=1.12.249  # from collection user
+boto3>=1.9.249  # from collection user
+requests-oauthlib  # from collection user
