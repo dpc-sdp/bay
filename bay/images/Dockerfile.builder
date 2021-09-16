@@ -11,7 +11,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 RUN apk update \
-    && apk del nodejs nodejs-current yarn \
+    && apk del npm nodejs nodejs-current yarn \
     && apk add nodejs-npm patch rsync redis --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/
 
 # Add MySQL client configuration.
