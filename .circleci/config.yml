@@ -6,11 +6,12 @@ jobs:
       - image: singledigital/bay-ci-builder:edge
         environment:
           GOSS_FILE_STRATEGY: cp
-          DOCKER_VERSION: 18.09.2
+          DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: bay_ci
     steps:
       - checkout
       - setup_remote_docker
+          version: 20.10.7
       - run:
           name: Bring the containers up.
           command: docker-compose up -d
