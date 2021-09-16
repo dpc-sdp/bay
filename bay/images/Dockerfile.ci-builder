@@ -14,7 +14,6 @@ COPY --from=terraform /bin/terraform /bin/terraform
 
 RUN apk add --no-cache \
     ansible \
-    ansible-lint \
     aws-cli \
     bash \
     cargo \
@@ -46,6 +45,7 @@ RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub
 RUN pip install \
     flake8 \
     yamllint \
+    ansible-lint \
     boto3
 
 ## Install required PHP extensions for Drupal
