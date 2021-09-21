@@ -1,0 +1,12 @@
+---
+version: 1
+dependencies:
+  galaxy: requirements.yml
+  python: requirements.txt
+
+additional_build_steps:
+  # prepend:
+  append:
+    - RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon
+    - RUN chmod +x /usr/local/bin/lagoon
+    - RUN lagoon config feature --disable-project-directory-check true
