@@ -62,10 +62,6 @@ for file in bay/images/Dockerfile*; do
     continue;
   fi
 
-  if [[ "$service" != "bay-node" ]]; then
-    continue
-  fi
-
   # Support different image names in dockerhub.
   case "$service" in
     bay-builder)

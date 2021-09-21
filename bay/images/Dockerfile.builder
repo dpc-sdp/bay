@@ -29,6 +29,10 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/g
     chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
     mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
 
+# Update to Composer 2
+RUN composer global remove hirak/prestissimo \
+    && composer self-update --2
+
 # Add common drupal config.
 RUN mkdir /bay
 COPY docker/services.yml /bay
