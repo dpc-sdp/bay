@@ -5,10 +5,15 @@ ENV WEBROOT=docroot \
     COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_CACHE_DIR=/tmp/.composer/cache
 
-ENV DOCKERIZE_VERSION v0.6.1
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+# Temporarily use a fork of dockerize as the binary download is broken.
+# @see https://github.com/jwilder/dockerize/issues/166
+# The dpc-sdp fork can be removed once this issue is resolved.
+#ENV DOCKERIZE_VERSION v0.6.1
+#RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+#    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+#    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releases/download/v0.6.1/dockerize_amd64_linux && \
+    chmod +x /usr/local/bin/dockerize
 
 RUN apk update \
     && apk del npm nodejs nodejs-current yarn \

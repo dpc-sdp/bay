@@ -15,6 +15,10 @@ echo "Build bay docker images"
 # Determine the tag to build.
 case $CIRCLE_BRANCH in
 
+  4.x)
+    echo "==> Build 4.x"
+    IMAGE_TAG=4.x
+    ;;
   3.x)
     echo "==> Build 3.x"
     IMAGE_TAG=3.x
