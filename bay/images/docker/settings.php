@@ -102,7 +102,7 @@ if (getenv('ENABLE_REDIS')) {
   $redis_password = getenv('REDIS_PASSWORD') ?: '';
 
   try {
-    if (drupal_installation_attempted()) {
+    if (\Drupal\Core\Installer\InstallerKernel::installationAttempted()) {
       throw new \Exception('Drupal installation underway.');
     }
 
