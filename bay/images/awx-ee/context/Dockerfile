@@ -12,6 +12,7 @@ RUN ansible-galaxy collection install $ANSIBLE_GALAXY_CLI_COLLECTION_OPTS -r req
 
 FROM $PYTHON_BUILDER_IMAGE as builder
 ADD _build/requirements_combined.txt /tmp/src/requirements.txt
+ADD _build/bindep_combined.txt /tmp/src/bindep.txt
 RUN assemble
 
 FROM $ANSIBLE_RUNNER_IMAGE
