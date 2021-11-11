@@ -31,3 +31,6 @@ COPY docker/redis-unavailable.services.yml /bay
 COPY docker/redis-cluster.services.yml /bay
 COPY docker/redis-single.services.yml /bay
 COPY docker/settings.php /bay
+
+# Update NPM to latest version
+RUN npm install npm@8.1 -g
