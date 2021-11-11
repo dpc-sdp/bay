@@ -2,6 +2,7 @@ php-cli
 php-json
 php-pdo
 php-dom
+php-gd
 which
 git
 git-lfs
