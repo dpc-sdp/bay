@@ -24,3 +24,6 @@ RUN /output/install-from-bindep && rm -rf /output/wheels
 RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon
 RUN chmod +x /usr/local/bin/lagoon
 RUN lagoon config feature --disable-project-directory-check true
+RUN curl -sS https://getcomposer.org/download/2.1.9/composer.phar --output composer.phar
+RUN chmod +x composer.phar
+RUN mv composer.phar /usr/local/bin/composer
