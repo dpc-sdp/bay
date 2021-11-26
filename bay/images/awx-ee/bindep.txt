@@ -1,5 +1,17 @@
-python38-devel      [platform:rpm compile]
-python38-dev        [platform:dpkg]
-gcc-c++             [platform:rpm]
+php-cli
+php-json
+php-pdo
+php-dom
+php-gd
+which
 git
-git-lfs             [platform:rpm]
+git-lfs
+
+unzip
+zip
+
+ca-certificates
+curl
+openssl
+jq
+rsync

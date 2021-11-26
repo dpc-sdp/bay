@@ -12,6 +12,7 @@ RUN ansible-galaxy collection install $ANSIBLE_GALAXY_CLI_COLLECTION_OPTS -r req
 
 FROM $PYTHON_BUILDER_IMAGE as builder
 ADD _build/requirements_combined.txt /tmp/src/requirements.txt
+ADD _build/bindep_combined.txt /tmp/src/bindep.txt
 RUN assemble
 
 FROM $ANSIBLE_RUNNER_IMAGE
@@ -23,3 +24,6 @@ RUN /output/install-from-bindep && rm -rf /output/wheels
 RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon
 RUN chmod +x /usr/local/bin/lagoon
 RUN lagoon config feature --disable-project-directory-check true
+RUN curl -sS https://getcomposer.org/download/2.1.9/composer.phar --output composer.phar
+RUN chmod +x composer.phar
+RUN mv composer.phar /usr/local/bin/composer
