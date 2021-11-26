@@ -11,6 +11,7 @@ php-phar
 which
 git
 git-lfs
+patch
 
 unzip
 zip
