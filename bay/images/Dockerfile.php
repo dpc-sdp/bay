@@ -2,14 +2,6 @@ FROM uselagoon/php-7.4-fpm:latest
 
 RUN mkdir /bay
 
-# Add blackfire probe.
-RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
-    && mkdir -p /blackfire \
-    && curl -A "Docker" -o /blackfire/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$version \
-    && tar zxpf /blackfire/blackfire-probe.tar.gz -C /blackfire \
-    && mv /blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
-    && rm -rf /blackfire
-
 COPY php/00-bay.ini /usr/local/etc/php/conf.d/
 COPY php/bay-php-config.sh /bay
 RUN chmod +x /bay/bay-php-config.sh
