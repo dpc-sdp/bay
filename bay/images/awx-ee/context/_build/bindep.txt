@@ -1,0 +1,23 @@
+php ==7.4
+php-cli
+php-json
+php-pdo
+php-dom
+php-gd
+php-zip
+php-mbstring
+php-phar
+
+which
+git
+git-lfs
+patch
+
+unzip
+zip
+
+ca-certificates
+curl
+openssl
+jq
+rsync
