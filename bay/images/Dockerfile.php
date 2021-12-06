@@ -8,7 +8,7 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /blackfire/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$version \
     && tar zxpf /blackfire/blackfire-probe.tar.gz -C /blackfire \
     && mv /blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
-    rm -rf /blackfire
+    && rm -rf /blackfire
 
 COPY php/00-bay.ini /usr/local/etc/php/conf.d/
 COPY php/bay-php-config.sh /bay
