@@ -90,3 +90,17 @@ for file in bay/images/Dockerfile*; do
   fi
 
 done
+
+echo "Build AWX docker images"
+awx_file=bay/images/awx-ee/context/Dockerfile
+awx_service=awx-ee
+if [ -f "$awx_file" ]; then
+ echo "==> Starting build for awx-ee from $awx_file"
+  docker build -f "$awx_file" -t "$DOCKERHUB_NAMESPACE/$awx_service" ./bay/images/awx-ee/context
+
+  echo "==> Tagging $awx_service image to $DOCKERHUB_NAMESPACE/$awx_service:$IMAGE_TAG"
+  docker tag "$DOCKERHUB_NAMESPACE/$awx_service" "$DOCKERHUB_NAMESPACE/$awx_service:$IMAGE_TAG"
+
+  echo "==> Pushing $awx_service to $DOCKERHUB_NAMESPACE/$awx_service:$IMAGE_TAG"
+  docker push "$DOCKERHUB_NAMESPACE/$awx_service:$IMAGE_TAG"
+fi
