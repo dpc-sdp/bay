@@ -36,10 +36,10 @@ RUN apk add --no-cache \
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ## Install GitHub CLI tool.
-RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz" -o /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
-    tar -C /tmp -xzvf /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
-    chmod +x /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub && \
-    mv /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub /usr/local/bin
+RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-386-${HUB_VERSION}.tgz" -o /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
+    tar -C /tmp -xzvf /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
+    chmod +x /tmp/hub-linux-386-${HUB_VERSION}/bin/hub && \
+    mv /tmp/hub-linux-386-${HUB_VERSION}/bin/hub /usr/local/bin
 
 # Install Python dependencies not available in apk.
 RUN pip install \
