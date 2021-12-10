@@ -16,7 +16,7 @@ Bay is a fully managed platform and hosting environment that provides an open Pl
  - is an open-source hosting platform based on Lagoon.
  - allows agencies to build, test and deliver websites via the cloud.
  - is a Kubernetes-based (OpenShift) Docker container hosting platform with auto-scaling, auto-recovery and high-availability at core.
- - is based on open-source project Lagoon.
+ - is based on open-source project Lagoon
 
 ### amazee.io Lagoon
 Lagoon solves what developers are dreaming about: A system that allows developers to locally develop their code and their services with Docker and run the exact same system in production. The same Docker images, the same service configurations and the same code.
@@ -28,7 +28,7 @@ Learn more from https://lagoon.readthedocs.io/en/latest/
 
 ### Lock-down Ingress with Pre-Shared Key
 
-Using the nginx image, you can lock down access to your application with using a pre-shared key added at your CDN. 
+Using the nginx image, you can lock down access to your application with using a pre-shared key added at your CDN.
 
 Set these environment variables in your nginx deployment:
 
