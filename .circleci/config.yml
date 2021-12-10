@@ -73,7 +73,7 @@ jobs:
               echo "==> Skip deployment..."
             else
               echo "==> Push images with $IMAGE_TAG"
-              docker buildx bake -f bake.hcl
+              docker buildx bake -f bake.hcl --push
             fi
 
 workflows:
