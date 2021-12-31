@@ -4,7 +4,5 @@ collections:
   - ansible.utils
   - community.general
   - kubernetes.core
-  - name: lagoon.api
-    source: https://github.com/salsadigitalauorg/lagoon_ansible_collection.git
-    version: master
-    type: git
+  - git+https://github.com/salsadigitalauorg/lagoon_ansible_collection.git,master
+  - git+https://github.com/salsadigitalauorg/section_ansible_collection.git,main
