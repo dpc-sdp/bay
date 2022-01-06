@@ -13,7 +13,8 @@ COPY --from=commons /bin/fix-permissions /bin/ep /bin/docker-sleep /bin/wait-for
 COPY --from=commons /home /home
 
 RUN architecture=$(case $(uname -m) in x86_64 | amd64) echo "amd64" ;; aarch64 | arm64 | armv8) echo "arm64" ;; *) echo "amd64" ;; esac) \
-    && curl -sL https://github.com/krallin/tini/releases/download/v0.19.0/tini-${architecture} -o /sbin/tini && chmod a+x /sbin/tini
+    && curl -sL https://github.com/krallin/tini/releases/download/v0.19.0/tini-${architecture} -o /sbin/tini \
+    && chmod a+x /sbin/tini
 
 COPY elasticsearch/docker-entrypoint.sh.7 /lagoon/entrypoints/90-elasticsearch.sh
 
