@@ -109,7 +109,7 @@ target "circle" {
   dockerfile    = "Dockerfile.builder"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-cirlce:${IMAGE_TAG}"]
+  tags          = ["${DOCKERHUB_NAMESPACE}/bay-circle:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
