@@ -25,6 +25,7 @@ group "default" {
       "nginx-php",
       "node",
       "circle",
+      "elasticsearch",
     ]
 }
 
@@ -109,6 +110,18 @@ target "circle" {
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-cirlce:${IMAGE_TAG}"]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+
+target "elasticsearch" {
+  context       = "${CONTEXT}"
+  dockerfile    = "Dockerfile.elasticsearch"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+  tags          = ["${DOCKERHUB_NAMESPACE}/bay-elasticsearch:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
