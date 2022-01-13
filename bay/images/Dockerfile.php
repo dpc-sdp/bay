@@ -14,6 +14,10 @@ COPY docker/services.yml /bay
 COPY docker/redis-unavailable.services.yml /bay
 COPY docker/settings.php /bay
 
+# Configure a sane worker pool
+RUN sed -i "s/pm = dynamic/pm = static/" /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i "s/pm.max_children = 50/pm.max_children = 32/" /usr/local/etc/php-fpm.d/www.conf
+
 ENV TZ=Australia/Melbourne
 
 RUN  apk add --no-cache tzdata \
