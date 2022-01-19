@@ -1,27 +1,21 @@
-ARG EE_BASE_IMAGE=quay.io/ansible/ansible-runner:latest
-ARG EE_BUILDER_IMAGE=quay.io/ansible/ansible-builder:latest
+ARG ANSIBLE_RUNNER_IMAGE=quay.io/ansible/ansible-runner:devel
+ARG PYTHON_BUILDER_IMAGE=quay.io/ansible/python-builder:latest
 
-FROM $EE_BASE_IMAGE as galaxy
+FROM $ANSIBLE_RUNNER_IMAGE as galaxy
+
 ARG ANSIBLE_GALAXY_CLI_COLLECTION_OPTS=
-USER root
-
 ADD _build /build
-WORKDIR /build
 
+WORKDIR /build
 RUN ansible-galaxy role install -r requirements.yml --roles-path /usr/share/ansible/roles
 RUN ansible-galaxy collection install $ANSIBLE_GALAXY_CLI_COLLECTION_OPTS -r requirements.yml --collections-path /usr/share/ansible/collections
 
-FROM $EE_BUILDER_IMAGE as builder
-
-COPY --from=galaxy /usr/share/ansible /usr/share/ansible
-
-ADD _build/requirements.txt requirements.txt
-ADD _build/bindep.txt bindep.txt
-RUN ansible-builder introspect --sanitize --user-pip=requirements.txt --user-bindep=bindep.txt --write-bindep=/tmp/src/bindep.txt --write-pip=/tmp/src/requirements.txt
+FROM $PYTHON_BUILDER_IMAGE as builder
+ADD _build/requirements_combined.txt /tmp/src/requirements.txt
+ADD _build/bindep_combined.txt /tmp/src/bindep.txt
 RUN assemble
 
-FROM $EE_BASE_IMAGE
-USER root
+FROM $ANSIBLE_RUNNER_IMAGE
 RUN dnf module enable php:7.4 -y
 
 COPY --from=galaxy /usr/share/ansible /usr/share/ansible
