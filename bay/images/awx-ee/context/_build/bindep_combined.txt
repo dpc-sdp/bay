@@ -11,6 +11,7 @@ php-gd  # from collection user
 php-zip  # from collection user
 php-mbstring  # from collection user
 php-phar  # from collection user
+php-soap  # from collection user
 which  # from collection user
 git  # from collection user
 git-lfs  # from collection user
