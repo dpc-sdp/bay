@@ -51,7 +51,7 @@ RUN  set -eux; \
 
 
 RUN apt-get update
-RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-mbstring php-soap php-gd
+RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-mbstring php-soap php-gd python3 python3-pip
 
 ENV PATH="/govcms/vendor/bin:/usr/local/bin:${PATH}"
 
@@ -97,3 +97,5 @@ RUN git --version \
   && docker --version \
   && docker-compose version \
   && composer --version
+
+RUN pip install ansible ansible-builder
