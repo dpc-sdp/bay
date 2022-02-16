@@ -7,7 +7,6 @@ php-gd
 php-zip
 php-mbstring
 php-phar
-php-soap
 
 which
 git

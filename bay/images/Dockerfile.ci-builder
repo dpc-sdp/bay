@@ -36,10 +36,10 @@ RUN apk add --no-cache \
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ## Install GitHub CLI tool.
-RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz" -o /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
-    tar -C /tmp -xzvf /tmp/hub-linux-amd64-${HUB_VERSION}.tgz && \
-    chmod +x /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub && \
-    mv /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub /usr/local/bin
+RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-386-${HUB_VERSION}.tgz" -o /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
+    tar -C /tmp -xzvf /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
+    chmod +x /tmp/hub-linux-386-${HUB_VERSION}/bin/hub && \
+    mv /tmp/hub-linux-386-${HUB_VERSION}/bin/hub /usr/local/bin
 
 # Install Python dependencies not available in apk.
 RUN pip install \
@@ -54,7 +54,9 @@ RUN apk add --no-cache \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
+    libxml2-dev \
     zlib-dev \
+    && docker-php-ext-install soap \
     && docker-php-ext-configure gd --enable-gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
@@ -75,8 +77,9 @@ RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/
   && chmod +x /usr/local/bin/ahoy \
   && ahoy --version
 
-# Install bats.
+# Install bats and shellcheck.
 RUN npm install -g bats@1.2.1
+RUN apk add --no-cache shellcheck
 
 # Cleanup tmp when we're done.
 RUN rm -rf /tmp/*
