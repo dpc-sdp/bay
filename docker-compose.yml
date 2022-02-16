@@ -54,7 +54,7 @@ services:
       context: ./bay/images
       dockerfile: $PWD/bay/images/Dockerfile.php_goss
       args:
-        BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx
+        BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx-php:${IMAGE_TAG:-4.x}
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx_goss
     environment:
       << : *default-environment
