@@ -187,6 +187,11 @@ if ($smtp_on = getenv('ENABLE_SMTP')) {
   $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@vic.gov.au';
 }
 
+// Add webspell check customer id in ckeditor config.
+if ($ckeditor_custom_config = getenv('CKEDITOR_CUSTOM_CONFIG')) {
+  $config['editor.editor.rich_text']['settings']['plugins']['customconfig']['ckeditor_custom_config'] = $ckeditor_custom_config;
+}
+
 /**
  * Fast 404 settings.
  *
