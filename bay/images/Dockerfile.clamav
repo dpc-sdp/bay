@@ -5,9 +5,10 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
   clamav-daemon \
   clamav-libunrar \
-  unrar \
   py3-setuptools \
   supervisor
+
+RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main unrar
 
 # Add clamav user
 RUN mkdir -p /var/lib/clamav && \
