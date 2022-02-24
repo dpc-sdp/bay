@@ -14,7 +14,7 @@ COPY docker/services.yml /bay
 COPY docker/redis-unavailable.services.yml /bay
 COPY docker/settings.php /bay
 
-# Configure a sane worker pool
+# Change worker pool from dynamic to static. Change default value to 24.
 RUN sed -i "s/pm = dynamic/pm = static/" /usr/local/etc/php-fpm.d/www.conf
 ENV PHP_FPM_PM_MAX_CHILDREN=24
 
