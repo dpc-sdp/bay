@@ -3,11 +3,15 @@ FROM uselagoon/commons:latest
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-  clamav-daemon \
-  clamav-libunrar \
   py3-setuptools \
   supervisor \
   ca-certificates
+
+RUN update-ca-certificates
+
+RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+  clamav-daemon \
+  clamav-libunrar
 
 RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main unrar
 
