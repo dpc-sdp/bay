@@ -306,6 +306,8 @@ $config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
 // Configure elasticsearch connections from environment variables.
 if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
+} else {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] =  "http://elasticsearch:9200";
 }
 
 if (getenv('SEARCH_INDEX')) {
