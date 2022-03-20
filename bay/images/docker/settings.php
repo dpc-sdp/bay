@@ -316,6 +316,11 @@ if (getenv('SEARCH_INDEX')) {
     'prefix' => getenv('SEARCH_INDEX'),
     'suffix' => '',
   ];
+} else {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
+    'prefix' => 'elasticsearch_index_nonprod_',
+    'suffix' => '',
+  ];
 }
 
 if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
@@ -323,6 +328,8 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 1;
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
+} else {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
