@@ -1,21 +1,27 @@
-ARG ANSIBLE_RUNNER_IMAGE=quay.io/ansible/ansible-runner:devel
-ARG PYTHON_BUILDER_IMAGE=quay.io/ansible/python-builder:latest
+ARG EE_BASE_IMAGE=quay.io/ansible/ansible-runner:latest
+ARG EE_BUILDER_IMAGE=quay.io/ansible/ansible-builder:latest
 
-FROM $ANSIBLE_RUNNER_IMAGE as galaxy
-
+FROM $EE_BASE_IMAGE as galaxy
 ARG ANSIBLE_GALAXY_CLI_COLLECTION_OPTS=
-ADD _build /build
+USER root
 
+ADD _build /build
 WORKDIR /build
+
 RUN ansible-galaxy role install -r requirements.yml --roles-path /usr/share/ansible/roles
 RUN ansible-galaxy collection install $ANSIBLE_GALAXY_CLI_COLLECTION_OPTS -r requirements.yml --collections-path /usr/share/ansible/collections
 
-FROM $PYTHON_BUILDER_IMAGE as builder
-ADD _build/requirements_combined.txt /tmp/src/requirements.txt
-ADD _build/bindep_combined.txt /tmp/src/bindep.txt
+FROM $EE_BUILDER_IMAGE as builder
+
+COPY --from=galaxy /usr/share/ansible /usr/share/ansible
+
+ADD _build/requirements.txt requirements.txt
+ADD _build/bindep.txt bindep.txt
+RUN ansible-builder introspect --sanitize --user-pip=requirements.txt --user-bindep=bindep.txt --write-bindep=/tmp/src/bindep.txt --write-pip=/tmp/src/requirements.txt
 RUN assemble
 
-FROM $ANSIBLE_RUNNER_IMAGE
+FROM $EE_BASE_IMAGE
+USER root
 RUN dnf module enable php:7.4 -y
 
 COPY --from=galaxy /usr/share/ansible /usr/share/ansible
@@ -34,3 +40,7 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.12.4/gojq_v0.12
 RUN tar -C /tmp -xvf /tmp/gojq_v0.12.4_linux_amd64.tar.gz
 RUN chmod +x /tmp/gojq_v0.12.4_linux_amd64/gojq
 RUN mv /tmp/gojq_v0.12.4_linux_amd64/gojq /usr/local/bin
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
+ADD azure-cli.repo /etc/yum.repos.d/azure-cli.repo
+RUN dnf --assumeyes install azure-cli
+RUN az aks install-cli
