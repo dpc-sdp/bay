@@ -318,7 +318,7 @@ if (getenv('SEARCH_INDEX')) {
   ];
 } else {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
-    'prefix' => 'elasticsearch_index_nonprod_',
+    'prefix' => 'elasticsearch_index_default_',
     'suffix' => '',
   ];
 }
