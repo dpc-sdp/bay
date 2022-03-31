@@ -9,7 +9,7 @@ RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge
 
 RUN update-ca-certificates
 
-RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
   clamav-daemon \
   clamav-libunrar
 
