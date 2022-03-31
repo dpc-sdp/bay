@@ -2,6 +2,8 @@ FROM uselagoon/commons:latest
 
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN apk update
+
 RUN apk add --no-cache -u --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
   py3-setuptools \
   supervisor \
