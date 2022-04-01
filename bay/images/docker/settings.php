@@ -304,25 +304,32 @@ $config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clamav_host;
 $config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
 
 // Configure elasticsearch connections from environment variables.
-if (!in_array($lagoon_env_type, ['local', 'ci'])) {
-  if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
-  }
+if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
+} else {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] =  "http://elasticsearch:9200";
+}
 
-  if (getenv('SEARCH_INDEX')) {
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['rewrite_index'] = 1;
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
-      'prefix' => getenv('SEARCH_INDEX'),
-      'suffix' => '',
-    ];
-  }
+if (getenv('SEARCH_INDEX')) {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['rewrite_index'] = 1;
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
+    'prefix' => getenv('SEARCH_INDEX'),
+    'suffix' => '',
+  ];
+} else {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
+    'prefix' => 'elasticsearch_index_default_',
+    'suffix' => '',
+  ];
+}
 
-  if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['username'] = getenv('SEARCH_AUTH_USERNAME');
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 1;
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
-  }
+if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['username'] = getenv('SEARCH_AUTH_USERNAME');
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 1;
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
+} else {
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
