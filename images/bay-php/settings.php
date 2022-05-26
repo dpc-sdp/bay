@@ -34,13 +34,13 @@ $connection_info = [
 
 $databases['default']['default'] = $connection_info;
 
-// If Lagoon defines the DB_READREPLICA_HOSTS we add this to the available
+// If Lagoon defines the MARIADB_READREPLICA_HOSTS we add this to the available
 // database connections. This allows core services to offload some
 // queries to the replica.
 //
 // @see core/services.yml database.replica
-if (getenv('DB_READREPLICA_HOSTS')) {
-  $replica_hosts = explode(' ', getenv('DB_READREPLICA_HOSTS'));
+if (getenv('MARIADB_READREPLICA_HOSTS')) {
+  $replica_hosts = explode(' ', getenv('MARIADB_READREPLICA_HOSTS'));
   $replica_hosts = array_map('trim', $replica_hosts);
 
   // This allows --database=reader so Drush can be set to target the
