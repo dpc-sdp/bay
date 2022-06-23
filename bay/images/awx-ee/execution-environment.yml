@@ -14,7 +14,7 @@ additional_build_steps:
     - RUN curl -L "https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz" -o /tmp/hub && tar -xvf /tmp/hub -C /tmp && mv /tmp/hub-linux-amd64-2.14.2/bin/hub /usr/local/bin
     - RUN chmod +x /usr/local/bin/hub
     - RUN lagoon config feature --disable-project-directory-check true
-    - RUN curl -sS https://getcomposer.org/download/2.1.9/composer.phar --output composer.phar
+    - RUN curl -sS https://getcomposer.org/download/2.3.7/composer.phar --output composer.phar
     - RUN chmod +x composer.phar
     - RUN mv composer.phar /usr/local/bin/composer
     - RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.12.4/gojq_v0.12.4_linux_amd64.tar.gz --output /tmp/gojq_v0.12.4_linux_amd64.tar.gz
