@@ -10,5 +10,5 @@ collections:
     type: git
   - name: section.api
     source: https://github.com/salsadigitalauorg/section_ansible_collection.git
-    version: master
+    version: main
     type: git
