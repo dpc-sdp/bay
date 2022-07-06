@@ -29,3 +29,7 @@ ONBUILD ARG LAGOON_ENVIRONMENT_TYPE
 # End of build time env vars
 
 RUN apk --update add curl
+
+# Force cloning with https rather than ssh.
+# @expires 2022-10
+RUN git config --global url."https://github.com/".insteadOf 'git@github.com:'
