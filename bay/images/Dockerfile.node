@@ -33,3 +33,4 @@ RUN apk --update add curl git
 # Force cloning with https rather than ssh.
 # @expires 2022-10
 RUN git config --global url."https://github.com/".insteadOf 'git@github.com:'
+RUN git config --global url."https://github.com/".insteadOf 'ssh://git@github.com/'
