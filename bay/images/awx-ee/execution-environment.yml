@@ -7,7 +7,7 @@ dependencies:
 
 additional_build_steps:
   prepend:
-    - RUN pip3 install --upgrade pip setuptools
+    - RUN /usr/bin/python3 -m pip install --upgrade pip
     - RUN dnf module enable php:7.4 -y
   append:
     - RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon
