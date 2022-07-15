@@ -1,0 +1,18 @@
+{
+    "name": "dpc-sdp/clamav-testing",
+    "description": "Test the clamav service",
+    "require": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "authors": [
+        {
+            "name": "steveworley",
+            "email": "sj.worley88@gmail.com.au"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DpcSdpTests\\": "src/"
+        }
+    }
+}

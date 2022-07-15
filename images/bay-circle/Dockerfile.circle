@@ -1,0 +1,44 @@
+FROM php:7.4-cli
+ARG GOJQ_VERSION=0.12.4
+
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+    DOCKER_VERSION=19.03.8 \
+    DOCKER_COMPOSE_VERSION=1.25.5 \
+    HUB_VERSION=2.14.2
+
+# Install git
+RUN apt-get update -qq && apt-get install -qqy \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    git \
+    ssh \
+    zip
+
+# Install docker.
+RUN curl -L -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz \
+    && tar -xz -C /tmp -f /tmp/docker.tgz \
+    && mv /tmp/docker/* /usr/bin
+
+# Install docker-compose.
+RUN curl -L https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
+
+# Install composer.
+RUN curl -s https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && chmod +x /usr/local/bin/composer
+
+# Install composer-lock-updater
+RUN composer global require danielbachhuber/composer-lock-updater
+
+# Install hub for creating GitHub pull requests
+RUN curl -L -o /tmp/hub.tgz https://github.com/github/hub/releases/download/v$HUB_VERSION/hub-linux-amd64-$HUB_VERSION.tgz \
+    && tar -xz -C /tmp -f /tmp/hub.tgz \
+    && mv /tmp/hub-linux-amd64-$HUB_VERSION/bin/* /usr/bin
+
+# Install gojq.
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
+    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
+    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin

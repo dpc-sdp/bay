@@ -1,0 +1,27 @@
+---
+version: 1
+dependencies:
+  galaxy: requirements.yml
+  python: requirements.txt
+  system: bindep.txt
+
+additional_build_steps:
+  prepend:
+    - RUN dnf module enable php:7.4 -y
+  append:
+    - RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon
+    - RUN chmod +x /usr/local/bin/lagoon
+    - RUN curl -L "https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz" -o /tmp/hub && tar -xvf /tmp/hub -C /tmp && mv /tmp/hub-linux-amd64-2.14.2/bin/hub /usr/local/bin
+    - RUN chmod +x /usr/local/bin/hub
+    - RUN lagoon config feature --disable-project-directory-check true
+    - RUN curl -sS https://getcomposer.org/download/2.3.7/composer.phar --output composer.phar
+    - RUN chmod +x composer.phar
+    - RUN mv composer.phar /usr/local/bin/composer
+    - RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.12.4/gojq_v0.12.4_linux_amd64.tar.gz --output /tmp/gojq_v0.12.4_linux_amd64.tar.gz
+    - RUN tar -C /tmp -xvf /tmp/gojq_v0.12.4_linux_amd64.tar.gz
+    - RUN chmod +x /tmp/gojq_v0.12.4_linux_amd64/gojq
+    - RUN mv /tmp/gojq_v0.12.4_linux_amd64/gojq /usr/local/bin
+    - RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    - ADD azure-cli.repo /etc/yum.repos.d/azure-cli.repo
+    - RUN dnf --assumeyes install azure-cli
+    - RUN az aks install-cli
