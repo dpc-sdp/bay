@@ -128,7 +128,7 @@ services:
   ci-builder:
     build:
       context: ./images/bay-ci-builder
-      dockerfile: $PWD/bay/images/bay-ci-builder/Dockerfile.ci-builder
+      dockerfile: $PWD/images/bay-ci-builder/Dockerfile.ci-builder
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ci-builder:${IMAGE_TAG:-4.x}
     command: tail -F anything
     environment:
