@@ -49,7 +49,7 @@ jobs:
           name: "Unit tests for clamav"
       - 
         run: 
-          command: "ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml"
+          command: "ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml"
           name: "Build the AWX EE"
   deploy: 
     docker: 
