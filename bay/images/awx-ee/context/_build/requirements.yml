@@ -8,3 +8,11 @@ collections:
     source: https://github.com/salsadigitalauorg/lagoon_ansible_collection.git
     version: master
     type: git
+  - name: section.api
+    source: https://github.com/salsadigitalauorg/section_ansible_collection.git
+    version: main
+    type: git
+  - name: community.elastic
+    source: https://github.com/ansible-collections/community.elastic.git
+    version: latest
+    type: git

@@ -3,7 +3,6 @@ collections:
   - ansible.posix
   - ansible.utils
   - community.general
-  - community.elastic
   - kubernetes.core
   - name: lagoon.api
     source: https://github.com/salsadigitalauorg/lagoon_ansible_collection.git
@@ -12,4 +11,8 @@ collections:
   - name: section.api
     source: https://github.com/salsadigitalauorg/section_ansible_collection.git
     version: main
+    type: git
+  - name: community.elastic
+    source: https://github.com/ansible-collections/community.elastic.git
+    version: latest
     type: git

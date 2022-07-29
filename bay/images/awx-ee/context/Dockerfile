@@ -8,8 +8,8 @@ USER root
 ADD _build /build
 WORKDIR /build
 
-RUN ansible-galaxy role install -r requirements.yml --roles-path /usr/share/ansible/roles
-RUN ansible-galaxy collection install $ANSIBLE_GALAXY_CLI_COLLECTION_OPTS -r requirements.yml --collections-path /usr/share/ansible/collections
+RUN ansible-galaxy role install -r requirements.yml --roles-path "/usr/share/ansible/roles"
+RUN ANSIBLE_GALAXY_DISABLE_GPG_VERIFY=1 ansible-galaxy collection install $ANSIBLE_GALAXY_CLI_COLLECTION_OPTS -r requirements.yml --collections-path "/usr/share/ansible/collections"
 
 FROM $EE_BUILDER_IMAGE as builder
 
@@ -33,7 +33,7 @@ RUN chmod +x /usr/local/bin/lagoon
 RUN curl -L "https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz" -o /tmp/hub && tar -xvf /tmp/hub -C /tmp && mv /tmp/hub-linux-amd64-2.14.2/bin/hub /usr/local/bin
 RUN chmod +x /usr/local/bin/hub
 RUN lagoon config feature --disable-project-directory-check true
-RUN curl -sS https://getcomposer.org/download/2.1.9/composer.phar --output composer.phar
+RUN curl -sS https://getcomposer.org/download/2.3.7/composer.phar --output composer.phar
 RUN chmod +x composer.phar
 RUN mv composer.phar /usr/local/bin/composer
 RUN curl -L https://github.com/itchyny/gojq/releases/download/v0.12.4/gojq_v0.12.4_linux_amd64.tar.gz --output /tmp/gojq_v0.12.4_linux_amd64.tar.gz
