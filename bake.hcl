@@ -7,7 +7,7 @@ variable "DOCKERHUB_NAMESPACE" {
 }
 
 variable "CONTEXT" {
-  default = "bay/images"
+  default = "images"
 }
 
 variable "LAGOON_IMAGE_VERSION" {
