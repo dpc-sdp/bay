@@ -69,7 +69,7 @@ jobs:
           threshold are discovered
         type: boolean
       image_file:
-        default: ''
+        default: (.circleci/scripts/tag.sh)
         description: Path to a file of images to scan
         type: (.circleci/scripts/tag.sh)
       severity_threshold:
