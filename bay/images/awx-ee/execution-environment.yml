@@ -5,6 +5,11 @@ dependencies:
   python: requirements.txt
   system: bindep.txt
 
+build_arg_defaults:
+  NVM_INSTALL_VERSION: v0.39.1
+  NVM_DIR: $HOME/.nvm
+  NVM_VERSION: v14.15.1
+
 additional_build_steps:
   prepend:
     - RUN dnf module enable php:7.4 -y
@@ -25,5 +30,9 @@ additional_build_steps:
     - ADD azure-cli.repo /etc/yum.repos.d/azure-cli.repo
     - RUN dnf --assumeyes install azure-cli
     - RUN az aks install-cli
-    - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-    - RUN export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" nvm install v14.15.1
+    - RUN touch $HOME/.profile
+    - RUN curl -o- --silent https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
+    - RUN source $NVM_DIR/nvm.sh \
+    - RUN nvm install $NVM_VERSION \
+    - RUN nvm alias default $NVM_VERSION \
+    - RUN nvm use default
