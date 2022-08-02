@@ -27,10 +27,11 @@ jobs:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
       - run:
+          name: Download Clair scan
+          command: ".circleci/scripts/downloadclairscan.sh"
+      - run:
           name: scan the images
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh)
-          command: .circleci/scripts/downloadclairscan.sh
-          command: .circleci/scripts/runclairscan.sh .circleci/scripts/dockercompose.yml $IMAGE_TAG $IMAGE_TAG_report
+          command: ".circleci/scripts/runclairscan.sh .circleci/scripts/dockercompose.yml $IMAGE_TAG $IMAGE_TAG_report"
       - run:
           name: Start the containers
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
