@@ -1,8 +1,9 @@
 version: 2
+
 jobs:
   build:
     docker:
-      - image: 'singledigital/ci-buildx:DDS-1080'
+      - image: singledigital/ci-buildx:DDS-1080
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
@@ -14,177 +15,38 @@ jobs:
           version: 20.10.7
       - run:
           name: Prepare the docker context
-          command: >
-            docker run --rm --privileged multiarch/qemu-user-static --reset -p
-            yes
-
+          command: |
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             docker context create dpc
-
-            docker buildx create --platform linux/amd64,linux/arm64 dpc --name
-            dpc --use
-
+            docker buildx create --platform linux/amd64,linux/arm64 dpc --name dpc --use
             docker buildx inspect --bootstrap
       - run:
           name: Prepare the manifest
-          command: >-
-            IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl
-            --print --no-cache
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print --no-cache
       - run:
           name: Build the images
-          command: >-
-            IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl
-            --no-cache
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
       - run:
           name: Start the containers
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
       - run:
           name: Install goss
-          command: 'curl -fsSL https://goss.rocks/install | sh && goss --version'
+          command: curl -fsSL https://goss.rocks/install | sh && goss --version
+      # Sleeping to ensure the supervisord has started.
       - run: sleep 30s
       - run:
           name: Test images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Unit tests for clamav
-          command: >-
-            docker-compose exec test sh -c 'cd /app/clamav &&
-            ./vendor/bin/phpunit'
+          command: docker-compose exec test sh -c 'cd /app/clamav && ./vendor/bin/phpunit'
       - run:
           name: Build the AWX EE
-          command: >-
-            ansible-builder build --context=bay/images/awx-ee/context --tag
-            singledigital/awx-ee:latest --container-runtime docker -f
-            bay/images/awx-ee/execution-environment.yml
-  scan:
-    description: Scan an image for vulnerabilities
-    parameters:
-      docker_layer_caching:
-        default: false
-        description: Enable CircleCI Docker Layer Caching
-        type: boolean
-      fail_on_discovered_vulnerabilities:
-        default: true
-        description: >-
-          Fail command when vulnerabilities at severity equal to or above the
-          threshold are discovered
-        type: boolean
-      image_file:
-        default: (.circleci/scripts/tag.sh)
-        description: Path to a file of images to scan
-        type: (.circleci/scripts/tag.sh)
-      severity_threshold:
-        default: High
-        description: >-
-          The threshold (equal and above) at which discovered vulnerabilities
-          are reported. May be 'Defcon1', 'Critical', 'High', 'Medium', 'Low',
-          'Negligible' or 'Unknown'
-        type: string
-      whitelist:
-        default: ''
-        description: Path to a CVE whitelist
-        type: string
-      steps:
-        - checkout
-        - setup_remote_docker:
-            docker_layer_caching: << parameters.docker_layer_caching >>
-            version: 17.11.0-ce
-        - executors:
-            default:
-              description: Clair executor
-              docker:
-                - image: >-
-                    ovotech/clair-scanner@sha256:104d99d746f4eeca4109ce3aed63fd860f2b2b742ef648bda5ef7bcc17ceab86
-          run:
-            command: >
-              #!/usr/bin/env bash
+          command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
 
-
-              set -ex
-
-
-              if [ -z "<< parameters.image_file >>" ]; then
-                  echo "Either the image_file or image parameters must be present"
-                  exit -1
-              fi
-
-
-              function scan() {
-                  image=$1
-                  munged_image=$(echo "$image" | sed 's/\//_/g' | sed 's/:/_/g')
-                  sanitised_image_filename="${munged_image}.json"
-                  if ! docker exec -it $CLAIR_SCANNER clair-scanner --ip ${scanner_ip} --clair=http://${clair_ip}:6060 -t "<< parameters.severity_threshold >>" --report "/$sanitised_image_filename" $WHITELIST "$image"; then
-                      EXIT_STATUS=1
-                  fi
-              }
-
-
-              function check_clair_running() {
-                  container_id=$1
-                  if ! docker ps | grep "$container_id" | grep -i "Up"; then
-                    docker logs $container_id
-                    docker start $container_id
-                  fi
-              }
-
-
-              REPORT_DIR=/clair-reports
-
-              mkdir $REPORT_DIR
-
-              out=`docker load < "<< parameters.image_file >>"`
-
-              image=`echo ${out} | awk '{print $3}'`
-
-              DB=$(docker run -p 5432:5432 -d arminc/clair-db:latest)
-
-              CLAIR=$(docker run -p 6060:6060 --link $DB:postgres -d
-              arminc/clair-local-scan:v2.1.7_5125fde67edee46cb058a3feee7164af9645e07d)
-
-              CLAIR_SCANNER=$(docker run -v
-              /var/run/docker.sock:/var/run/docker.sock -d
-              ovotech/clair-scanner@sha256:104d99d746f4eeca4109ce3aed63fd860f2b2b742ef648bda5ef7bcc17ceab86
-              tail -f /dev/null)
-
-
-              check_clair_running $CLAIR
-
-
-              clair_ip=$(docker exec -it $CLAIR hostname -i | grep -oE
-              '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
-
-              scanner_ip=$(docker exec -it $CLAIR_SCANNER hostname -i | grep -oE
-              '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
-
-
-              WHITELIST=""
-
-              if [ -n "<< parameters.whitelist >>" ]; then
-                  cat "<< parameters.whitelist >>"
-                  docker cp "<< parameters.whitelist >>" $CLAIR_SCANNER:/whitelist.yml
-
-                  WHITELIST="-w /whitelist.yml"
-              fi
-
-
-              EXIT_STATUS=0
-
-
-              check_clair_running $CLAIR
-
-              scan $image
-
-
-
-              if [ "<< parameters.fail_on_discovered_vulnerabilities >>" ==
-              "false" ]; then
-                  exit 0
-              else
-                  exit $EXIT_STATUS
-              fi
-            name: vulnerability scan
   deploy:
     docker:
-      - image: 'singledigital/ci-buildx:4.x'
+      - image: singledigital/ci-buildx:4.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
@@ -199,15 +61,10 @@ jobs:
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run:
           name: Create the builder for multiarch
-          command: >
-            docker run --rm --privileged multiarch/qemu-user-static --reset -p
-            yes
-
+          command: |
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             docker context create dpc
-
-            docker buildx create --platform linux/amd64,linux/arm64 dpc --name
-            dpc --use
-
+            docker buildx create --platform linux/amd64,linux/arm64 dpc --name dpc --use
             docker buildx inspect --bootstrap
       - run:
           name: Push images to dockerhub
@@ -227,10 +84,10 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - scan
       - deploy:
           requires:
             - build
+
   weekly_build:
     jobs:
       - build
