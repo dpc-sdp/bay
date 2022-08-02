@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:bullseye-slim
 
 # TODO remove config.json this flag once it's not needed for `buildx` anymore
 COPY buildx/config.json /root/.docker/
