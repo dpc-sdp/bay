@@ -1,0 +1,21 @@
+--- 
+services: 
+  clair: 
+    depends_on: 
+      db: 
+        condition: service_healthy
+    image: "arminc/clair—local-scan:v2.0.1"
+    links: 
+      - "db:postgres"
+    ports: 
+      - "6060:6060"
+  db: 
+    healthcheck: 
+      interval: 30s
+      retries: 3
+      test: 
+        - CMD-SHELL
+        - "pg_isready -U postgres"
+      timeout: 30s
+    image: arminc/clair-db
+    ports: "— \"5432:5432\""
