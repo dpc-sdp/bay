@@ -26,4 +26,4 @@ additional_build_steps:
     - RUN dnf --assumeyes install azure-cli
     - RUN az aks install-cli
     - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-    - RUN nvm install v14.15.1
+    - RUN export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" nvm install v14.15.1
