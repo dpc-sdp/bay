@@ -23,8 +23,6 @@ RUN assemble
 FROM $EE_BASE_IMAGE
 USER root
 ARG NVM_INSTALL_VERSION=v0.39.1
-ARG NVM_DIR=$HOME/.nvm
-ARG NVM_VERSION=v14.15.1
 RUN dnf module enable php:7.4 -y
 
 COPY --from=galaxy /usr/share/ansible /usr/share/ansible
@@ -47,9 +45,5 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
 ADD azure-cli.repo /etc/yum.repos.d/azure-cli.repo
 RUN dnf --assumeyes install azure-cli
 RUN az aks install-cli
-RUN touch $HOME/.profile
+RUN touch ~/.bashrc && chmod +x ~/.bashrc
 RUN curl -o- --silent https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
-RUN source $NVM_DIR/nvm.sh \
-RUN nvm install $NVM_VERSION \
-RUN nvm alias default $NVM_VERSION \
-RUN nvm use default
