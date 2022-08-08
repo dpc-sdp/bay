@@ -23,7 +23,6 @@ jobs:
       - run:
           name: Prepare the manifest
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print --no-cache
-          exho $IMAGE_TAG
       - run:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
@@ -52,16 +51,15 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-             docker build -t scanimage .
-             docker tag scanimage scanimage
+             echo $IMAGE_TAG
              mkdir -p /docker-tars
-             docker save -o /docker-tars/scanimage.tar scanimage:latest
+             docker save -o /docker-tars/$IMAGE_TAG.tar $IMAGE_TAG
       - run:
           name: Add permisstions
           command: chmod +x ".circleci/scripts/runclairscan.sh"
       - run:
           name: scan the images
-          command: "bash -x .circleci/scripts/runclairscan.sh sarithareturi1988/myclair:scanimage /docker-tars $DOCKER_USER $DOCKER_PASS"
+          command: "bash -x .circleci/scripts/runclairscan.sh /docker-tars 
       - run:
           name: Post plan to PR comment
           command: |-
