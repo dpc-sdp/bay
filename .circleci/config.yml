@@ -40,30 +40,27 @@ jobs:
       - run:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
-          
-    Scan:
-      environment:
-      docker:
-      - image: ovotech/clair-scanner@sha256:8a4f920b4e7e40dbcec4a6168263d45d3385f2970ee33e5135dd0e3b75d39c75
-      steps:
+  Scan: 
+    docker: 
+      - image: "ovotech/clair-scanner@sha256:8a4f920b4e7e40dbcec4a6168263d45d3385f2970ee33e5135dd0e3b75d39c75"
+    steps: 
       - checkout
       - setup_remote_docker
-      - run:
-          name: Build Docker image
-          command: |
-             docker build -t scanimage .
-             docker tag scanimage scanimage
-             mkdir -p /docker-tars
-             docker save -o /docker-tars/scanimage.tar scanimage:latest
-      - run:
-          name: Add permisstions
-          command: chmod +x ".circleci/scripts/runclairscan.sh"
-      - run:
-          name: scan the images
-          command: "bash -x .circleci/scripts/runclairscan.sh scanimage /docker-tars $DOCKER_USER $DOCKER_PASS"
-      - run:
-          name: Post plan to PR comment
-          command: |-
+      - run: 
+        command: |
+            docker build -t scanimage .
+            docker tag scanimage scanimage
+            mkdir -p /docker-tars
+            docker save -o /docker-tars/scanimage.tar scanimage:latest
+        name: "Build Docker image" 
+      - run: 
+        command: "chmod +x \".circleci/scripts/runclairscan.sh\""
+        name: "Add permisstions"
+    - run: 
+        command: "bash -x .circleci/scripts/runclairscan.sh scanimage /docker-tars $DOCKER_USER $DOCKER_PASS"
+        name: "scan the images"
+    - run: 
+        command: |-
             export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
             if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
             cat /code/tfplan.txt | github-commenter \
@@ -73,6 +70,8 @@ jobs:
               -delete-comment-regex "Output from" \
               -type pr \
               -template_file .circleci/plan-comment.tpl
+       name: "Post plan to PR comment"
+        
 
   deploy:
     docker:
