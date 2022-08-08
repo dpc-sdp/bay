@@ -41,11 +41,11 @@ jobs:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
           
-   Scan:
-    environment:
-    docker:
+    Scan:
+      environment:
+      docker:
       - image: ovotech/clair-scanner@sha256:8a4f920b4e7e40dbcec4a6168263d45d3385f2970ee33e5135dd0e3b75d39c75
-    steps:
+      steps:
       - checkout
       - setup_remote_docker
       - run:
@@ -60,7 +60,7 @@ jobs:
           command: chmod +x ".circleci/scripts/runclairscan.sh"
       - run:
           name: scan the images
-          command: "bash -x .circleci/scripts/runclairscan.sh sarithareturi1988/myclair:scanimage /docker-tars $DOCKER_USER $DOCKER_PASS"
+          command: "bash -x .circleci/scripts/runclairscan.sh scanimage /docker-tars $DOCKER_USER $DOCKER_PASS"
       - run:
           name: Post plan to PR comment
           command: |-
