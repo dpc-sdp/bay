@@ -55,7 +55,7 @@ jobs:
              mkdir -p /docker-tars
              docker save -o /docker-tars/$IMAGE_TAG.tar $IMAGE_TAG
       - run:
-          name: Add permisstions
+          name: Add permisstions.
           command: chmod +x ".circleci/scripts/runclairscan.sh"
       - run:
           name: scan the images
