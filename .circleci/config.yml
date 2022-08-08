@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: singledigital/ci-buildx:DDS-1080
+      - image: singledigital/ci-buildx:4.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
@@ -27,12 +27,6 @@ jobs:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
       - run:
-          name: Download Clair scan
-          command: ".circleci/scripts/downloadclairscan.sh"
-      - run:
-          name: scan the images
-          command: ".circleci/scripts/runclairscan.sh .circleci/scripts/dockercompose.yml $IMAGE_TAG $IMAGE_TAG_report"
-      - run:
           name: Start the containers
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
       - run:
@@ -43,9 +37,6 @@ jobs:
       - run:
           name: Test images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
-      - run:
-          name: Unit tests for clamav
-          command: docker-compose exec test sh -c 'cd /app/clamav && ./vendor/bin/phpunit'
       - run:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
@@ -85,6 +76,7 @@ jobs:
               ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
             fi
+
 workflows:
   version: 2
   build_and_test:
