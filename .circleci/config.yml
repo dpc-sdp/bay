@@ -59,7 +59,7 @@ jobs:
           command: chmod +x ".circleci/scripts/runclairscan.sh"
       - run:
           name: scan the images
-          command: "bash -x .circleci/scripts/runclairscan.sh /docker-tars 
+          command: "bash -x .circleci/scripts/runclairscan.sh /docker-tars"
       - run:
           name: Post plan to PR comment
           command: |-
