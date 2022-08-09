@@ -107,7 +107,6 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - scan
       - deploy:
           requires:
             - build
