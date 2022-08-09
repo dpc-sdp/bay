@@ -25,18 +25,21 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print --no-cache
       - run:
           name: Build the images
-          command: |
-             IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
-             echo $tags
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
+
       - run:
           name: Prepare ClairScan Env
           command: |
-             IMAGE_TAG=$(.circleci/scripts/tag.sh)
-             echo $tags
-             touch myclair.log
-      - run:
-          name: Scanning image with Clair 
-          command: "bash -x .circleci/scripts/runclairscan.sh /docker-tars"
+             chmod +x ".circleci/scripts/runclairscan.sh"
+             docker images >> images.txt
+             cat images.txt
+             for image in `cat images.txt`; do
+               echo "scanning image: $image"
+               mkdir -p /docker-tars
+               docker save -o /docker-tars/$image.tar $image:latest
+               bash -x .circleci/scripts/runclairscan.sh /docker-tars
+               rm -rf /docker-tars
+             done
       - run:
           name: Post Scan to PR comment
           command: |-
