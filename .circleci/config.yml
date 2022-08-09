@@ -30,7 +30,7 @@ jobs:
           name: Prepare ClairScan Env
           command: |
              IMAGE_TAG=$(.circleci/scripts/tag.sh)
-             echo $IMAGE_TAG
+             echo $tags
              touch myclair.log
              mkdir -p /docker-tars
              docker save -o /docker-tars/scan.tar IMAGE_TAG=$(.circleci/scripts/tag.sh)
@@ -108,7 +108,6 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - scan
       - deploy:
           requires:
             - build
