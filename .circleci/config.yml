@@ -54,7 +54,7 @@ jobs:
              echo $IMAGE_TAG
              touch myclair.log
              mkdir -p /docker-tars
-             docker save -o /docker-tars/$IMAGE_TAG.tar $IMAGE_TAG
+             docker save -o /docker-tars/$IMAGE_TAG.tar IMAGE_TAG=$(.circleci/scripts/tag.sh)"
       - run:
           name: Add permisstions.
           command: chmod +x ".circleci/scripts/runclairscan.sh"
