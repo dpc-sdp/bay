@@ -1,17 +1,14 @@
- #!/usr/bin/env bash
+#!/usr/bin/env bash
 
            echo "setting parameters"
-#           image=$1
            image_file=$1
            whitelist=""
            image_file=""
            severity_threshold="High"
            fail_on_discovered_vulnerabilities="true"
-           fail_on_unsupported_images="false"
+           fail_on_unsupported_images="true"
            disable_verbose_console_output="false"
            docker_tar_dir="/docker-tars"
-           DOCKER_USER=$3
-           DOCKER_PASS=$4
 
             
             set -e
@@ -23,12 +20,21 @@
                 exit 255
             fi
             
-            REPORT_DIR=/clair-reports
-            mkdir $REPORT_DIR
-            
-            DB=$(docker run -p 5432:5432 -d arminc/clair-db:latest)
-            CLAIR=$(docker run -p 6060:6060 --link "$DB":postgres -d arminc/clair-local-scan:latest)           
-            CLAIR_SCANNER=$(docker run -v /var/run/docker.sock:/var/run/docker.sock -d ovotech/clair-scanner@sha256:8a4f920b4e7e40dbcec4a6168263d45d3385f2970ee33e5135dd0e3b75d39c75 tail -f /dev/null)
+#            REPORT_DIR=/clair-reports
+
+#            mkdir $REPORT_DIR
+
+            for line in $(docker ps -a -q)  
+             do  
+             docker stop $line
+             docker rm $line
+             sleep 5
+             done  
+      
+             DB=$(docker run -p 5432:5432 -d arminc/clair-db:latest)
+             CLAIR=$(docker run -p 6060:6060 --link "$DB":postgres -d arminc/clair-local-scan:latest)
+             CLAIR_SCANNER=$(docker run -v /var/run/docker.sock:/var/run/docker.sock -d ovotech/clair-scanner@sha256:8a4f920b4e7e40dbcec4a6168263d45d3385f2970ee33e5135dd0e3b75d39c75 tail -f /dev/null)
+         
 #            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 #            docker pull $image
             clair_ip=$(docker exec -it "$CLAIR" hostname -i | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
@@ -83,6 +89,7 @@
                 docker cp "$CLAIR_SCANNER:/$sanitised_image_filename" "$REPORT_DIR/$sanitised_image_filename" || true
             }
             
+            
             EXIT_STATUS=0
             
             for entry in "$DOCKER_TAR_DIR"/*.tar; do
@@ -110,3 +117,4 @@
             exit $EXIT_STATUS
       - store_artifacts:
           path: /clair-reports
+          
