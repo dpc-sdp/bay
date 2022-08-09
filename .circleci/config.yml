@@ -34,9 +34,6 @@ jobs:
              IMAGE_TAG=$(.circleci/scripts/tag.sh)
              echo $tags
              touch myclair.log
-             mkdir -p /docker-tars
-             docker save -o /docker-tars/scan.tar IMAGE_TAG=$(.circleci/scripts/tag.sh)
-             chmod +x ".circleci/scripts/runclairscan.sh"
       - run:
           name: Scanning image with Clair 
           command: "bash -x .circleci/scripts/runclairscan.sh /docker-tars"
