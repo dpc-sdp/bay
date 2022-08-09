@@ -31,7 +31,7 @@ jobs:
           name: Prepare ClairScan Env
           command: |
              chmod +x ".circleci/scripts/runclairscan.sh"
-             docker images >> images.txt
+             docker images | awk '{ print $1 }' | tail -n +2 >> images.txt
              cat images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
