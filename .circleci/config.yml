@@ -36,7 +36,7 @@ jobs:
              for image in `cat images.txt`; do
                echo "scanning image: $image"
                mkdir -p /docker-tars
-               docker save -o /docker-tars/$image.tar $image:latest
+               docker save -o /docker-tars/scanimage.tar $image:latest
                bash -x .circleci/scripts/runclairscan.sh /docker-tars
                rm -rf /docker-tars
              done
