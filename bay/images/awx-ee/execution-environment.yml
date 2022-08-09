@@ -8,6 +8,8 @@ dependencies:
 additional_build_steps:
   prepend:
     - ARG NVM_INSTALL_VERSION=v0.39.1
+    - ARG NVM_DIR=$HOME/.nvm
+    - ARG NODE_VERSION=v14.15.1
     - RUN dnf module enable php:7.4 -y
   append:
     - RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/0.10.0/lagoon-cli-0.10.0-linux-amd64" -o /usr/local/bin/lagoon
@@ -26,5 +28,9 @@ additional_build_steps:
     - ADD azure-cli.repo /etc/yum.repos.d/azure-cli.repo
     - RUN dnf --assumeyes install azure-cli
     - RUN az aks install-cli
-    - RUN touch /home/runner/.bashrc && chmod +x /home/runner/.bashrc
+    - RUN touch $HOME/.bashrc && chmod +x $HOME/.bashrc
     - RUN curl -o- --silent https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
+    - RUN bash -c 'source $NVM_DIR/nvm.sh && \
+      nvm install $NODE_VERSION && \
+      nvm alias default $NODE_VERSION && \
+      nvm use default'
