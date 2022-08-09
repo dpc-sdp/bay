@@ -51,6 +51,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
+             IMAGE_TAG=$(.circleci/scripts/tag.sh)
              echo $IMAGE_TAG
              touch myclair.log
              mkdir -p /docker-tars
