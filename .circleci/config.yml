@@ -39,7 +39,7 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Build the AWX EE
-          command: ansible-builder build --context=bay/images/awx-ee/context --verbosity 3 --no-cache --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
+          command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
 
   deploy:
     docker:
@@ -73,7 +73,7 @@ jobs:
               echo "==> Push images with $IMAGE_TAG"
               IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --push --no-cache
               echo "==> Push the AWX Executor Environment image"
-              ansible-builder build --context=bay/images/awx-ee/context --verbosity 3 --no-cache --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
+              ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
             fi
 
