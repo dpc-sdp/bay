@@ -7,7 +7,7 @@
            image_file=""
            severity_threshold="High"
            fail_on_discovered_vulnerabilities="true"
-           fail_on_unsupported_images="true"
+           fail_on_unsupported_images="false"
            disable_verbose_console_output="false"
            docker_tar_dir="/docker-tars"
            DOCKER_USER=$3
