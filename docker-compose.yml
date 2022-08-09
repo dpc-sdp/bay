@@ -136,18 +136,6 @@ services:
     networks:
       - default
 
-  clamav:
-    build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.clamav
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-clamav:${IMAGE_TAG:-4.x}
-    ports:
-      - 3000
-    environment:
-      << : *default-environment
-    networks:
-      - default
-
   test:
     build:
       context: $PWD
