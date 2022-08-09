@@ -114,6 +114,7 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - scan
       - deploy:
           requires:
             - build
@@ -121,7 +122,6 @@ workflows:
   weekly_build:
     jobs:
       - build
-      - scan
       - deploy:
           requires:
             - build
