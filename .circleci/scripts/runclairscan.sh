@@ -20,7 +20,7 @@
                 exit 255
             fi
             
-#            REPORT_DIR=/clair-reports
+             REPORT_DIR=/clair-reports
 
 #            mkdir $REPORT_DIR
 
