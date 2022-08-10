@@ -76,11 +76,11 @@
                     if [ "$fail_on_discovered_vulnerabilities" == "true" ];then
                         EXIT_STATUS=1
                     fi
-                elif [ $ret -eq 5 ]; then
-                    echo "Image was not scanned, not supported."
-                    if [ "$fail_on_unsupported_images" == "true" ];then
-                        EXIT_STATUS=1
-                    fi
+  #              elif [ $ret -eq 5 ]; then
+  #                  echo "Image was not scanned, not supported."
+  #                  if [ "$fail_on_unsupported_images" == "true" ];then
+  #                      EXIT_STATUS=1
+  #                  fi
                 else
                     echo "Unknown clair-scanner return code $ret."
                     EXIT_STATUS=1
