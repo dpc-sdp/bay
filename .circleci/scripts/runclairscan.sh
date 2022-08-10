@@ -80,6 +80,7 @@
                     echo "Image was not scanned, not supported."
                     if [ "$fail_on_unsupported_images" == "true" ];then
 #                        EXIT_STATUS=1
+                       echo "shipped exit"
                     fi
                 else
                     echo "Unknown clair-scanner return code $ret."
