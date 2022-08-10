@@ -22,7 +22,7 @@
             
              REPORT_DIR=/clair-reports
 
-#            mkdir $REPORT_DIR
+             mkdir -p $REPORT_DIR
 
             for line in $(docker ps -a -q)  
              do  
