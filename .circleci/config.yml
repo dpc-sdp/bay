@@ -30,7 +30,7 @@ jobs:
           name: Build Docker image
           command: |
              chmod +x ".circleci/scripts/runclairscan.sh"
-             docker images | grep singledigital | awk '{ print $1 }' | tail -n +2 >> images.txt
+             docker images | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
              cat images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
