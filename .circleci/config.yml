@@ -46,7 +46,7 @@ jobs:
                mkdir -p /docker-tars
                mkdir -p /clair-reports
                docker save -o /docker-tars/scan.tar $image
-               bash -x .circleci/scripts/runclairscan.sh /docker-tars
+               bash -x .circleci/scripts/runclairscan.sh /docker-tars >> myclair.log
              done
       - run:
           name: Post plan to PR comment
