@@ -34,9 +34,18 @@ jobs:
              cat images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
+               docker ps -a -q
+               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}'); 
+               do
+                echo "container name $line"
+                docker stop $line
+                docker rm $line
+                sleep 5
+               done
+               sleep 50
                mkdir -p /docker-tars
                mkdir -p /clair-reports
-               docker save -o /docker-tars/scan.tar $image:latest
+               docker save -o /docker-tars/scan.tar $image
                bash -x .circleci/scripts/runclairscan.sh /docker-tars
              done
       - run:
