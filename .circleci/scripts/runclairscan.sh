@@ -5,7 +5,7 @@
            whitelist=""
            image_file=""
            severity_threshold="High"
-           fail_on_discovered_vulnerabilities="true"
+           fail_on_discovered_vulnerabilities="false"
            fail_on_unsupported_images="true"
            disable_verbose_console_output="false"
            docker_tar_dir="/docker-tars"
