@@ -30,11 +30,10 @@ jobs:
           name: Build Docker image
           command: |
              chmod +x ".circleci/scripts/runclairscan.sh"
-             docker images | awk '{ print $1 }' | tail -n +2 >> images.txt
+             docker images | grep singledigital | awk '{ print $1 }' | tail -n +2 >> images.txt
              cat images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
-               docker ps -a -q
                mkdir -p /docker-tars
                mkdir -p /clair-reports
                docker save -o /docker-tars/scan.tar $image:latest
