@@ -20,16 +20,9 @@
                 exit 255
             fi
             
-             REPORT_DIR=/clair-reports
+#            REPORT_DIR=/clair-reports
 
-             mkdir -p $REPORT_DIR
-
-            for line in $(docker ps -a -q)  
-             do  
-             docker stop $line
-             docker rm $line
-             sleep 5
-             done  
+#            mkdir $REPORT_DIR
       
              DB=$(docker run -p 5432:5432 -d arminc/clair-db:latest)
              CLAIR=$(docker run -p 6060:6060 --link "$DB":postgres -d arminc/clair-local-scan:latest)
@@ -79,8 +72,7 @@
                 elif [ $ret -eq 5 ]; then
                     echo "Image was not scanned, not supported."
                     if [ "$fail_on_unsupported_images" == "true" ];then
-#                        EXIT_STATUS=1
-                       echo "shipped exit"
+                        EXIT_STATUS=1
                     fi
                 else
                     echo "Unknown clair-scanner return code $ret."
@@ -118,4 +110,5 @@
             exit $EXIT_STATUS
       - store_artifacts:
           path: /clair-reports
+          
           
