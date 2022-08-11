@@ -49,7 +49,7 @@ jobs:
                bash -x .circleci/scripts/runclairscan.sh /docker-tars
              done
       - run:
-          name: Post plan to PR comment.
+          name: Post plan to PR comment
           command: |-
             export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
             if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
