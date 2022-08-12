@@ -22,7 +22,7 @@
             
             REPORT_DIR=/clair-reports
 
-            mkdir $REPORT_DIR
+            mkdir -p $REPORT_DIR
       
              DB=$(docker run -p 5432:5432 -d arminc/clair-db:latest)
              CLAIR=$(docker run -p 6060:6060 --link "$DB":postgres -d arminc/clair-local-scan:latest)
