@@ -1,0 +1,4 @@
+Output from `clair scan `
+```
+{{.}}
+```
