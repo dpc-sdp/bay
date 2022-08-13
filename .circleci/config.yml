@@ -27,7 +27,7 @@ jobs:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
       - run:
-          name: Build Docker image
+          name: Scanning the image with clair
           command: |
              chmod +x ".circleci/scripts/runclairscan.sh"
              docker images | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
@@ -46,15 +46,27 @@ jobs:
                mkdir -p /docker-tars
                mkdir -p /clair-reports
                docker save -o /docker-tars/scan.tar $image
-               bash -x .circleci/scripts/runclairscan.sh /docker-tars >> myclair.log
+               bash -x .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/myclair.log
              done
+      - persist_to_workspace:
+          root: /clair-reports
+          paths:
+            - .
+  pr_comment:
+    docker:
+      - image: cloudposse/github-commenter:latest
+    working_directory: /clair-reports
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /clair-reports
       - run:
           name: Post plan to PR comment
           command: |-
             export CIRCLE_PULL_REQUEST=https://github.com/dpc-sdp/bay/pull/121
             export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
             if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
-            cat myclair.log | github-commenter \
+            cat /clair-reports/myclair.log | github-commenter \
               -owner ${CIRCLE_PROJECT_USERNAME} \
               -repo ${CIRCLE_PROJECT_REPONAME} \
               -number $CIRCLE_PR_NUMBER \
@@ -116,6 +128,9 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - pr_comment:
+          requires:
+            - build
       - deploy:
           requires:
             - build
