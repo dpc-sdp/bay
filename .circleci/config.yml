@@ -27,7 +27,7 @@ jobs:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
       - run:
-          name: Scanning the image with clair
+          name: Scan the images with clair
           command: |
              chmod +x ".circleci/scripts/runclairscan.sh"
              docker images | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
