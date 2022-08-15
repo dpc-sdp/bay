@@ -44,7 +44,7 @@ jobs:
                done
                sleep 50
                mkdir -p /docker-tars
-               mkdir -p /clair-reports
+               mkdir -p /clair-reports/reports
                docker save -o /docker-tars/scan.tar $image
                bash -x .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/myclair.log
              done
@@ -87,7 +87,7 @@ jobs:
               -type pr \
               -template_file .circleci/plan-comment.tpl
       - store_artifacts:
-           path: /clair-reports
+           path: /clair-reports/reports
 
 
   deploy:
