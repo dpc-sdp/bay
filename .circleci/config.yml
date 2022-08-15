@@ -86,7 +86,7 @@ jobs:
               -delete-comment-regex "Output from" \
               -type pr \
               -template_file .circleci/plan-comment.tpl
-       - store_artifacts:
+      - store_artifacts:
            path: /clair-reports
 
 
