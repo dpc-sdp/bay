@@ -52,6 +52,8 @@ jobs:
           root: /clair-reports
           paths:
             - .
+      - store_artifacts:
+           path: /clair-reports
   pr_comment:
     docker:
       - image: cloudposse/github-commenter:latest
@@ -128,6 +130,8 @@ workflows:
     jobs:
       - build
       - pr_comment:
+          context:
+            - sdpdeploy
           requires:
             - build
       - deploy:
