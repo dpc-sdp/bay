@@ -52,8 +52,20 @@ jobs:
           root: /clair-reports
           paths:
             - .
-      - store_artifacts:
-           path: /clair-reports
+      - run:
+          name: Start the containers
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
+      - run:
+          name: Install goss
+          command: curl -fsSL https://goss.rocks/install | sh && goss --version
+      # Sleeping to ensure the supervisord has started.
+      - run: sleep 30s
+      - run:
+          name: Test images
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
+      - run:
+          name: Build the AWX EE
+          command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
   pr_comment:
     docker:
       - image: cloudposse/github-commenter:latest
@@ -74,20 +86,9 @@ jobs:
               -delete-comment-regex "Output from" \
               -type pr \
               -template_file .circleci/plan-comment.tpl
-      - run:
-          name: Start the containers
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
-      - run:
-          name: Install goss
-          command: curl -fsSL https://goss.rocks/install | sh && goss --version
-      # Sleeping to ensure the supervisord has started.
-      - run: sleep 30s
-      - run:
-          name: Test images
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
-      - run:
-          name: Build the AWX EE
-          command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
+       - store_artifacts:
+           path: /clair-reports
+
 
   deploy:
     docker:
