@@ -52,6 +52,9 @@ jobs:
           root: /clair-reports
           paths:
             - .
+     - store_artifacts:
+          path: /clair-reports
+          destination: .
       - store_artifacts:
            path: /clair-reports
   pr_comment:
