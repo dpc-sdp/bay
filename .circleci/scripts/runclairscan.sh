@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-           echo "setting parameters"
            image_file=$1
            whitelist=""
            image_file=""
