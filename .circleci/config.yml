@@ -25,12 +25,12 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print --no-cache
       - run:
           name: Build the images
-          command: |
-             IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
-             sleep 10m
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
+
       - run:
           name: Scan the images with clair
           command: |
+             docker buildx ls
              docker images | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
              cat images.txt
              for image in `cat images.txt`; do
