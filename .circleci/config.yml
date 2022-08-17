@@ -28,6 +28,9 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
 
       - run:
+          name: Start the containers
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
+      - run:
           name: Scan the images with clair
           command: |
              docker buildx ls
@@ -53,9 +56,6 @@ jobs:
           root: /clair-reports
           paths:
             - .
-      - run:
-          name: Start the containers
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
       - run:
           name: Install goss
           command: curl -fsSL https://goss.rocks/install | sh && goss --version
