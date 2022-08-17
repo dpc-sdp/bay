@@ -33,8 +33,7 @@ jobs:
       - run:
           name: Scan the images with clair
           command: |
-             docker buildx ls
-             docker images | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
+             docker images | grep bay | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
              cat images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
