@@ -47,7 +47,8 @@ jobs:
                mkdir -p /docker-tars
                mkdir -p /clair-reports/reports
                docker save -o /docker-tars/scan.tar $image
-               bash -x .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$image-myclair.log
+               clairfile=$(echo "$image" | cut -d '/' -f2)
+               bash -x .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$clairfile-myclair.log
              done
       - persist_to_workspace:
           root: /clair-reports
