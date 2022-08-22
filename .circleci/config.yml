@@ -34,7 +34,6 @@ jobs:
           name: Scan the images with clair
           command: |
              docker images | grep bay | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
-             cat images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
                for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}'); 
@@ -48,7 +47,7 @@ jobs:
                mkdir -p /docker-tars
                mkdir -p /clair-reports/reports
                docker save -o /docker-tars/scan.tar $image
-               bash -x .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/myclair.log
+               bash -x .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$image-myclair.log
              done
       - persist_to_workspace:
           root: /clair-reports
@@ -76,15 +75,18 @@ jobs:
       - run:
           name: Post plan to PR comment.
           command: |-
-            export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
-            if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
-            cat /clair-reports/myclair.log | github-commenter \
-              -owner ${CIRCLE_PROJECT_USERNAME} \
-              -repo ${CIRCLE_PROJECT_REPONAME} \
-              -number $CIRCLE_PR_NUMBER \
-              -delete-comment-regex "Output from" \
-              -type pr \
-              -template_file .circleci/plan-comment.tpl
+            ls -lart /clair-reports/ | grep *myclair.log >> clair.txt
+            for clairimages in `cat clair.txt`; do
+              export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
+              if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
+              cat /clair-reports/$clairimages | github-commenter \
+                -owner ${CIRCLE_PROJECT_USERNAME} \
+                -repo ${CIRCLE_PROJECT_REPONAME} \
+                -number $CIRCLE_PR_NUMBER \
+                -delete-comment-regex "Output from" \
+                -type pr \
+                -template_file .circleci/plan-comment.tpl
+            done
       - store_artifacts:
            path: /clair-reports/reports
 
