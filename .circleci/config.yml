@@ -76,7 +76,7 @@ jobs:
       - run:
           name: Post plan to PR comment.
           command: |-
-            ls -lart /clair-reports/ | grep *myclair.log >> clair.txt
+            ls -lart /clair-reports | grep -e myclair.log | awk '{print $NF}' >> clair.txt
             for clairimages in `cat clair.txt`; do
               export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
               if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
