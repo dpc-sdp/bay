@@ -37,7 +37,6 @@ jobs:
              cat images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
-               docker ps -a -q
                for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}'); 
                do
                 echo "container name $line"
