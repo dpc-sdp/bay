@@ -47,9 +47,13 @@ jobs:
                mkdir -p /docker-tars
                mkdir -p /clair-reports/reports
                docker save -o /docker-tars/scan.tar $image
-               bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/myclair.log
+               clairfile=$(echo "$image" | cut -d '/' -f2)
+               bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$clairfile-myclair.log
              done
-
+      - persist_to_workspace:
+          root: /clair-reports
+          paths:
+            - .
       - run:
           name: Install goss
           command: curl -fsSL https://goss.rocks/install | sh && goss --version
@@ -61,16 +65,35 @@ jobs:
       - run:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
-      
+      - slack/notify:
+          color: '#FF0000'
+          message: Diffs detected in ${CIRCLE_PROJECT_REPONAME}
+          webhook: $SLACK_WEBHOOK
+  pr_comment:
+    docker:
+      - image: cloudposse/github-commenter:latest
+    working_directory: /clair-reports
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /clair-reports
+      - run:
+          name: Post plan to PR comment.
+          command: |-
+            ls -lart /clair-reports | grep -e myclair.log | awk '{print $NF}' >> clair.txt
+            for clairimages in `cat clair.txt`; do
+              export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
+              if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
+              cat /clair-reports/$clairimages | github-commenter \
+                -owner ${CIRCLE_PROJECT_USERNAME} \
+                -repo ${CIRCLE_PROJECT_REPONAME} \
+                -number $CIRCLE_PR_NUMBER \
+                -delete-comment-regex "Output from" \
+                -type pr \
+                -template_file .circleci/plan-comment.tpl
+            done
       - store_artifacts:
            path: /clair-reports/reports
-           
-      - run:
-          name: Print artifact URLs
-          environment:
-            CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com 
-          command: |
-            echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/myclair.log"
 
 
   deploy:
@@ -113,6 +136,11 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - pr_comment:
+          context:
+            - sdpdeploy
+          requires:
+            - build
       - deploy:
           requires:
             - build
