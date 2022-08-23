@@ -68,23 +68,9 @@ jobs:
            path: /clair-reports/reports
 
       - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "url",
-                       echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX}/"
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
-          webhook: $SLACK_WEBHOOK
+           color: '#FF0000'
+           message: Diffs detected in ${CIRCLE_PROJECT_REPONAME}
+           webhook: $SLACK_WEBHOOK
 
 
   deploy:
