@@ -66,11 +66,6 @@ jobs:
       - store_artifacts:
            path: /clair-reports/reports
 
-      - slack/notify:
-           color: '#FF0000'
-           message: Diffs detected in ${CIRCLE_PROJECT_REPONAME}
-           webhook: $SLACK_WEBHOOK
-
 
   deploy:
     docker:
