@@ -50,10 +50,16 @@ jobs:
                clairfile=$(echo "$image" | cut -d '/' -f2)
                bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$clairfile-myclair.log
              done
+   
       - persist_to_workspace:
           root: /clair-reports
           paths:
             - .
+      - slack/notify:
+          color: '#FF0000'
+          message: Diffs detected in ${CIRCLE_PROJECT_REPONAME}
+          webhook: $SLACK_WEBHOOK      
+      
       - run:
           name: Install goss
           command: curl -fsSL https://goss.rocks/install | sh && goss --version
@@ -65,10 +71,7 @@ jobs:
       - run:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
-      - slack/notify:
-          color: '#FF0000'
-          message: Diffs detected in ${CIRCLE_PROJECT_REPONAME}
-          webhook: $SLACK_WEBHOOK
+
   pr_comment:
     docker:
       - image: cloudposse/github-commenter:latest
