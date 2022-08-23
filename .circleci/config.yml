@@ -65,6 +65,13 @@ jobs:
       
       - store_artifacts:
            path: /clair-reports/reports
+           
+      - run:
+          name: Print artifact URLs
+          environment:
+            CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com 
+          command: |
+            echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX}/"
 
 
   deploy:
