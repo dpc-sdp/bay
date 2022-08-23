@@ -136,6 +136,8 @@ workflows:
   build_and_test:
     jobs:
       - build
+          context:
+            - sdpdeploy
       - pr_comment:
           context:
             - sdpdeploy
