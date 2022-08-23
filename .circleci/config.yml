@@ -9,7 +9,6 @@ jobs:
           DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: bay_ci
           DOCKER_CLI_EXPERIMENTAL: enabled
-          CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com 
     steps:
       - checkout
       - setup_remote_docker:
