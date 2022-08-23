@@ -51,6 +51,9 @@ jobs:
                clairfile=$(echo "$image" | cut -d '/' -f2)
                bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$clairfile-myclair.log
              done
+             
+      - store_artifacts:
+           path: /clair-reports/reports
 
       - slack/notify:
           color: '#FF0000'
@@ -92,8 +95,6 @@ jobs:
                 -type pr \
                 -template_file .circleci/plan-comment.tpl
             done
-      - store_artifacts:
-           path: /clair-reports/reports
 
 
   deploy:
