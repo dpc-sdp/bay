@@ -68,7 +68,6 @@ jobs:
            path: /clair-reports/reports
 
       - slack/notify:
-          webhook: $SLACK_WEBHOOK
           custom: |
             {
               "blocks": [
@@ -85,6 +84,7 @@ jobs:
               ]
             }
           event: always
+          webhook: $SLACK_WEBHOOK
 
 
   deploy:
