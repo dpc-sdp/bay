@@ -51,10 +51,10 @@ jobs:
                bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$clairfile-myclair.log
              done
 
-        - slack/notify:
-            color: '#FF0000'
-            message: Diffs detected in ${CIRCLE_PROJECT_REPONAME}
-            webhook: $SLACK_WEBHOOK      
+      - slack/notify:
+          color: '#FF0000'
+          message: Diffs detected in ${CIRCLE_PROJECT_REPONAME}
+          webhook: $SLACK_WEBHOOK      
       
       - run:
           name: Install goss
