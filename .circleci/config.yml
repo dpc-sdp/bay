@@ -9,6 +9,7 @@ jobs:
           DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: bay_ci
           DOCKER_CLI_EXPERIMENTAL: enabled
+          CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com 
     steps:
       - checkout
       - setup_remote_docker:
@@ -75,8 +76,8 @@ jobs:
                   "type": "section",
                   "fields": [
                     {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
+                      "type": "url",
+                       echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX}/"
                       "emoji": true
                     }
                   ]
@@ -126,11 +127,6 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - pr_comment:
-          context:
-            - sdpdeploy
-          requires:
-            - build
       - deploy:
           requires:
             - build
