@@ -47,8 +47,7 @@ jobs:
                mkdir -p /docker-tars
                mkdir -p /clair-reports/reports
                docker save -o /docker-tars/scan.tar $image
-               clairfile=$(echo "$image" | cut -d '/' -f2)
-               bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/$clairfile-myclair.log
+               bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/myclair.log
              done
 
       - run:
@@ -71,7 +70,7 @@ jobs:
           environment:
             CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com 
           command: |
-            echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX}/"
+            echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/myclair.log"
 
 
   deploy:
