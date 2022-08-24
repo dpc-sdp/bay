@@ -64,8 +64,7 @@ jobs:
           environment:
             CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com
           command: |
-#            echo "https://${CIRCLE_ARTIFACT_DOMAIN}//storage/artifacts/c63f0253-8623-432c-ab63-9fde60506744/${CIRCLE_WORKFLOW_JOB_ID}//clair-reports/reports/myclair.log"
-             echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/clair-reports/reports/myclair.log"
+            echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/clair-reports/reports/myclair.log"
       - run:
           name: Install goss
           command: curl -fsSL https://goss.rocks/install | sh && goss --version
