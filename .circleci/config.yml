@@ -64,7 +64,7 @@ jobs:
           environment:
             CIRCLE_ARTIFACT_DOMAIN: circleci-tasks-prod.s3.us-east-1.amazonaws.com 
           command: |
-            echo "https://${CIRCLE_ARTIFACT_DOMAIN}//storage/artifacts/${CIRCLE_WORKFLOW_JOB_ID}//clair-reports/reports/myclair.log"
+            echo "https://${CIRCLE_ARTIFACT_DOMAIN}//storage/artifacts/c63f0253-8623-432c-ab63-9fde60506744/${CIRCLE_WORKFLOW_JOB_ID}//clair-reports/reports/myclair.log"
       
       - run:
           name: Install goss
@@ -78,29 +78,29 @@ jobs:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
 
-  pr_comment:
-    docker:
-      - image: cloudposse/github-commenter:latest
-    working_directory: /clair-reports
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /clair-reports
-      - run:
-          name: Post plan to PR comment.
-          command: |-
-            ls -lart /clair-reports | grep -e myclair.log | awk '{print $NF}' >> clair.txt
-            for clairimages in `cat clair.txt`; do
-              export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
-              if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
-              cat /clair-reports/$clairimages | github-commenter \
-                -owner ${CIRCLE_PROJECT_USERNAME} \
-                -repo ${CIRCLE_PROJECT_REPONAME} \
-                -number $CIRCLE_PR_NUMBER \
-                -delete-comment-regex "Output from" \
-                -type pr \
-                -template_file .circleci/plan-comment.tpl
-            done
+#  pr_comment:
+#    docker:
+#      - image: cloudposse/github-commenter:latest
+#    working_directory: /clair-reports
+#    steps:
+#      - checkout
+#      - attach_workspace:
+#          at: /clair-reports
+#      - run:
+#          name: Post plan to PR comment.
+#          command: |-
+#            ls -lart /clair-reports | grep -e myclair.log | awk '{print $NF}' >> clair.txt
+#            for clairimages in `cat clair.txt`; do
+#              export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
+#              if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
+#              cat /clair-reports/$clairimages | github-commenter \
+#                -owner ${CIRCLE_PROJECT_USERNAME} \
+#                -repo ${CIRCLE_PROJECT_REPONAME} \
+#                -number $CIRCLE_PR_NUMBER \
+#                -delete-comment-regex "Output from" \
+#                -type pr \
+#                -template_file .circleci/plan-comment.tpl
+#            done
 
 
   deploy:
@@ -145,14 +145,14 @@ workflows:
       - build:
           context:
             - sdpdeploy
-      - pr_comment:
-          context:
-            - sdpdeploy
-          requires:
-            - build
-      - deploy:
-          requires:
-            - build
+#      - pr_comment:
+#          context:
+#            - sdpdeploy
+#          requires:
+#            - build
+#      - deploy:
+#          requires:
+#            - build
 
   weekly_build:
     jobs:
