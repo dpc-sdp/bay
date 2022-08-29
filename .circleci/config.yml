@@ -10,6 +10,7 @@ jobs:
           DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: bay_ci
           DOCKER_CLI_EXPERIMENTAL: enabled
+          CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com 
     steps:
       - checkout
       - setup_remote_docker:
@@ -56,7 +57,7 @@ jobs:
 
       - slack/notify:
           color: '#FF0000'
-          message: Clair reports ${CIRCLE_PROJECT_REPONAME} echo "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/clair-reports/reports/myclair.log"
+          message: Clair reports ${CIRCLE_PROJECT_REPONAME} "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/clair-reports/reports/myclair.log"
           webhook: $SLACK_WEBHOOK
 
       - run:
