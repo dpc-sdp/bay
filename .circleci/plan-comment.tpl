@@ -1,4 +1,4 @@
-Output from `clair scan `
+Output from `clair scan. `
 ```
 {{.}}
 ```
