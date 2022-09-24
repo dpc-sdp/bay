@@ -81,7 +81,7 @@ jobs:
 #      - attach_workspace:
 #          at: /clair-reports
 #      - run:
-#          name: Post plan to PR comment
+#          name: Post plan to PR comment.
 #          command: |-
 #            ls -lart /clair-reports | grep -e myclair.log | awk '{print $NF}' >> clair.txt
 #            for clairimages in `cat clair.txt`; do
