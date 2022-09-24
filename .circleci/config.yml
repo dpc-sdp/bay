@@ -72,29 +72,6 @@ jobs:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
 
-#  pr_comment:
-#    docker:
-#      - image: cloudposse/github-commenter:latest
-#    working_directory: /clair-reports
-#    steps:
-#      - checkout
-#      - attach_workspace:
-#          at: /clair-reports
-#      - run:
-#          name: Post plan to PR comment.
-#          command: |-
-#            ls -lart /clair-reports | grep -e myclair.log | awk '{print $NF}' >> clair.txt
-#            for clairimages in `cat clair.txt`; do
-#              export CIRCLE_PR_NUMBER=${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
-#              if [ -z $CIRCLE_PR_NUMBER ]; then echo "Not a pull request - aborting"; exit 0; fi
-#              cat /clair-reports/$clairimages | github-commenter \
-#                -owner ${CIRCLE_PROJECT_USERNAME} \
-#                -repo ${CIRCLE_PROJECT_REPONAME} \
-#                -number $CIRCLE_PR_NUMBER \
-#                -delete-comment-regex "Output from" \
-#                -type pr \
-#                -template_file .circleci/plan-comment.tpl
-#            done
 
 
   deploy:
