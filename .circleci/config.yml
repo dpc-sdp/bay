@@ -57,7 +57,7 @@ jobs:
 
       - slack/notify:
           color: '#FF0000'
-          message: Clair reports ${CIRCLE_PROJECT_REPONAME} "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/clair-reports/reports/myclair.log"
+          message: Clair scan report for ${CIRCLE_PROJECT_REPONAME} Image "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/clair-reports/reports/myclair.log"
           webhook: $SLACK_WEBHOOK
 
       - run:
