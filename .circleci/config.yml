@@ -1,6 +1,14 @@
 version: 2
 orbs:
   slack: circleci/slack@4.0
+  
+commands:
+  notify_slack_error:
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+          mentions: "@sdp-build-notifications"
 jobs:
   build:
     docker:
@@ -27,10 +35,6 @@ jobs:
       - run:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-          mentions: "@sdp-build-notifications"
       - run:
           name: Start the containers
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
