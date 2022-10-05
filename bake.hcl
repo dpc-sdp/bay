@@ -115,15 +115,3 @@ target "circle" {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
   }
 }
-
-target "clamav" {
-  context       = "${CONTEXT}/bay-clamav"
-  dockerfile    = "Dockerfile.clamav"
-
-  platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-clamav:${IMAGE_TAG}"]
-
-  args          = {
-    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
-  }
-}
