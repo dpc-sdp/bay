@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  slack: rmacklin/slack@1.1.0
+  slack: circleci/slack@3.4.2
   
 jobs:
   build:
