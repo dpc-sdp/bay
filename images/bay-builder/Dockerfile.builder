@@ -20,7 +20,7 @@ RUN apk update \
     && apk add nodejs-npm patch rsync redis --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/
 
 # Add MySQL client configuration.
-COPY php/mariadb-client.cnf /etc/my.cnf.d/
+COPY mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
 
 # Install gojq.
