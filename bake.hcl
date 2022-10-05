@@ -31,7 +31,7 @@ group "default" {
 
 target "ci-builder" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/images/Dockerfile.ci-builder"
+  dockerfile    = "./bay/images/Dockerfile.ci-builder"
 
   platforms     = ["linux/amd64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}"]
@@ -43,7 +43,7 @@ target "ci-builder" {
 
 target "mariadb" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/imagesDockerfile.mariadb"
+  dockerfile    = "./bay/imagesDockerfile.mariadb"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}"]
@@ -55,7 +55,7 @@ target "mariadb" {
 
 target "cli" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/images/Dockerfile.builder"
+  dockerfile    = "./bay/images/Dockerfile.builder"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-cli:${IMAGE_TAG}"]
@@ -67,7 +67,7 @@ target "cli" {
 
 target "php" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/images/Dockerfile.php"
+  dockerfile    = "./bay/images/Dockerfile.php"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}"]
@@ -79,7 +79,7 @@ target "php" {
 
 target "nginx-php" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/images/Dockerfile.nginx"
+  dockerfile    = "./bay/images/Dockerfile.nginx"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}"]
@@ -91,7 +91,7 @@ target "nginx-php" {
 
 target "node" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/images/Dockerfile.node"
+  dockerfile    = "./bay/images/Dockerfile.node"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
@@ -106,7 +106,7 @@ target "node" {
 
 target "circle" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/images/Dockerfile.builder"
+  dockerfile    = "./bay/images/Dockerfile.builder"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-circle:${IMAGE_TAG}"]
@@ -118,7 +118,7 @@ target "circle" {
 
 target "clamav" {
   context       = "${CONTEXT}"
-  dockerfile    = ".bay/images/Dockerfile.clamav"
+  dockerfile    = "./bay/images/Dockerfile.clamav"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-clamav:${IMAGE_TAG}"]
