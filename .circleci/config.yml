@@ -51,14 +51,12 @@ jobs:
                docker save -o /docker-tars/scan.tar $image
                bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/reports/myclair.log
              done
+             echo "clair log"
+             cat /clair-reports/reports/myclair.log
              
       - store_artifacts:
            path: /clair-reports/reports
 
-      - slack/notify:
-          color: '#FF0000'
-          message: Clair scan report for ${CIRCLE_PROJECT_REPONAME} Image "https://${CIRCLE_ARTIFACT_DOMAIN}/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/0/clair-reports/reports/myclair.log"
-          webhook: $SLACK_WEBHOOK
 
       - run:
           name: Install goss
