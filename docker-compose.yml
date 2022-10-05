@@ -12,7 +12,7 @@ services:
   buildx:
     build:
       context: ./images/bay-buildx
-      dockerfile: $PWD/images/bay-buildx/Dockerfile.buildx
+      dockerfile: $PWD/bay-buildx/Dockerfile.buildx
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/ci-buildx
