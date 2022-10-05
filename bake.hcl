@@ -31,7 +31,7 @@ group "default" {
 
 target "ci-builder" {
   context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.ci-builder"
+  dockerfile    = "./images/bay-ci-builder/Dockerfile.ci-builder"
 
   platforms     = ["linux/amd64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}"]
