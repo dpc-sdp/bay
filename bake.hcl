@@ -30,7 +30,7 @@ group "default" {
 }
 
 target "ci-builder" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-ci-builder"
   dockerfile    = "Dockerfile.ci-builder"
 
   platforms     = ["linux/amd64"]
@@ -42,7 +42,7 @@ target "ci-builder" {
 }
 
 target "mariadb" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-mariadb"
   dockerfile    = "Dockerfile.mariadb"
 
   platforms     = ["linux/amd64", "linux/arm64"]
@@ -54,7 +54,7 @@ target "mariadb" {
 }
 
 target "cli" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-builder"
   dockerfile    = "Dockerfile.builder"
 
   platforms     = ["linux/amd64", "linux/arm64"]
@@ -66,7 +66,7 @@ target "cli" {
 }
 
 target "php" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-php"
   dockerfile    = "Dockerfile.php"
 
   platforms     = ["linux/amd64", "linux/arm64"]
@@ -78,7 +78,7 @@ target "php" {
 }
 
 target "nginx-php" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-nginx"
   dockerfile    = "Dockerfile.nginx"
 
   platforms     = ["linux/amd64", "linux/arm64"]
@@ -90,7 +90,7 @@ target "nginx-php" {
 }
 
 target "node" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-node"
   dockerfile    = "Dockerfile.node"
 
   platforms     = ["linux/amd64", "linux/arm64"]
@@ -105,7 +105,7 @@ target "node" {
 }
 
 target "circle" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-builder"
   dockerfile    = "Dockerfile.builder"
 
   platforms     = ["linux/amd64", "linux/arm64"]
@@ -117,7 +117,7 @@ target "circle" {
 }
 
 target "clamav" {
-  context       = "${CONTEXT}"
+  context       = "${CONTEXT}/bay-clamav"
   dockerfile    = "Dockerfile.clamav"
 
   platforms     = ["linux/amd64", "linux/arm64"]
