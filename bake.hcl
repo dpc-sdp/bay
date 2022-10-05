@@ -25,7 +25,6 @@ group "default" {
       "nginx-php",
       "node",
       "circle",
-      "clamav",
     ]
 }
 
