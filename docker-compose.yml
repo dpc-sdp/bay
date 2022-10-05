@@ -39,7 +39,7 @@ services:
       dockerfile: $PWD/images/bay-nginx/Dockerfile.nginx
       args:
         << : *default-args
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx-php:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx-nginx:${IMAGE_TAG:-4.x}
     ports:
       - 8080
     depends_on:
