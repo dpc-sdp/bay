@@ -11,7 +11,7 @@ x-args:
 services:
   buildx:
     build:
-      context: ./images/bay-buildx
+      context: ./bay/images/images/bay-buildx
       dockerfile: $PWD/images/bay-buildx/Dockerfile.buildx
       args:
         << : *default-args
@@ -23,7 +23,7 @@ services:
 
   cli:
     build:
-      context: ./images/bay-builder
+      context: ./bay/images/images/bay-builder
       dockerfile: $PWD/images/bay-builder/Dockerfile.builder
       args:
         << : *default-args
@@ -35,7 +35,7 @@ services:
 
   nginx:
     build:
-      context: ./images/bay-nginx
+      context: ./bay/images/bay-nginx
       dockerfile: $PWD/images/bay-nginx/Dockerfile.nginx
       args:
         << : *default-args
@@ -51,7 +51,7 @@ services:
 
   php:
     build:
-      context: ./images/bay-php
+      context: ./bay/images/bay-php
       dockerfile: $PWD/images/bay-php/Dockerfile.php
       args:
         << : *default-args
@@ -63,7 +63,7 @@ services:
 
   php_goss:
     build:
-      context: ./images/bay-php_goss
+      context: ./bay/images/bay-php_goss
       dockerfile: $PWD/images/bay-php_goss/Dockerfile.php_goss
       args:
         BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php:${IMAGE_TAG:-4.x}
@@ -77,7 +77,7 @@ services:
 
   node-slim:
     build:
-      context: ./images/bay-node-slim
+      context: ./bay/images/bay-node-slim
       dockerfile: $PWD/images/bay-node-slim/Dockerfile.node-slim
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node-slim:${IMAGE_TAG:-4.x}
     environment:
@@ -87,7 +87,7 @@ services:
 
   node:
     build:
-      context: ./images/bay-node
+      context: ./bay/images/bay-node
       dockerfile: $PWD/images/bay-node/Dockerfile.node
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node:${IMAGE_TAG:-4.x}
     environment:
@@ -97,7 +97,7 @@ services:
 
   node-ripple:
     build:
-      context: ./images/bay-node-ripple
+      context: ./bay/images/bay-node-ripple
       dockerfile: $PWD/images/bay-node-ripple/Dockerfile.node
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/ripple-node:${IMAGE_TAG:-4.x}
     environment:
@@ -107,7 +107,7 @@ services:
 
   mariadb:
     build:
-      context: ./images/bay-mariadb
+      context: ./bay/images/bay-mariadb
       dockerfile: $PWD/images/bay-mariadb/Dockerfile.mariadb
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-mariadb:${IMAGE_TAG:-4.x}
     environment:
@@ -117,7 +117,7 @@ services:
 
   circle:
     build:
-      context: ./images/bay-circle
+      context: ./bay/images/bay-circle
       dockerfile: $PWD/images/bay-circle/Dockerfile.circle
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/circle:${IMAGE_TAG:-4.x}
     environment:
@@ -127,7 +127,7 @@ services:
 
   ci-builder:
     build:
-      context: ./images/bay-ci-builder
+      context: ./bay/images/bay-ci-builder
       dockerfile: $PWD/images/bay-ci-builder/Dockerfile.ci-builder
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ci-builder:${IMAGE_TAG:-4.x}
     command: tail -F anything
@@ -138,7 +138,7 @@ services:
 
   clamav:
     build:
-      context: ./images/bay-clamav
+      context: ./bay/images/bay-clamav
       dockerfile: $PWD/images/bay-clamav/Dockerfile.clamav
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-clamav:${IMAGE_TAG:-4.x}
     ports:
@@ -150,7 +150,7 @@ services:
 
   test:
     build:
-      context: $PWD/bay-test
+      context: ./bay/images/bay-test
       dockerfile: $PWD/images/bay-test/Dockerfile.test
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/test
     networks:
