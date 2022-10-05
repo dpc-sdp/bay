@@ -1,6 +1,6 @@
 version: 2
 orbs:
-  slack: circleci/slack@4.0
+  slack: circleci/slack@4.1
   
 jobs:
   build:
@@ -44,9 +44,9 @@ jobs:
           command: ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
 
       - slack/notify:
+          mentions: "@sdp-build-notifications"
           event: fail
           template: basic_fail_1
-          mentions: "@sdp-build-notifications"
 
 
 
