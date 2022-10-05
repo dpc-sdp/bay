@@ -43,10 +43,10 @@ jobs:
           name: Build the AWX EE
           command: ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
 
-      - slack/status:
-          event: fail
-          template: basic_fail_1
-          mentions: "@sdp-build-notifications"    
+       - slack/notify:
+           event: fail
+           template: basic_fail_1
+           mentions: "@sdp-build-notifications"
 
 
 
