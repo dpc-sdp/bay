@@ -11,7 +11,7 @@ x-args:
 services:
   buildx:
     build:
-      context: ./bay/images/images/bay-buildx
+      context: ./bay/images/bay-buildx
       dockerfile: $PWD/images/bay-buildx/Dockerfile.buildx
       args:
         << : *default-args
@@ -23,7 +23,7 @@ services:
 
   cli:
     build:
-      context: ./bay/images/images/bay-builder
+      context: ./bay/images/bay-builder
       dockerfile: $PWD/images/bay-builder/Dockerfile.builder
       args:
         << : *default-args
