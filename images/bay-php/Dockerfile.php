@@ -6,7 +6,7 @@ COPY 00-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay
 RUN chmod +x /bay/bay-php-config.sh
 
-COPY php/mariadb-client.cnf /etc/my.cnf.d/
+COPY mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
 
 # Add common drupal config.
