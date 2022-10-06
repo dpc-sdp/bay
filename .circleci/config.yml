@@ -45,7 +45,6 @@ jobs:
 
       - slack/notify:
           event: always
-          channel: sdp-build-notifications
           template: basic_fail_1
 
 
