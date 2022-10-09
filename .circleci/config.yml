@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  slack: rmacklin/slack@1.1.0
+  slack: circleci/slack@4.1
   
 jobs:
   build:
@@ -43,11 +43,10 @@ jobs:
           name: Build the AWX EE
           command: ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
 
-      - slack/status:
-          mentions: OPS
-          fail_only: 'true'
-          message: Bay job had failed. Please check the Circle CI logs for more details. 
-          webhook: $SLACK_WEBHOOK
+      - slack/notify:
+          channel: OPS
+          event: always
+          template: basic_fail_1
 
 
   deploy:
