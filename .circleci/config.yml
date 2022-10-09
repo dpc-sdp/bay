@@ -45,8 +45,8 @@ jobs:
 
       - slack/status:
           mentions: OPS
-          event: always
-          template: basic_fail_1
+          fail_only: 'true'
+          message: Bay job had failed. Please check the Circle CI logs for more details. 
           webhook: $SLACK_WEBHOOK
 
 
