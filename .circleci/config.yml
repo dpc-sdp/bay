@@ -27,16 +27,21 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print
       - run:
           name: Build the images
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl
       - run:
           name: Start the containers
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
       - run:
           name: Install goss
+          command: curl -fsSL https://goss.rocks/install | sh && goss --version
       # Sleeping to ensure the supervisord has started.
       - run: sleep 30s
       - run:
           name: Test images
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Build the AWX EE
+          command: ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
 
       - slack/notify:
           channel: OPS
