@@ -1,6 +1,5 @@
 version: '2.1'
 orbs:
-  node: 'circleci/node:4.1'
   slack: circleci/slack@4.1
 jobs:
   deploy:
@@ -10,7 +9,7 @@ jobs:
       - checkout
       - node/install-packages
       - run:
-          command: npm run deploy
+          command: echo "testing"
       - slack/notify:
           channel: ABCXYZ
           event: fail
