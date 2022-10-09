@@ -6,8 +6,6 @@ jobs:
     executor:
       name: node/default
     steps:
-      - checkout
-      - node/install-packages
       - run:
           command: echo "testing"
       - slack/notify:
