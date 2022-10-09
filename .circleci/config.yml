@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  slack: circleci/slack@4.3.0
+  slack: circleci/slack@4.1
   
 jobs:
   build:
@@ -44,6 +44,7 @@ jobs:
           command: ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
 
       - slack/notify:
+          channel: G015H7K158D
           event: always
           template: basic_fail_1
 
