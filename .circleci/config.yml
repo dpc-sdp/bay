@@ -44,9 +44,10 @@ jobs:
           command: ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
 
       - slack/status:
-          channel: OPS
+          mentions: OPS
           event: always
           template: basic_fail_1
+          webhook: $SLACK_WEBHOOK
 
 
   deploy:
