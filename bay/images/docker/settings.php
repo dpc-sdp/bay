@@ -350,7 +350,7 @@ if (getenv('TIDE_LOGS_SUMOLOGIC_CATEGORY')) {
 }
 
 if (getenv('TIDE_LOGS_DEBUG')) {
-  $config['tide_logs.settings']['debug'] = getenv('TIDE_LOGS_DEBUG');
+  $config['tide_logs.settings']['debug'] = getenv('TIDE_LOGS_DEBUG') == "true";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
