@@ -45,7 +45,7 @@ jobs:
 
       - slack/notify:
           channel: G015H7K158D
-          event: always
+          event: fail
           template: basic_fail_1
 
 
