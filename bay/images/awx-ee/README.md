@@ -17,10 +17,24 @@ AWX has `singledigital/awx-ee:latest` added as an execution environment with a p
 
 ## Building the image
 
-Commands run from this directory.
+Commands run from this directory if you have ansible-builder installed locally.
 
 ```
 $ ansible-builder build --tag singledigital/awx-ee:latest --container-runtime docker
+```
+
+OR run with docker.
+
+```
+# Generate the build artefacts
+$ docker run --rm -it \
+    -v $(pwd):/data \
+    -w /data \
+    quay.io/ansible/ansible-builder:latest \
+      ansible-builder build --tag singledigital/awx-ee:latest --container-runtime docker
+
+# Build the image
+$ docker build -f context/Dockerfile -t singledigital/awx-ee:latest context
 ```
 
 ## Deploying the image
@@ -28,4 +42,3 @@ $ ansible-builder build --tag singledigital/awx-ee:latest --container-runtime do
 ```
 $ docker push singledigital/awx-ee:latest
 ```
-

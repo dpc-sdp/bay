@@ -22,7 +22,7 @@ Bay is a fully managed platform and hosting environment that provides an open Pl
 Lagoon solves what developers are dreaming about: A system that allows developers to locally develop their code and their services with Docker and run the exact same system in production. The same Docker images, the same service configurations and the same code.
 
 ## Use
-Learn more from https://lagoon.readthedocs.io/en/latest/
+Learn more from https://docs.lagoon.sh/
 
 ## Bay Features
 
@@ -41,6 +41,9 @@ In your CDN configuration, set the header defined in `BAY_INGRESS_HEADER` with t
 - [Cloudfront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html)
 
 Once deployed, if the header is missing in the request nginx will return a `405 Not Allowed` HTTP response.
+
+### Multiple architecture support
+Bay images are available in both amd64 and arm64 architectures.
 
 ## Contribute
 [Open an issue](https://github.com/dpc-sdp/bay) on GitHub or submit a pull request with suggested changes.

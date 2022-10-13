@@ -1,4 +1,7 @@
-FROM uselagoon/php-7.4-cli-drupal:latest
+ARG PHP_VERSION=7.4
+FROM php:${PHP_VERSION}-cli-alpine AS php-cli
+FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
+COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
 ARG GOJQ_VERSION=0.12.4
 
 ENV WEBROOT=docroot \
