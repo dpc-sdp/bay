@@ -38,9 +38,6 @@ jobs:
           name: Test images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
-          name: Unit tests for clamav
-          command: docker-compose exec test sh -c 'cd /app/clamav && ./vendor/bin/phpunit'
-      - run:
           name: Build the AWX EE
           command: ansible-builder build --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
 
