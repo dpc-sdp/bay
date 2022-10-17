@@ -19,18 +19,18 @@ variable "LAGOON_IMAGE_VERSION" {
 group "default" {
     targets = [
       "ci-builder",
-      "mariadb",
+      "circle",
       "cli",
-      "php",
+      "mariadb",
       "nginx-php",
       "node",
-      "circle",
+      "php",
     ]
 }
 
 target "ci-builder" {
   context       = "${CONTEXT}/bay-ci-builder"
-  dockerfile    = "Dockerfile.ci-builder"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}"]
@@ -42,7 +42,7 @@ target "ci-builder" {
 
 target "mariadb" {
   context       = "${CONTEXT}/bay-mariadb"
-  dockerfile    = "Dockerfile.mariadb"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}"]
@@ -54,7 +54,7 @@ target "mariadb" {
 
 target "cli" {
   context       = "${CONTEXT}/bay-builder"
-  dockerfile    = "Dockerfile.builder"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-cli:${IMAGE_TAG}"]
@@ -66,7 +66,7 @@ target "cli" {
 
 target "php" {
   context       = "${CONTEXT}/bay-php"
-  dockerfile    = "Dockerfile.php"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}"]
@@ -78,7 +78,7 @@ target "php" {
 
 target "nginx-php" {
   context       = "${CONTEXT}/bay-nginx"
-  dockerfile    = "Dockerfile.nginx"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}"]
@@ -90,7 +90,7 @@ target "nginx-php" {
 
 target "node" {
   context       = "${CONTEXT}/bay-node"
-  dockerfile    = "Dockerfile.node"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
@@ -105,7 +105,7 @@ target "node" {
 
 target "circle" {
   context       = "${CONTEXT}/bay-builder"
-  dockerfile    = "Dockerfile.builder"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-circle:${IMAGE_TAG}"]
