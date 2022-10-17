@@ -8,9 +8,9 @@ RUN yum install unzip -y \
     && unzip v1.16.21_es6.2.4.zip \
     && mv elasticsearch-readonlyrest-plugin-1.16.21_es6.2.4 readonlyrest
 
-COPY readonlyrest/build.gradle /tmp/readonlyrest/core/build.gradle
-COPY readonlyrest/gradle.properties /tmp/readonlyrest/es61x/gradle.properties
-COPY readonlyrest/settings.gradle tmp/readonlyrest/settings.gradle
+COPY build.gradle /tmp/readonlyrest/core/build.gradle
+COPY gradle.properties /tmp/readonlyrest/es61x/gradle.properties
+COPY settings.gradle /tmp/readonlyrest/settings.gradle
 
 WORKDIR /tmp/readonlyrest
 
