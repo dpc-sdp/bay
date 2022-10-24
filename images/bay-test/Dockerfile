@@ -1,4 +1,1 @@
 FROM uselagoon/php-7.4-cli-drupal:latest
-
-COPY unit /app
-RUN cd clamav && COMPOSER_MEMORY_LIMIT=-1 composer install
