@@ -53,7 +53,7 @@ target "mariadb" {
 }
 
 target "cli" {
-  context       = "${CONTEXT}/bay-builder"
+  context       = "${CONTEXT}/bay-cli"
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
@@ -104,7 +104,7 @@ target "node" {
 }
 
 target "circle" {
-  context       = "${CONTEXT}/bay-builder"
+  context       = "${CONTEXT}/bay-cli"
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]

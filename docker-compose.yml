@@ -23,8 +23,8 @@ services:
 
   cli:
     build:
-      context: ./images/bay-builder
-      dockerfile: $PWD/images/bay-builder/Dockerfile
+      context: ./images/bay-cli
+      dockerfile: $PWD/images/bay-cli/Dockerfile
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-cli:${IMAGE_TAG:-4.x}
