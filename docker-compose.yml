@@ -75,31 +75,11 @@ services:
     depends_on:
       - php
 
-  node-slim:
-    build:
-      context: ./images/bay-node-slim
-      dockerfile: $PWD/images/bay-node-slim/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node-slim:${IMAGE_TAG:-4.x}
-    environment:
-      << : *default-environment
-    networks:
-      - default
-
   node:
     build:
       context: ./images/bay-node
       dockerfile: $PWD/images/bay-node/Dockerfile
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node:${IMAGE_TAG:-4.x}
-    environment:
-      << : *default-environment
-    networks:
-      - default
-
-  node-ripple:
-    build:
-      context: ./images/bay-node-ripple
-      dockerfile: $PWD/images/bay-node-ripple/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/ripple-node:${IMAGE_TAG:-4.x}
     environment:
       << : *default-environment
     networks:
