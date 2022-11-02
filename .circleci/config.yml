@@ -75,7 +75,6 @@ jobs:
           event: fail
           template: basic_fail_1
 
-
   deploy:
     docker:
       - image: singledigital/ci-buildx:4.x
