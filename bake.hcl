@@ -18,17 +18,17 @@ variable "LAGOON_IMAGE_VERSION" {
 
 group "default" {
     targets = [
-      "ci-builder",
-      "circle",
-      "cli",
-      "mariadb",
+      "bay-ci-builder",
+      "bay-circle",
+      "bay-cli",
+      "bay-mariadb",
       "bay-nginx",
-      "node",
-      "php",
+      "bay-node",
+      "bay-php",
     ]
 }
 
-target "ci-builder" {
+target "bay-ci-builder" {
   context       = "${CONTEXT}/bay-ci-builder"
   dockerfile    = "Dockerfile"
 
@@ -40,7 +40,7 @@ target "ci-builder" {
   }
 }
 
-target "circle" {
+target "bay-circle" {
   context       = "${CONTEXT}/bay-cli"
   dockerfile    = "Dockerfile"
 
@@ -52,7 +52,7 @@ target "circle" {
   }
 }
 
-target "cli" {
+target "bay-cli" {
   context       = "${CONTEXT}/bay-cli"
   dockerfile    = "Dockerfile"
 
@@ -64,7 +64,7 @@ target "cli" {
   }
 }
 
-target "mariadb" {
+target "bay-mariadb" {
   context       = "${CONTEXT}/bay-mariadb"
   dockerfile    = "Dockerfile"
 
@@ -88,7 +88,7 @@ target "bay-nginx" {
   }
 }
 
-target "node" {
+target "bay-node" {
   context       = "${CONTEXT}/bay-node"
   dockerfile    = "Dockerfile"
 
@@ -103,7 +103,7 @@ target "node" {
   }
 }
 
-target "php" {
+target "bay-php" {
   context       = "${CONTEXT}/bay-php"
   dockerfile    = "Dockerfile"
 
