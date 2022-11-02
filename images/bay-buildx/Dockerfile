@@ -1,9 +1,9 @@
 FROM debian:stable-slim
 
 # TODO remove config.json this flag once it's not needed for `buildx` anymore
-COPY buildx/config.json /root/.docker/
-COPY buildx/debian-backports-pin-600.pref /etc/apt/preferences.d/
-COPY buildx/debian-sources.list /etc/apt/sources.list.d/
+COPY config.json /root/.docker/
+COPY debian-backports-pin-600.pref /etc/apt/preferences.d/
+COPY debian-backports.list /etc/apt/sources.list.d/
 
 # Upgrades the image, Installs docker and qemu
 RUN  set -eux; \

@@ -22,7 +22,7 @@ RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releas
 RUN apk add redis --no-cache
 
 # Add MySQL client configuration.
-COPY php/mariadb-client.cnf /etc/my.cnf.d/
+COPY mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
 
 # Install gojq.
@@ -37,8 +37,8 @@ RUN composer global remove hirak/prestissimo \
 
 # Add common drupal config.
 RUN mkdir /bay
-COPY docker/services.yml /bay
-COPY docker/redis-unavailable.services.yml /bay
-COPY docker/redis-cluster.services.yml /bay
-COPY docker/redis-single.services.yml /bay
-COPY docker/settings.php /bay
+COPY services.yml /bay
+COPY redis-unavailable.services.yml /bay
+COPY redis-cluster.services.yml /bay
+COPY redis-single.services.yml /bay
+COPY settings.php /bay

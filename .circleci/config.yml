@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  slack: rmacklin/slack@1.1.0
+  slack: circleci/slack@4.10.1
 jobs:
   build:
     docker:
@@ -10,7 +10,7 @@ jobs:
           DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: bay_ci
           DOCKER_CLI_EXPERIMENTAL: enabled
-          CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com 
+          CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com
     steps:
       - checkout
       - setup_remote_docker:
@@ -53,7 +53,7 @@ jobs:
              done
              echo "clair log"
              cat /clair-reports/reports/myclair.log
-             
+
       - store_artifacts:
            path: /clair-reports/reports
 
@@ -68,9 +68,12 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Build the AWX EE
-          command: ansible-builder build --verbosity 3 --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
+          command: ansible-builder build --verbosity 3 --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
 
-
+      - slack/notify:
+          channel: G015H7K158D
+          event: fail
+          template: basic_fail_1
 
   deploy:
     docker:
@@ -104,9 +107,10 @@ jobs:
               echo "==> Push images with $IMAGE_TAG"
               IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --push --no-cache
               echo "==> Push the AWX Executor Environment image"
-              ansible-builder build --verbosity 3 --context=bay/images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
+              ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
             fi
+
 workflows:
   version: 2
   build_and_test:
@@ -119,9 +123,9 @@ workflows:
 #            - sdpdeploy
 #          requires:
 #            - build
-#      - deploy:
-#          requires:
-#            - build
+      - deploy:
+          requires:
+            - build
 
   weekly_build:
     jobs:

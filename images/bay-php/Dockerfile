@@ -2,17 +2,17 @@ FROM uselagoon/php-7.4-fpm:latest
 
 RUN mkdir /bay
 
-COPY php/00-bay.ini /usr/local/etc/php/conf.d/
-COPY php/bay-php-config.sh /bay
+COPY 00-bay.ini /usr/local/etc/php/conf.d/
+COPY bay-php-config.sh /bay
 RUN chmod +x /bay/bay-php-config.sh
 
-COPY php/mariadb-client.cnf /etc/my.cnf.d/
+COPY mariadb-client.cnf /etc/my.cnf.d/
 RUN fix-permissions /etc/my.cnf.d/
 
 # Add common drupal config.
-COPY docker/services.yml /bay
-COPY docker/redis-unavailable.services.yml /bay
-COPY docker/settings.php /bay
+COPY services.yml /bay
+COPY redis-unavailable.services.yml /bay
+COPY settings.php /bay
 
 # Change worker pool from dynamic to static. Change default value to 24.
 RUN sed -i "s/pm = dynamic/pm = static/" /usr/local/etc/php-fpm.d/www.conf

@@ -7,7 +7,7 @@ variable "DOCKERHUB_NAMESPACE" {
 }
 
 variable "CONTEXT" {
-  default = "bay/images"
+  default = "images"
 }
 
 variable "LAGOON_IMAGE_VERSION" {
@@ -18,19 +18,19 @@ variable "LAGOON_IMAGE_VERSION" {
 
 group "default" {
     targets = [
-      "ci-builder",
-      "mariadb",
-      "cli",
-      "php",
-      "nginx-php",
-      "node",
-      "circle",
+      "bay-ci-builder",
+      "bay-circle",
+      "bay-cli",
+      "bay-mariadb",
+      "bay-nginx",
+      "bay-node",
+      "bay-php",
     ]
 }
 
-target "ci-builder" {
-  context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.ci-builder"
+target "bay-ci-builder" {
+  context       = "${CONTEXT}/bay-ci-builder"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}"]
@@ -40,21 +40,21 @@ target "ci-builder" {
   }
 }
 
-target "mariadb" {
-  context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.mariadb"
+target "bay-circle" {
+  context       = "${CONTEXT}/bay-cli"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}"]
+  tags          = ["${DOCKERHUB_NAMESPACE}/bay-circle:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
   }
 }
 
-target "cli" {
-  context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.builder"
+target "bay-cli" {
+  context       = "${CONTEXT}/bay-cli"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-cli:${IMAGE_TAG}"]
@@ -64,21 +64,21 @@ target "cli" {
   }
 }
 
-target "php" {
-  context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.php"
+target "bay-mariadb" {
+  context       = "${CONTEXT}/bay-mariadb"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}"]
+  tags          = ["${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
   }
 }
 
-target "nginx-php" {
-  context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.nginx"
+target "bay-nginx" {
+  context       = "${CONTEXT}/bay-nginx"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}"]
@@ -88,9 +88,9 @@ target "nginx-php" {
   }
 }
 
-target "node" {
-  context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.node"
+target "bay-node" {
+  context       = "${CONTEXT}/bay-node"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
@@ -103,12 +103,12 @@ target "node" {
   }
 }
 
-target "circle" {
-  context       = "${CONTEXT}"
-  dockerfile    = "Dockerfile.builder"
+target "bay-php" {
+  context       = "${CONTEXT}/bay-php"
+  dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-circle:${IMAGE_TAG}"]
+  tags          = ["${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"

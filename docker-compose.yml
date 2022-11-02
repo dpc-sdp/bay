@@ -11,8 +11,8 @@ x-args:
 services:
   buildx:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.buildx
+      context: ./images/bay-buildx
+      dockerfile: $PWD/images/bay-buildx/Dockerfile
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/ci-buildx
@@ -23,8 +23,8 @@ services:
 
   cli:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.builder
+      context: ./images/bay-cli
+      dockerfile: $PWD/images/bay-cli/Dockerfile
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-cli:${IMAGE_TAG:-4.x}
@@ -35,11 +35,11 @@ services:
 
   nginx:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.nginx
+      context: ./images/bay-nginx
+      dockerfile: $PWD/images/bay-nginx/Dockerfile
       args:
         << : *default-args
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx-php:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx-nginx:${IMAGE_TAG:-4.x}
     ports:
       - 8080
     depends_on:
@@ -51,8 +51,8 @@ services:
 
   php:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.php
+      context: ./images/bay-php
+      dockerfile: $PWD/images/bay-php/Dockerfile
       args:
         << : *default-args
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php:${IMAGE_TAG:-4.x}
@@ -63,8 +63,8 @@ services:
 
   php_goss:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.php_goss
+      context: ./images/bay-php_goss
+      dockerfile: $PWD/images/bay-php_goss/Dockerfile
       args:
         BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php:${IMAGE_TAG:-4.x}
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/php_goss:${IMAGE_TAG:-4.x}
@@ -75,31 +75,11 @@ services:
     depends_on:
       - php
 
-  node-slim:
-    build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.node-slim
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node-slim:${IMAGE_TAG:-4.x}
-    environment:
-      << : *default-environment
-    networks:
-      - default
-
   node:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.node
+      context: ./images/bay-node
+      dockerfile: $PWD/images/bay-node/Dockerfile
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node:${IMAGE_TAG:-4.x}
-    environment:
-      << : *default-environment
-    networks:
-      - default
-
-  node-ripple:
-    build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.node
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/ripple-node:${IMAGE_TAG:-4.x}
     environment:
       << : *default-environment
     networks:
@@ -107,8 +87,8 @@ services:
 
   mariadb:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.mariadb
+      context: ./images/bay-mariadb
+      dockerfile: $PWD/images/bay-mariadb/Dockerfile
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-mariadb:${IMAGE_TAG:-4.x}
     environment:
       << : *default-environment
@@ -117,8 +97,8 @@ services:
 
   circle:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.circle
+      context: ./images/bay-circle
+      dockerfile: $PWD/images/bay-circle/Dockerfile
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/circle:${IMAGE_TAG:-4.x}
     environment:
       << : *default-environment
@@ -127,8 +107,8 @@ services:
 
   ci-builder:
     build:
-      context: ./bay/images
-      dockerfile: $PWD/bay/images/Dockerfile.ci-builder
+      context: ./images/bay-ci-builder
+      dockerfile: $PWD/images/bay-ci-builder/Dockerfile
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ci-builder:${IMAGE_TAG:-4.x}
     command: tail -F anything
     environment:
@@ -138,8 +118,8 @@ services:
 
   test:
     build:
-      context: $PWD
-      dockerfile: $PWD/bay/images/Dockerfile.test
+      context: ./images/bay-test
+      dockerfile: $PWD/images/bay-test/Dockerfile
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/test
     networks:
       - default
