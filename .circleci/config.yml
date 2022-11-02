@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
-  slack: circleci/slack@4.10.1
-  
+  slack: rmacklin/slack@1.1.0
 jobs:
   build:
     docker:
@@ -11,6 +10,7 @@ jobs:
           DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: bay_ci
           DOCKER_CLI_EXPERIMENTAL: enabled
+          CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com
     steps:
       - checkout
       - setup_remote_docker:
@@ -28,9 +28,36 @@ jobs:
       - run:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
+
       - run:
           name: Start the containers
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
+      - run:
+          name: Scan the images with clair
+          command: |
+             docker images | grep bay | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
+             for image in `cat images.txt`; do
+               echo "scanning image: $image"
+               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}'); 
+               do
+                echo "container name $line"
+                docker stop $line
+                docker rm $line
+                sleep 5
+               done
+               sleep 50
+               mkdir -p /docker-tars
+               mkdir -p /clair-reports/reports
+               docker save -o /docker-tars/scan.tar $image
+               bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/reports/myclair.log
+             done
+             echo "clair log"
+             cat /clair-reports/reports/myclair.log
+
+      - store_artifacts:
+           path: /clair-reports/reports
+
+
       - run:
           name: Install goss
           command: curl -fsSL https://goss.rocks/install | sh && goss --version
@@ -41,7 +68,7 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Build the AWX EE
-          command: ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
+          command: ansible-builder build --verbosity 3 --context=bay/images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f bay/images/awx-ee/execution-environment.yml
 
       - slack/notify:
           channel: G015H7K158D
@@ -84,11 +111,19 @@ jobs:
               ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
             fi
+
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - build:
+          context:
+            - sdpdeploy
+#      - pr_comment:
+#          context:
+#            - sdpdeploy
+#          requires:
+#            - build
       - deploy:
           requires:
             - build

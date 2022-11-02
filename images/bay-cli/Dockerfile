@@ -18,9 +18,8 @@ ENV WEBROOT=docroot \
 RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releases/download/v0.6.1/dockerize_amd64_linux && \
     chmod +x /usr/local/bin/dockerize
 
-RUN apk update \
-    && apk del npm nodejs nodejs-current yarn \
-    && apk add nodejs-npm patch rsync redis --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.7/main/
+# Install redis-cli for debugging.
+RUN apk add redis --no-cache
 
 # Add MySQL client configuration.
 COPY mariadb-client.cnf /etc/my.cnf.d/

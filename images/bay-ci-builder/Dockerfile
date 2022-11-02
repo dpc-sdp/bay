@@ -12,7 +12,7 @@ VOLUME /tmp
 ## Add Python dependencies.
 COPY --from=terraform /bin/terraform /bin/terraform
 
-RUN apk add --no-cache \
+RUN apk add --update --no-cache \
     ansible \
     aws-cli \
     bash \
