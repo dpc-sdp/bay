@@ -1,5 +1,5 @@
 variable "IMAGE_TAG" {
-  default = "4.x"
+  default = "5.x"
 }
 
 variable "DOCKERHUB_NAMESPACE" {
