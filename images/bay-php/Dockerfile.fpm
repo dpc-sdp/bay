@@ -1,8 +1,9 @@
-FROM uselagoon/php-8.1-fpm:latest
+ARG PHP_VERSION=8.1
+FROM uselagoon/php-${PHP_VERSION}-fpm:latest
 
 LABEL org.opencontainers.image.authors="Digital Victoria"
 LABEL org.opencontainers.image.description="PHP-FPM image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.fpm"
 
 RUN mkdir /bay
 COPY 00-bay.ini /usr/local/etc/php/conf.d/
@@ -18,8 +19,7 @@ COPY settings.php /bay
 RUN sed -i "s/pm = dynamic/pm = static/" /usr/local/etc/php-fpm.d/www.conf
 ENV PHP_FPM_PM_MAX_CHILDREN=24
 
-ENV TZ=Australia/Melbourne
-
+ARG TZ=Australia/Melbourne
 RUN  apk add --no-cache tzdata \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
