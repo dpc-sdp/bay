@@ -174,8 +174,8 @@ $config['system.performance']['css']['preprocess'] = 1;
 // Aggregate JavaScript files on
 $config['system.performance']['js']['preprocess'] = 1;
 
-if ($smtp_on = getenv('ENABLE_SMTP')) {
-  $config['smtp.settings']['smtp_on'] = (strtolower($smtp_on) == "true");
+if (strlower(getenv('ENABLE_SMTP')) === "true") {
+  $config['system.mail']['interface']['default'] = 'SMTPMailSystem';
   $config['smtp.settings']['smtp_host'] = getenv('SMTP_HOST') ?: 'email-smtp.ap-southeast-2.amazonaws.com';
   $config['smtp.settings']['smtp_port'] = getenv('SMTP_PORT') ?: '587';
   $config['smtp.settings']['smtp_protocol'] = getenv('SMTP_PROTOCOL') ?: 'tls';
@@ -184,7 +184,7 @@ if ($smtp_on = getenv('ENABLE_SMTP')) {
   $config['smtp.settings']['smtp_timeout'] = getenv('SMTP_TIMEOUT') ?: 15;
 
   // @see baywatch.module for SMTP_REPLYTO setting.
-  $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@vic.gov.au';
+  $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@dpc.vic.gov.au';
 }
 
 /**
