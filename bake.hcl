@@ -41,7 +41,7 @@ target "bay-ci-builder" {
 }
 
 target "bay-circle" {
-  context       = "${CONTEXT}/bay-cli"
+  context       = "${CONTEXT}/bay-circle"
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
