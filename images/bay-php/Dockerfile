@@ -1,17 +1,17 @@
-FROM uselagoon/php-7.4-fpm:latest
+FROM uselagoon/php-8.1-fpm:latest
+
+LABEL org.opencontainers.image.authors="Digital Victoria"
+LABEL org.opencontainers.image.description="PHP-FPM image for Bay container platform"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile"
 
 RUN mkdir /bay
-
 COPY 00-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay
-RUN chmod +x /bay/bay-php-config.sh
-
-COPY mariadb-client.cnf /etc/my.cnf.d/
-RUN fix-permissions /etc/my.cnf.d/
 
 # Add common drupal config.
-COPY services.yml /bay
 COPY redis-unavailable.services.yml /bay
+COPY redis-cluster.services.yml /bay
+COPY redis-single.services.yml /bay
 COPY settings.php /bay
 
 # Change worker pool from dynamic to static. Change default value to 24.
