@@ -139,4 +139,4 @@ workflows:
           filters:
             branches:
               only:
-                - 4.x
+                - 5.x

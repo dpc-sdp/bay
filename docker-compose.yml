@@ -23,11 +23,11 @@ services:
 
   cli:
     build:
-      context: ./images/bay-cli
-      dockerfile: $PWD/images/bay-cli/Dockerfile
+      context: ./images/bay-php
+      dockerfile: $PWD/images/bay-php/Dockerfile.cli
       args:
         << : *default-args
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-cli:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php-cli:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
     networks:
@@ -39,7 +39,7 @@ services:
       dockerfile: $PWD/images/bay-nginx/Dockerfile
       args:
         << : *default-args
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/nginx-nginx:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-nginx:${IMAGE_TAG:-5.x}
     ports:
       - 8080
     depends_on:
@@ -52,10 +52,10 @@ services:
   php:
     build:
       context: ./images/bay-php
-      dockerfile: $PWD/images/bay-php/Dockerfile
+      dockerfile: $PWD/images/bay-php/Dockerfile.fpm
       args:
         << : *default-args
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php-fpm:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
     networks:
@@ -66,8 +66,10 @@ services:
       context: ./images/bay-php_goss
       dockerfile: $PWD/images/bay-php_goss/Dockerfile
       args:
-        BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php:${IMAGE_TAG:-4.x}
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/php_goss:${IMAGE_TAG:-4.x}
+        BASE_IMAGE: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-php-cli:${IMAGE_TAG:-5.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/php_goss:${IMAGE_TAG:-5.x}
+    depends_on:
+      - cli
     environment:
       << : *default-environment
     networks:
@@ -79,7 +81,7 @@ services:
     build:
       context: ./images/bay-node
       dockerfile: $PWD/images/bay-node/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-node:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
     networks:
@@ -89,7 +91,7 @@ services:
     build:
       context: ./images/bay-mariadb
       dockerfile: $PWD/images/bay-mariadb/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-mariadb:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-mariadb:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
     networks:
@@ -99,7 +101,7 @@ services:
     build:
       context: ./images/bay-circle
       dockerfile: $PWD/images/bay-circle/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/circle:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/circle:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
     networks:
@@ -109,7 +111,7 @@ services:
     build:
       context: ./images/bay-ci-builder
       dockerfile: $PWD/images/bay-ci-builder/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ci-builder:${IMAGE_TAG:-4.x}
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ci-builder:${IMAGE_TAG:-5.x}
     command: tail -F anything
     environment:
       << : *default-environment

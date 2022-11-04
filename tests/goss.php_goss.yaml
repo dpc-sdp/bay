@@ -1,8 +1,8 @@
 command:
   php -r "phpinfo();":
-    exit-status: 0
+    exit-status: 255
     stderr:
-      - "PHP Warning:  phpinfo() has been disabled for security reasons in Command line code on line 1"
+      - "Call to undefined function phpinfo()"
 
   php -i | grep disable_functions:
     exit-status: 0
@@ -32,7 +32,7 @@ command:
   php -r "echo phpversion();":
     exit-status: 0
     stdout:
-      - '/7\.4/'
+      - '/8\.1/'
 file:
   /usr/local/etc/php/conf.d/00-bay.ini:
     exists: true

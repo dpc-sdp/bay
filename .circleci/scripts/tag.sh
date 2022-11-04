@@ -5,6 +5,9 @@ CIRCLE_BRANCH=${CIRCLE_BRANCH:-}
 # Determine the tag to build.
 case $CIRCLE_BRANCH in
 
+  5.x)
+    IMAGE_TAG=5.x
+    ;;
   4.x)
     IMAGE_TAG=4.x
     ;;
