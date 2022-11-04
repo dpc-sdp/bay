@@ -174,8 +174,8 @@ $config['system.performance']['css']['preprocess'] = 1;
 // Aggregate JavaScript files on
 $config['system.performance']['js']['preprocess'] = 1;
 
-if ($smtp_on = getenv('ENABLE_SMTP')) {
-  $config['smtp.settings']['smtp_on'] = (strtolower($smtp_on) == "true");
+if (strtolower(getenv('ENABLE_SMTP')) === "true") {
+  $config['system.mail']['interface']['default'] = 'SMTPMailSystem';
   $config['smtp.settings']['smtp_host'] = getenv('SMTP_HOST') ?: 'email-smtp.ap-southeast-2.amazonaws.com';
   $config['smtp.settings']['smtp_port'] = getenv('SMTP_PORT') ?: '587';
   $config['smtp.settings']['smtp_protocol'] = getenv('SMTP_PROTOCOL') ?: 'tls';
@@ -184,7 +184,7 @@ if ($smtp_on = getenv('ENABLE_SMTP')) {
   $config['smtp.settings']['smtp_timeout'] = getenv('SMTP_TIMEOUT') ?: 15;
 
   // @see baywatch.module for SMTP_REPLYTO setting.
-  $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@vic.gov.au';
+  $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@dpc.vic.gov.au';
 }
 
 /**
@@ -330,27 +330,6 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
 } else {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
-}
-
-// Configure tide_logs.
-if (getenv('TIDE_LOGS_UDPLOG_HOST')) {
-  $config['tide_logs.settings']['host'] = getenv('TIDE_LOGS_UDPLOG_HOST');
-}
-
-if (getenv('TIDE_LOGS_ENABLE')) {
-  $config['tide_logs.settings']['enable'] = getenv('TIDE_LOGS_ENABLE');
-}
-
-if (getenv('TIDE_LOGS_PORT')) {
-  $config['tide_logs.settings']['port'] = getenv('TIDE_LOGS_PORT');
-}
-
-if (getenv('TIDE_LOGS_SUMOLOGIC_CATEGORY')) {
-  $config['tide_logs.settings']['sumologic_category'] = getenv('TIDE_LOGS_SUMOLOGIC_CATEGORY');
-}
-
-if (getenv('TIDE_LOGS_DEBUG')) {
-  $config['tide_logs.settings']['debug'] = getenv('TIDE_LOGS_DEBUG') == "true";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
