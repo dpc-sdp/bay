@@ -87,11 +87,11 @@ services:
     networks:
       - default
 
-  mariadb:
+  mysql:
     build:
-      context: ./images/bay-mariadb
-      dockerfile: $PWD/images/bay-mariadb/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-mariadb:${IMAGE_TAG:-5.x}
+      context: ./images/bay-mysql
+      dockerfile: $PWD/images/bay-mysql/Dockerfile
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-mysql:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
     networks:

@@ -21,7 +21,7 @@ group "default" {
       "bay-ci-builder",
       "bay-circle",
       "bay-php-cli",
-      "bay-mariadb",
+      "bay-mysql",
       "bay-nginx",
       "bay-node",
       "bay-php-fpm",
@@ -68,12 +68,16 @@ target "bay-php-cli" {
   }
 }
 
-target "bay-mariadb" {
-  context       = "${CONTEXT}/bay-mariadb"
+target "bay-mysql" {
+  context       = "${CONTEXT}/bay-mysql"
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}"]
+  tags          = [
+    // bay-mariadb is a legacy tag - should be removed eventually.
+    "${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}",
+    "${DOCKERHUB_NAMESPACE}/bay-mysql:${IMAGE_TAG}",
+  ]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
