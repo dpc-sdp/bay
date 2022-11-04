@@ -182,6 +182,7 @@ if (strlower(getenv('ENABLE_SMTP')) === "true") {
   $config['smtp.settings']['smtp_username'] = getenv('SMTP_USERNAME') ?: '';
   $config['smtp.settings']['smtp_password'] = getenv('SMTP_PASSWORD') ?: '';
   $config['smtp.settings']['smtp_timeout'] = getenv('SMTP_TIMEOUT') ?: 15;
+  $config['smtp.settings']['smtp_allowhtml'] = 1;
 
   // @see baywatch.module for SMTP_REPLYTO setting.
   $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@dpc.vic.gov.au';
