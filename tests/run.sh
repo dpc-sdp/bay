@@ -18,7 +18,7 @@ for file in $BASEDIR/goss.*.yaml; do
     cp $BASEDIR/$service.wait.yaml $PWD/goss_wait.yaml
   fi;
 
-  if ! dgoss run -i ${DOCKERHUB_NAMESPACE:-singledigital}/$service:${IMAGE_TAG:-4.x}; then
+  if ! dgoss run -i ${DOCKERHUB_NAMESPACE:-singledigital}/$service:${IMAGE_TAG:-5.x}; then
     fails=$((fails+1))
   fi
 
