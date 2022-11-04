@@ -40,18 +40,6 @@ target "bay-ci-builder" {
   }
 }
 
-target "bay-circle" {
-  context       = "${CONTEXT}/bay-circle"
-  dockerfile    = "Dockerfile"
-
-  platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-circle:${IMAGE_TAG}"]
-
-  args          = {
-    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
-  }
-}
-
 target "bay-php-cli" {
   context       = "${CONTEXT}/bay-php"
   dockerfile    = "Dockerfile.cli"
