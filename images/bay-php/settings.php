@@ -174,7 +174,7 @@ $config['system.performance']['css']['preprocess'] = 1;
 // Aggregate JavaScript files on
 $config['system.performance']['js']['preprocess'] = 1;
 
-if (strlower(getenv('ENABLE_SMTP')) === "true") {
+if (strtolower(getenv('ENABLE_SMTP')) === "true") {
   $config['system.mail']['interface']['default'] = 'SMTPMailSystem';
   $config['smtp.settings']['smtp_host'] = getenv('SMTP_HOST') ?: 'email-smtp.ap-southeast-2.amazonaws.com';
   $config['smtp.settings']['smtp_port'] = getenv('SMTP_PORT') ?: '587';
