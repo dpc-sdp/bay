@@ -97,16 +97,6 @@ services:
     networks:
       - default
 
-  circle:
-    build:
-      context: ./images/bay-circle
-      dockerfile: $PWD/images/bay-circle/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/circle:${IMAGE_TAG:-5.x}
-    environment:
-      << : *default-environment
-    networks:
-      - default
-
   ci-builder:
     build:
       context: ./images/bay-ci-builder

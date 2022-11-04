@@ -19,7 +19,6 @@ variable "LAGOON_IMAGE_VERSION" {
 group "default" {
     targets = [
       "bay-ci-builder",
-      "bay-circle",
       "bay-php-cli",
       "bay-mariadb",
       "bay-nginx",
@@ -34,18 +33,6 @@ target "bay-ci-builder" {
 
   platforms     = ["linux/amd64"]
   tags          = ["${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}"]
-
-  args          = {
-    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
-  }
-}
-
-target "bay-circle" {
-  context       = "${CONTEXT}/bay-circle"
-  dockerfile    = "Dockerfile"
-
-  platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-circle:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
