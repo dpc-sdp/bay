@@ -249,7 +249,7 @@ if (empty($settings['file_private_path'])) {
 // Use mounted fileshare for temp directory unless explicity disabled with
 //  BAY_SHARED_TEMP_FILES=false
 if (getenv("BAY_SHARED_TEMP_FILES") !== "false") {
-  $config['system.file']['path']['temporary'] = sprintf("%s/tmp", $config['system.file']['path']['temporary']);
+  $config['system.file']['path']['temporary'] = sprintf("%s/tmp", $settings['file_private_path']);
 } else {
   $config['system.file']['path']['temporary'] = getenv("TMPDIR") ?: "/tmp";
 }
