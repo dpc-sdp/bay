@@ -242,9 +242,16 @@ if (file_exists($contrib_path . '/fast404/fast404.inc')) {
   fast404_preboot($settings);
 }
 
-// Temp directory.
-if (getenv('TMP')) {
-  $config['system.file']['path']['temporary'] = getenv('TMP');
+if (empty($settings['file_private_path'])) {
+  $settings['file_private_path'] = 'sites/default/files/private';
+}
+
+// Use mounted fileshare for temp directory unless explicity disabled with
+//  BAY_SHARED_TEMP_FILES=false
+if (getenv("BAY_SHARED_TEMP_FILES") !== "false") {
+  $config['system.file']['path']['temporary'] = sprintf("%s/tmp", $config['system.file']['path']['temporary']);
+} else {
+  $config['system.file']['path']['temporary'] = getenv("TMPDIR") ?: "/tmp";
 }
 
 // Hash Salt.
