@@ -1,9 +1,0 @@
-file:
-  /etc/my.cnf.d/mariadb-client.cnf:
-    exists: true
-    mode: "0664"
-    owner: root
-    group: root
-    filetype: file
-    contains:
-      - max_allowed_packet=16M
