@@ -1,5 +1,9 @@
 FROM uselagoon/elasticsearch-6:latest
 
+LABEL org.opencontainers.image.authors="Digital Victoria"
+LABEL org.opencontainers.image.description="Elasticsearch image for Bay container platform"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-elasticsearch/Dockerfile"
+
 WORKDIR /tmp
 
 RUN yum install unzip -y \
