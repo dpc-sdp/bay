@@ -8,7 +8,7 @@ jobs:
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
-          DOCKERHUB_NAMESPACE: bay_ci
+          DOCKERHUB_NAMESPACE: singledigital
           DOCKER_CLI_EXPERIMENTAL: enabled
           CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com
     steps:
