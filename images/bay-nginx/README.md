@@ -13,7 +13,7 @@ Typically this image is designed for use with lagoon using the following `lagoon
 - `nginx-php`
 - `nginx-php-persistent`
 
-You can also use it in your docker-compose stack with the following snippet:
+You can also use it in your Docker Compose stack with the following snippet:
 
 ```
 services:
