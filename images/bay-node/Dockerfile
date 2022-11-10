@@ -1,5 +1,9 @@
 FROM uselagoon/node-14:20.12.0
 
+LABEL org.opencontainers.image.authors="Digital Victoria"
+LABEL org.opencontainers.image.description="NodeJS image for Bay container platform"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-node/Dockerfile"
+
 RUN apk add --no-cache --virtual .gyp \
         python \
         make \
