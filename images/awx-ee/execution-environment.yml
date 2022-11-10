@@ -17,7 +17,7 @@ additional_build_steps:
     - RUN chmod +x /usr/local/bin/lagoon
     - RUN curl -L "https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz" -o /tmp/hub && tar -xvf /tmp/hub -C /tmp && mv /tmp/hub-linux-amd64-2.14.2/bin/hub /usr/local/bin
     - RUN chmod +x /usr/local/bin/hub
-    - RUN lagoon config feature --enable-local-dir-check false
+    - RUN lagoon config feature --enable-local-dir-check false --force
     - RUN curl -sS https://getcomposer.org/download/2.3.7/composer.phar --output composer.phar
     - RUN chmod +x composer.phar
     - RUN mv composer.phar /usr/local/bin/composer
