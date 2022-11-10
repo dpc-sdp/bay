@@ -1,5 +1,10 @@
 FROM hashicorp/terraform:light AS terraform
 FROM php:7.4-cli-alpine
+
+LABEL org.opencontainers.image.authors="Digital Victoria"
+LABEL org.opencontainers.image.description="CI builder image for Bay container platform"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-ci-builder/Dockerfile"
+
 ARG AHOY_VERSION=2.0.0
 ARG GOJQ_VERSION=0.12.4
 ARG HUB_VERSION=2.14.2
