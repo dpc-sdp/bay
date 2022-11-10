@@ -1,5 +1,9 @@
 FROM uselagoon/nginx-drupal:latest
 
+LABEL org.opencontainers.image.authors="Digital Victoria"
+LABEL org.opencontainers.image.description="nginx image for Bay container platform"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-nginx/Dockerfile"
+
 ENV WEBROOT=docroot
 ENV TZ=Australia/Melbourne
 
@@ -18,4 +22,3 @@ COPY append/server_append-healthz.conf /etc/nginx/conf.d/drupal/server_append-he
 RUN fix-permissions /etc/nginx \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
-
