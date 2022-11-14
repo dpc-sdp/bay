@@ -4,13 +4,15 @@ orbs:
 jobs:
   build:
     docker:
-      - image: singledigital/ci-buildx:4.x
+      - image: singledigital/ci-buildx:5.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: singledigital
           DOCKER_CLI_EXPERIMENTAL: enabled
           CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com
+    parallelism: 10
+    resource_class: large
     steps:
       - checkout
       - setup_remote_docker:
@@ -27,8 +29,9 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print --no-cache
       - run:
           name: Build the images
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
-
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache --pull $(find * -name "buildx.hcl" -exec echo "-f {}" \; | circleci tests split --split-by=timings)
+      # Temporarily halt execution
+      - run: circleci-agent step halt
       - run:
           name: Start the containers
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
