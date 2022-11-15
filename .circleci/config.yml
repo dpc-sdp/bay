@@ -25,11 +25,8 @@ jobs:
             docker buildx create --platform linux/amd64,linux/arm64 dpc --name dpc --use
             docker buildx inspect --bootstrap
       - run:
-          name: Prepare the manifest
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print --no-cache
-      - run:
           name: Build the images
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache --pull $(find * -name "buildx.hcl" -exec echo "-f {}" \; | circleci tests split --split-by=timings)
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) .circleci/scripts/bake.sh $(circleci tests glob images/**/buildx.hcl | circleci tests split --split-by=timings)
       # Temporarily halt execution
       - run: circleci-agent step halt
       - run:
