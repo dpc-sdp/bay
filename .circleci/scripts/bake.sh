@@ -14,14 +14,39 @@ info()    { echoerr "[INFO]    $*" ; }
 fatal()   { echoerr "[FATAL]   $*" ; exit 1 ; }
 
 info "starting buildx wrapper script"
-
-COMMAND="docker buildx bake -f bake.hcl --no-cache --pull"
 ARGS=$@
+TARGET_MANIFEST=/tmp/target.hcl
+
+# Dynamically build a list of -f flags.
+COMMAND="docker buildx bake -f bake.hcl --no-cache --pull"
+
+# Dynamically build a default target group.
+cat <<EOT > ${TARGET_MANIFEST}
+# Dynamic group built by $0
+group "default" {
+  targets = [
+EOT
+
 while read MANIFEST; do
   if [ -f "${MANIFEST}" ]; then
+    # Add the manifest file to the full command.
     COMMAND="${COMMAND} -f ${MANIFEST}"
+
+    # Add the target to default group.
+    TARGET=$(cat "${MANIFEST}" | grep "target" | awk -F'"' '{print $2}')
+    cat <<EOT >> ${TARGET_MANIFEST}
+    "${TARGET}",
+EOT
   else
     fatal "manifest file does not exist: ${MANIFEST}"
   fi
 done < <(echo ${ARGS} | tr ' ' '\n')
+
+cat <<EOT >> ${TARGET_MANIFEST}
+  ]
+}
+EOT
+COMMAND="${COMMAND} -f ${TARGET_MANIFEST}"
+
+info "running: ${COMMAND}"
 eval $COMMAND

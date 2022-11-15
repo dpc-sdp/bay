@@ -11,7 +11,7 @@ jobs:
           DOCKERHUB_NAMESPACE: singledigital
           DOCKER_CLI_EXPERIMENTAL: enabled
           CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com
-    parallelism: 10
+    parallelism: 5
     resource_class: large
     steps:
       - checkout
