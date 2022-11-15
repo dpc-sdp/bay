@@ -32,11 +32,13 @@ while read MANIFEST; do
     # Add the manifest file to the full command.
     COMMAND="${COMMAND} -f ${MANIFEST}"
 
-    # Add the target to default group.
-    TARGET=$(cat "${MANIFEST}" | grep "target" | awk -F'"' '{print $2}')
-    cat <<EOT >> ${TARGET_MANIFEST}
+    # Add the targets to default group.
+    while read TARGET; do
+      echo $TARGET
+      cat <<EOT >> ${TARGET_MANIFEST}
     "${TARGET}",
 EOT
+    done < <(cat "${MANIFEST}" | grep "target" | awk -F'"' '{print $2}')
   else
     fatal "manifest file does not exist: ${MANIFEST}"
   fi
