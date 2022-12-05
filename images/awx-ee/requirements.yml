@@ -7,7 +7,7 @@ collections:
   - kubernetes.core
   - name: lagoon.api
     source: https://github.com/salsadigitalauorg/lagoon_ansible_collection.git
-    version: master
+    version: feature/DEVOPS-71-deploy-targets
     type: git
   - name: section.api
     source: https://github.com/salsadigitalauorg/section_ansible_collection.git
