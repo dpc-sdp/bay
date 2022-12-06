@@ -27,6 +27,22 @@ group "default" {
     ]
 }
 
+target "bay-buildx" {
+  context       = "${CONTEXT}/bay-buildx"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64"]
+  tags          = [
+    // ci-buildx is a legacy tag - should be removed eventually.
+    "${DOCKERHUB_NAMESPACE}/ci-buildx:${IMAGE_TAG}",
+    "${DOCKERHUB_NAMESPACE}/bay-buildx:${IMAGE_TAG}",
+  ]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+
 target "bay-ci-builder" {
   context       = "${CONTEXT}/bay-ci-builder"
   dockerfile    = "Dockerfile"

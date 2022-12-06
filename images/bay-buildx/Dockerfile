@@ -11,7 +11,7 @@ RUN  set -eux; \
   export DEBIAN_FRONTEND=noninteractive; \
   export TERM=linux; \
   \
-  apt-get update; \
+  apt-get update --allow-insecure-repositories; \
   apt-get install -y --no-install-recommends \
   apt-transport-https \
   gnupg2 \
