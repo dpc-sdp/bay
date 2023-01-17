@@ -1,4 +1,4 @@
-php ==8.1
+php:remi-8.1
 php-cli
 php-json
 php-pdo

@@ -1,4 +1,4 @@
-php ==7.4
+php:remi-8.1
 php-cli
 php-json
 php-pdo
@@ -8,6 +8,7 @@ php-zip
 php-mbstring
 php-phar
 php-soap
+php-sodium
 
 which
 git

@@ -11,7 +11,20 @@ additional_build_steps:
     - ARG NVM_INSTALL_VERSION=v0.39.1
     - ARG NVM_DIR=$HOME/.nvm
     - ARG NODE_VERSION=v14.15.1
-    - RUN dnf module enable php:7.4 -y
+    # Custom rpm for libsodium.
+    - |-
+      RUN dnf install --assumeyes wget && \
+          wget https://kojipkgs.fedoraproject.org//packages/libsodium/1.0.18/2.el8/x86_64/libsodium-1.0.18-2.el8.x86_64.rpm -O /tmp/libsodium.rpm && \
+          rpm -i /tmp/libsodium.rpm && \
+          rm -rf /tmp/*
+    # Use remi repo for PHP.
+    - |-
+      RUN dnf config-manager --set-enabled powertools && \
+          dnf install --assumeyes https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
+          dnf install --assumeyes https://rpms.remirepo.net/enterprise/remi-release-8.rpm && \
+          dnf module reset --assumeyes php && \
+          rm -rf /var/cache/dnf/*
+
   append:
     - RUN curl -L "https://github.com/uselagoon/lagoon-cli/releases/download/$LAGOON_CLI_VERSION/lagoon-cli-$LAGOON_CLI_VERSION-linux-amd64" -o /usr/local/bin/lagoon
     - RUN chmod +x /usr/local/bin/lagoon
