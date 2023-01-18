@@ -24,6 +24,19 @@ additional_build_steps:
           dnf install --assumeyes https://rpms.remirepo.net/enterprise/remi-release-8.rpm && \
           dnf module reset --assumeyes php && \
           rm -rf /var/cache/dnf/*
+    # Install required remi PHP packages. Not using bindep because it doesnt seem to work with custom repos.
+    - |-
+      RUN dnf module install --assumeyes php:remi-8.1 && \
+          yum install --assumeyes --skip-broken \
+            php-cli \
+            php-pdo \
+            php-dom \
+            php-gd \
+            php-zip \
+            php-mbstring \
+            php-phar \
+            php-soap \
+            php-sodium
 
   append:
     - RUN curl -L "https://github.com/uselagoon/lagoon-cli/releases/download/$LAGOON_CLI_VERSION/lagoon-cli-$LAGOON_CLI_VERSION-linux-amd64" -o /usr/local/bin/lagoon

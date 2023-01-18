@@ -1,15 +1,3 @@
-php:remi-8.1
-php-cli
-php-json
-php-pdo
-php-dom
-php-gd
-php-zip
-php-mbstring
-php-phar
-php-soap
-php-sodium
-
 which
 git
 git-lfs

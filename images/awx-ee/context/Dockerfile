@@ -36,6 +36,17 @@ RUN dnf config-manager --set-enabled powertools && \
     dnf install --assumeyes https://rpms.remirepo.net/enterprise/remi-release-8.rpm && \
     dnf module reset --assumeyes php && \
     rm -rf /var/cache/dnf/*
+RUN dnf module install --assumeyes php:remi-8.1 && \
+    yum install --assumeyes --skip-broken \
+      php-cli \
+      php-pdo \
+      php-dom \
+      php-gd \
+      php-zip \
+      php-mbstring \
+      php-phar \
+      php-soap \
+      php-sodium
 
 COPY --from=galaxy /usr/share/ansible /usr/share/ansible
 
