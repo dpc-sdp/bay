@@ -42,7 +42,7 @@ RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub
     mv /tmp/hub-linux-386-${HUB_VERSION}/bin/hub /usr/local/bin
 
 # Install Python dependencies not available in apk.
-RUN pip install \
+RUN pip install --ignore-installed \
     flake8 \
     yamllint \
     ansible-lint \
