@@ -26,16 +26,22 @@ RUN  set -eux; \
   \
   binfmt-support \
   qemu-user-static \
+  lsb-release \
   ; \
   # Workaround for https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=923479
   c_rehash; \
   \
-  curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -; \
-  add-apt-repository "deb https://download.docker.com/linux/debian $(lsb_release -cs) stable"; \
+  mkdir -p /etc/apt/keyrings; \
+  curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg; \
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null; \
   apt-get update; \
-  apt-get install -y  --no-install-recommends \
-  docker-ce-cli \
-  docker-compose \
+  apt-get install -y \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-compose-plugin \
   ; \
   apt-get autoremove --purge -y \
   apt-transport-https \
@@ -95,7 +101,7 @@ RUN git --version \
   && shellcheck --version \
   && bats -v \
   && docker --version \
-  && docker-compose version \
+  && docker compose version \
   && composer --version
 
 RUN pip install ansible ansible-builder
