@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: singledigital/ci-buildx:5.x
+      - image: singledigital/ci-buildx:4.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
@@ -31,7 +31,7 @@ jobs:
 
       - run:
           name: Start the containers
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker compose up -d
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
       - run:
           name: Scan the images with clair
           command: |
