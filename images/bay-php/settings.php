@@ -340,6 +340,27 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
 }
 
+// Configure tide_logs.
+if (getenv('TIDE_LOGS_UDPLOG_HOST')) {
+  $config['tide_logs.settings']['host'] = getenv('TIDE_LOGS_UDPLOG_HOST');
+}
+
+if (getenv('TIDE_LOGS_ENABLE')) {
+  $config['tide_logs.settings']['enable'] = getenv('TIDE_LOGS_ENABLE');
+}
+
+if (getenv('TIDE_LOGS_PORT')) {
+  $config['tide_logs.settings']['port'] = getenv('TIDE_LOGS_PORT');
+}
+
+if (getenv('TIDE_LOGS_SUMOLOGIC_CATEGORY')) {
+  $config['tide_logs.settings']['sumologic_category'] = getenv('TIDE_LOGS_SUMOLOGIC_CATEGORY');
+}
+
+if (getenv('TIDE_LOGS_DEBUG')) {
+  $config['tide_logs.settings']['debug'] = getenv('TIDE_LOGS_DEBUG') == "true";
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////// PER-ENVIRONMENT SETTINGS //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
