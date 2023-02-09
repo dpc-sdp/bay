@@ -130,7 +130,7 @@ if (getenv('ENABLE_REDIS')) {
       $redis_interface = getenv('REDIS_INTERFACE');
     }
 
-    if (strpos($redis->ping(), 'PONG') === FALSE) {
+    if ($redis->ping() == FALSE) {
       throw new \Exception('Redis reachable but is not responding correctly.');
     }
 
