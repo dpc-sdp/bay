@@ -247,9 +247,9 @@ if (empty($settings['file_private_path'])) {
   $settings['file_private_path'] = 'sites/default/files/private';
 }
 
-// Use mounted fileshare for temp directory unless explicity disabled with
-//  BAY_SHARED_TEMP_FILES=false
-if (getenv("BAY_SHARED_TEMP_FILES") !== "false") {
+// Use mounted fileshare for temp directory when explicity enabled with
+//  BAY_SHARED_TEMP_FILES=true
+if (getenv("BAY_SHARED_TEMP_FILES") == "true") {
   $settings['file_temp_path'] = sprintf("%s/tmp", $settings['file_private_path']);
 } else {
   $settings['file_temp_path'] = getenv("TMPDIR") ?: "/tmp";
