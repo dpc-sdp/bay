@@ -1,3 +1,7 @@
 FROM elasticsearch:8.5.3
 
-RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch ingest-attachment
+ENV ES_PATH=/usr/share/elasticsearch
+
+RUN $ES_PATH/bin/elasticsearch-plugin install --batch ingest-attachment \
+    && $ES_PATH/bin/elasticsearch-plugin install analysis-kuromoji \
+    && $ES_PATH/bin/elasticsearch-plugin install analysis-icu
