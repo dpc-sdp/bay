@@ -24,6 +24,7 @@ group "default" {
       "bay-nginx",
       "bay-node",
       "bay-php-fpm",
+      "bay-elasticsearch",
     ]
 }
 
@@ -119,6 +120,20 @@ target "bay-php-fpm" {
     // bay-php is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-php-fpm:${IMAGE_TAG}",
+  ]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+
+target "bay-elasticsearch" {
+  context       = "${CONTEXT}/bay-elasticsearch"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-elasticsearch:${IMAGE_TAG}",
   ]
 
   args          = {
