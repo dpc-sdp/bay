@@ -45,7 +45,6 @@ RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub
 RUN pip install \
     flake8 \
     yamllint \
-    ansible-lint \
     boto3
 
 ## Install required PHP extensions for Drupal
