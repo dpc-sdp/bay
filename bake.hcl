@@ -24,8 +24,8 @@ group "default" {
       "bay-nginx",
       "bay-node",
       "bay-php-fpm",
-      "bay-elasticsearch"
-      "bay-mailhog"
+      "bay-elasticsearch",
+      "bay-mailhog",
       "bay-clamav",
     ]
 }
