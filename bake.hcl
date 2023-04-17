@@ -25,6 +25,8 @@ group "default" {
       "bay-node",
       "bay-php-fpm",
       "bay-elasticsearch",
+      "bay-mailhog",
+      "bay-clamav",
     ]
 }
 
@@ -134,6 +136,32 @@ target "bay-elasticsearch" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-elasticsearch:${IMAGE_TAG}",
+  ]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+target "bay-mailhog" {
+  context       = "${CONTEXT}/bay-elasticsearch"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-mailhog:${IMAGE_TAG}",
+  ]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+target "bay-clamav" {
+  context       = "${CONTEXT}/bay-elasticsearch"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-clamav:${IMAGE_TAG}",
   ]
 
   args          = {
