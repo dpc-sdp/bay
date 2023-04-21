@@ -4,8 +4,10 @@
 #
 
 FILE_TEMP_PATH="/app/docroot/sites/default/files/private/tmp"
-#if [ $BAY_SHARED_TEMP_FILES = "true" ] && [ ! -d $FILE_TEMP_PATH ]; then
-if [[ ${BAY_SHARED_TEMP_FILES:-x} == "false" ]] && [[ ! -d $FILE_TEMP_PATH ]]; then
-  echo "Missing file_temp_path - creating directory"
+if [[ ${BAY_SHARED_TEMP_FILES:-x} == "true" ]] && [[ ! -d $FILE_TEMP_PATH ]]; then
+  echo "Missing file_temp_path - creating directory '$FILE_TEMP_PATH'"
   mkdir -p $FILE_TEMP_PATH
+   if [[ $? -eq 0 ]]; then
+     echo "file_temp_path '$FILE_TEMP_PATH' created"
+   fi
 fi
