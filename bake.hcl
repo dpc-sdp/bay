@@ -27,6 +27,7 @@ group "default" {
       "bay-elasticsearch",
       "bay-mailhog",
       "bay-clamav",
+      "bay-ripple-static"
     ]
 }
 
@@ -163,6 +164,17 @@ target "bay-clamav" {
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-clamav:${IMAGE_TAG}",
   ]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+target "bay-ripple-static" {
+  context       = "${CONTEXT}/bay-ripple_static"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64"]
+  tags          = ["${DOCKERHUB_NAMESPACE}/bay-ripple-static:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
