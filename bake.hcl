@@ -7,7 +7,7 @@ variable "DOCKERHUB_NAMESPACE" {
 }
 
 variable "GITDOCKER_PACKAGE" {
-  default = "ghcr.io/dpc-sdp/bay/"
+  default = "ghcr.io/bay/"
 }
 
 variable "CONTEXT" {
