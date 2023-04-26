@@ -106,8 +106,8 @@ target "bay-nginx" {
 
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
-    "${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}"
-    "${GITDOCKER_PACKAGE}/bay-nginx:${IMAGE_TAG}"
+    "${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-nginx:${IMAGE_TAG}",
   ]
 
   args          = {
