@@ -94,7 +94,7 @@ jobs:
           name: Git Log in to GitHub Docker registry
           command: |
              GITHUB_USER=$(curl -sSL -H "Authorization:token $GITHUB_TOKEN" https://api.github.com/user | jq -r .login)
-             echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u "${GITHUB_USER}" --password-stdin
+             echo $GITHUB_TOKEN | docker login ghcr.io --username ghcr.io//dpc-sdp/bay/ --password-stdin
       - run:
           name: Create the builder for multiarch
           command: |
@@ -114,6 +114,7 @@ jobs:
               echo "==> Push the AWX Executor Environment image"
               ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
+              docker push ghcr.io//dpc-sdp/bay:$(.circleci/scripts/tag.sh)
             fi
 
 workflows:
