@@ -92,8 +92,9 @@ jobs:
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run:
           name: Git Log in to GitHub Docker registry
-          command: GITHUB_USER=$(curl -sSL -H "Authorization:token $GITHUB_TOKEN" https://api.github.com/user | jq -r .login)
-          command: echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u "${GITHUB_USER}" --password-stdin
+          command: |
+             GITHUB_USER=$(curl -sSL -H "Authorization:token $GITHUB_TOKEN" https://api.github.com/user | jq -r .login)
+             echo $GITHUB_TOKEN | docker login docker.pkg.github.com -u "${GITHUB_USER}" --password-stdin
       - run:
           name: Create the builder for multiarch
           command: |
