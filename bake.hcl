@@ -6,6 +6,10 @@ variable "DOCKERHUB_NAMESPACE" {
   default = "singledigital"
 }
 
+variable "GITDOCKER_PACKAGE" {
+  default = "singledigital"
+}
+
 variable "CONTEXT" {
   default = "images"
 }
@@ -39,6 +43,8 @@ target "bay-buildx" {
     // ci-buildx is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/ci-buildx:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-buildx:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/ci-buildx:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-buildx:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -51,7 +57,10 @@ target "bay-ci-builder" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}"]
+  tags          = [    
+    "${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-ci-builder:${IMAGE_TAG}",
+  ]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
@@ -67,6 +76,8 @@ target "bay-php-cli" {
     // bay-cli is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/bay-cli:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-php-cli:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-cli:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-php-cli:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -79,7 +90,10 @@ target "bay-mariadb" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-mariadb:${IMAGE_TAG}",
+  ]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
@@ -91,7 +105,10 @@ target "bay-nginx" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}"
+    "${GITDOCKER_PACKAGE}/bay-nginx:${IMAGE_TAG}"
+  ]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
@@ -106,6 +123,8 @@ target "bay-node" {
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-node:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/ripple-node:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-node:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/ripple-node:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -122,6 +141,8 @@ target "bay-php-fpm" {
     // bay-php is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-php-fpm:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-php:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-php-fpm:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -136,6 +157,7 @@ target "bay-elasticsearch" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-elasticsearch:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-elasticsearch:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -149,6 +171,7 @@ target "bay-mailhog" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-mailhog:${IMAGE_TAG}",
+    "${GITDOCKER_PACKAGE}/bay-mailhog:${IMAGE_TAG}",
   ]
 
   args          = {
