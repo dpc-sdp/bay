@@ -7,7 +7,7 @@ variable "DOCKERHUB_NAMESPACE" {
 }
 
 variable "GITDOCKER_PACKAGE" {
-  default = "ghcr.io/bay/"
+  default = "bay"
 }
 
 variable "CONTEXT" {
@@ -43,8 +43,8 @@ target "bay-buildx" {
     // ci-buildx is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/ci-buildx:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-buildx:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/ci-buildx:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-buildx:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/ci-buildx:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-buildx:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -59,7 +59,7 @@ target "bay-ci-builder" {
   platforms     = ["linux/amd64"]
   tags          = [    
     "${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-ci-builder:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-ci-builder:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -76,8 +76,8 @@ target "bay-php-cli" {
     // bay-cli is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/bay-cli:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-php-cli:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-cli:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-php-cli:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-cli:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-php-cli:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -92,7 +92,7 @@ target "bay-mariadb" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-mariadb:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-mariadb:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -107,7 +107,7 @@ target "bay-nginx" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-nginx:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-nginx:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -123,8 +123,8 @@ target "bay-node" {
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-node:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/ripple-node:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-node:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/ripple-node:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-node:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/ripple-node:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -141,8 +141,8 @@ target "bay-php-fpm" {
     // bay-php is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-php-fpm:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-php:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-php-fpm:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-php:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-php-fpm:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -157,7 +157,7 @@ target "bay-elasticsearch" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-elasticsearch:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-elasticsearch:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-elasticsearch:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -171,7 +171,7 @@ target "bay-mailhog" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-mailhog:${IMAGE_TAG}",
-    "${GITDOCKER_PACKAGE}/bay-mailhog:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-mailhog:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -185,6 +185,7 @@ target "bay-clamav" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-clamav:${IMAGE_TAG}",
+    "ghcr.io/${GITDOCKER_PACKAGE}/bay-clamav:${IMAGE_TAG}",
   ]
 
   args          = {
