@@ -114,7 +114,7 @@ jobs:
               echo "==> Push the AWX Executor Environment image"
               ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
-              docker push ghcr.io//dpc-sdp/bay:$(.circleci/scripts/tag.sh)
+              docker push ghcr.io/dpc-sdp/:$(.circleci/scripts/tag.sh)
             fi
 
 workflows:
