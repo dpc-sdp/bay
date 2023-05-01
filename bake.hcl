@@ -6,7 +6,7 @@ variable "DOCKERHUB_NAMESPACE" {
   default = "singledigital"
 }
 
-variable "GITDOCKER_PACKAGE" {
+variable "GHCR_NAMESPACE" {
   default = "ghcr.io/dpc-sdp/bay"
 }
 
