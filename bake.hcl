@@ -6,6 +6,10 @@ variable "DOCKERHUB_NAMESPACE" {
   default = "singledigital"
 }
 
+variable "GHCR_NAMESPACE" {
+  default = "ghcr.io/dpc-sdp/bay"
+}
+
 variable "CONTEXT" {
   default = "images"
 }
@@ -25,6 +29,8 @@ group "default" {
       "bay-node",
       "bay-php-fpm",
       "bay-elasticsearch",
+      "bay-mailhog",
+      "bay-clamav",
     ]
 }
 
@@ -37,6 +43,8 @@ target "bay-buildx" {
     // ci-buildx is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/ci-buildx:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-buildx:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/ci-buildx:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-buildx:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -49,7 +57,10 @@ target "bay-ci-builder" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}"]
+  tags          = [    
+    "${DOCKERHUB_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-ci-builder:${IMAGE_TAG}",
+  ]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
@@ -65,6 +76,8 @@ target "bay-php-cli" {
     // bay-cli is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/bay-cli:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-php-cli:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-cli:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-php-cli:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -77,7 +90,10 @@ target "bay-mariadb" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-mariadb:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-mariadb:${IMAGE_TAG}",
+  ]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
@@ -89,7 +105,10 @@ target "bay-nginx" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-nginx:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-nginx:${IMAGE_TAG}",
+  ]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
@@ -104,6 +123,8 @@ target "bay-node" {
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-node:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/ripple-node:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-node:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/ripple-node:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -120,6 +141,8 @@ target "bay-php-fpm" {
     // bay-php is a legacy tag - should be removed eventually.
     "${DOCKERHUB_NAMESPACE}/bay-php:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/bay-php-fpm:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-php:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-php-fpm:${IMAGE_TAG}",
   ]
 
   args          = {
@@ -134,6 +157,35 @@ target "bay-elasticsearch" {
   platforms     = ["linux/amd64", "linux/arm64"]
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-elasticsearch:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-elasticsearch:${IMAGE_TAG}",
+  ]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+target "bay-mailhog" {
+  context       = "${CONTEXT}/bay-elasticsearch"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-mailhog:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-mailhog:${IMAGE_TAG}",
+  ]
+
+  args          = {
+    LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
+  }
+}
+target "bay-clamav" {
+  context       = "${CONTEXT}/bay-elasticsearch"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+  tags          = [
+    "${DOCKERHUB_NAMESPACE}/bay-clamav:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/bay-clamav:${IMAGE_TAG}",
   ]
 
   args          = {
