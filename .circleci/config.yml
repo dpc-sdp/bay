@@ -76,7 +76,7 @@ jobs:
           command: ansible-builder build --verbosity 3 \
                       --context=images/awx-ee/context \ 
                       --tag singledigital/awx-ee:latest \ 
-                      --tagghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh) \
+                      --tag ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh) \
                       --container-runtime docker \ 
                       - images/awx-ee/execution-environment.yml
       - slack/notify:
