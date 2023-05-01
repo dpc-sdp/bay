@@ -91,6 +91,11 @@ jobs:
           name: Log in to dockerhub
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run:
+          name: Git Log in to GitHub Docker registry
+          command: |
+             GITHUB_USER=$(curl -sSL -H "Authorization:token $GITHUB_TOKEN" https://api.github.com/user | jq -r .login)
+             echo $GITHUB_TOKEN | docker login ghcr.io --username $GITHUB_USER --password-stdin
+      - run:
           name: Create the builder for multiarch
           command: |
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
@@ -107,8 +112,14 @@ jobs:
               echo "==> Push images with $IMAGE_TAG"
               IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --push --no-cache
               echo "==> Push the AWX Executor Environment image"
-              ansible-builder build --context=images/awx-ee/context --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker -f images/awx-ee/execution-environment.yml
+              ansible-builder build \
+                --context=images/awx-ee/context \
+                --tag ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh) \
+                --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) \
+                --container-runtime docker \
+                -f images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
+              docker push ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh)
             fi
 
 workflows:
