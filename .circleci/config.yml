@@ -73,7 +73,7 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Build the AWX EE
-          command: ansible-builder build --verbosity 3 --context=images/awx-ee/context --tag singledigital/awx-ee:latest --tag ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh) --container-runtime docker - images/awx-ee/execution-environment.yml
+          command: ansible-builder build --verbosity 3 --context=images/awx-ee/context --tag singledigital/awx-ee:latest --tag ghcr.io/dpc-sdp/bay/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
       - slack/notify:
           channel: G015H7K158D
           event: fail
