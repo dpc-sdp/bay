@@ -129,7 +129,7 @@ jobs:
                 --container-runtime docker \
                 -f images/awx-ee/execution-environment.yml
               docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
-              docker push ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh)
+              docker push ghcr.io/dpc-sdp/bay/:$(.circleci/scripts/tag.sh)
             fi
 workflows:
   version: 2
