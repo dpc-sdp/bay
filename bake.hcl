@@ -194,7 +194,7 @@ target "bay-ripple-static" {
   context       = "${CONTEXT}/bay-ripple-static"
   dockerfile    = "Dockerfile"
 
-  platforms     = ["linux/amd64"]
+  platforms     = ["linux/amd64", "linux/arm64"]
   tags          = ["${GHCR_NAMESPACE}/ripple-static:${IMAGE_TAG}"]
 
   args          = {
