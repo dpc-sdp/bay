@@ -1,0 +1,1 @@
+This is not a real image, its used to test the PHP images that have ONBUILD functions.
