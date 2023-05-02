@@ -1,36 +1,6 @@
-FROM uselagoon/node-14:20.12.0
-
-RUN apk add --no-cache --virtual .gyp \
-        python \
-        make \
-        g++
-
-ENV CYPRESS_INSTALL_BINARY 0
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
-
-# Build time env vars
-ONBUILD ARG CONTENT_API_SERVER
-ONBUILD ARG CONTENT_API_AUTH_PASS
-ONBUILD ARG CONTENT_API_AUTH_USER
-ONBUILD ARG CONTENT_API_OAUTH_CLIENT_ID
-ONBUILD ARG BASIC_AUTH
-ONBUILD ARG TIDE_DEBUG
-ONBUILD ARG DISPLAY_ERROR
-ONBUILD ARG GTM_ID
-ONBUILD ARG SEARCH_HASH
-ONBUILD ARG SEARCH_SERVICE
-ONBUILD ARG SEARCH_INDEX
-ONBUILD ARG SEARCH_URL
-ONBUILD ARG SEARCH_LOG
-ONBUILD ARG SEARCH_AUTH_USERNAME
-ONBUILD ARG SEARCH_AUTH_PASSWORD
-ONBUILD ARG LAGOON_ENVIRONMENT_TYPE
-
-# End of build time env vars
-
+FROM uselagoon/node-18:latest
 RUN apk --update add curl git
 
-# Force cloning with https rather than ssh.
-# @expires 2022-10
-RUN git config --global url."https://github.com/".insteadOf 'git@github.com:'
-RUN git config --global url."https://github.com/".insteadOf 'ssh://git@github.com/'
+# Prevents installation of large binaries only used for development.
+ENV CYPRESS_INSTALL_BINARY 0
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1

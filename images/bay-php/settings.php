@@ -130,7 +130,7 @@ if (getenv('ENABLE_REDIS')) {
       $redis_interface = getenv('REDIS_INTERFACE');
     }
 
-    if (strpos($redis->ping(), 'PONG') === FALSE) {
+    if ($redis->ping() == FALSE) {
       throw new \Exception('Redis reachable but is not responding correctly.');
     }
 
@@ -247,12 +247,12 @@ if (empty($settings['file_private_path'])) {
   $settings['file_private_path'] = 'sites/default/files/private';
 }
 
-// Use mounted fileshare for temp directory unless explicity disabled with
-//  BAY_SHARED_TEMP_FILES=false
-if (getenv("BAY_SHARED_TEMP_FILES") !== "false") {
-  $config['system.file']['path']['temporary'] = sprintf("%s/tmp", $settings['file_private_path']);
+// Use mounted fileshare for temp directory when explicity enabled with
+//  BAY_SHARED_TEMP_FILES=true
+if (getenv("BAY_SHARED_TEMP_FILES") == "true") {
+  $settings['file_temp_path'] = sprintf("%s/tmp", $settings['file_private_path']);
 } else {
-  $config['system.file']['path']['temporary'] = getenv("TMPDIR") ?: "/tmp";
+  $settings['file_temp_path'] = getenv("TMPDIR") ?: "/tmp";
 }
 
 // Hash Salt.
@@ -301,7 +301,7 @@ $config['purge_queuer_coretags.settings']['blacklist'] = $tag_list;
 // Configure ClamAV connections.
 $clamav_scan = getenv('CLAMAV_SCANMODE') ?: 0;
 $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav.sdp-central-clamav-master.svc.cluster.local';
-$clamav_port = getenv('CLAMAV_PORT') ?: 3000;
+$clamav_port = getenv('CLAMAV_PORT') ?: 3310;
 
 if ($lagoon_env_type == 'local') {
   $clamav_host = getenv('CLAMAV_HOST') ?: 'clamav';
@@ -338,6 +338,27 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
 } else {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
+}
+
+// Configure tide_logs.
+if (getenv('TIDE_LOGS_UDPLOG_HOST')) {
+  $config['tide_logs.settings']['host'] = getenv('TIDE_LOGS_UDPLOG_HOST');
+}
+
+if (getenv('TIDE_LOGS_ENABLE')) {
+  $config['tide_logs.settings']['enable'] = getenv('TIDE_LOGS_ENABLE');
+}
+
+if (getenv('TIDE_LOGS_PORT')) {
+  $config['tide_logs.settings']['port'] = getenv('TIDE_LOGS_PORT');
+}
+
+if (getenv('TIDE_LOGS_SUMOLOGIC_CATEGORY')) {
+  $config['tide_logs.settings']['sumologic_category'] = getenv('TIDE_LOGS_SUMOLOGIC_CATEGORY');
+}
+
+if (getenv('TIDE_LOGS_DEBUG')) {
+  $config['tide_logs.settings']['debug'] = getenv('TIDE_LOGS_DEBUG') == "true";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
