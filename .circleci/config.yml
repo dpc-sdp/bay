@@ -112,6 +112,7 @@ jobs:
               echo "==> Push images with $IMAGE_TAG"
               IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --push --no-cache
               echo "==> Push the AWX Executor Environment image"
+              pip install --upgrade ansible-builder
               ansible-builder build \
                 --context=images/awx-ee/context \
                 --tag ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh) \
