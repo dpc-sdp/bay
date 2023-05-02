@@ -2,6 +2,11 @@ FROM uselagoon/nginx-drupal:latest
 
 ENV WEBROOT=docroot
 ENV TZ=Australia/Melbourne
+ENV BAY_INGRESS_ENABLED=false
+ENV BAY_INGRESS_HEADER=""
+ENV BAY_INGRESS_PSK=""
+EXPOSE 8080
+EXPOSE 50000
 
 # Add ingress protection environment variable supprot to nginx.
 RUN sed -i '/env\ LAGOON_ENVIRONMENT_TYPE\;/a env BAY_INGRESS_ENABLED\;' /etc/nginx/nginx.conf \
