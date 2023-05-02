@@ -108,16 +108,16 @@ services:
     networks:
       - default
 
-  ripple_static:
+  ripple-static:
     build:
-      context: ./images/bay-ripple_static
-      dockerfile: $PWD/images/bay-ripple_static/Dockerfile
-    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ripple_static:${IMAGE_TAG:-5.x}
+      context: ./images/bay-ripple-static
+      dockerfile: $PWD/images/bay-ripple-static/Dockerfile
+    image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ripple-static:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
     networks:
       - default
-    
+
   test:
     build:
       context: ./images/bay-test
