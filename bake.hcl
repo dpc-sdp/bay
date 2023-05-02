@@ -191,11 +191,11 @@ target "bay-clamav" {
   }
 }
 target "bay-ripple-static" {
-  context       = "${CONTEXT}/bay-ripple_static"
+  context       = "${CONTEXT}/bay-ripple-static"
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64"]
-  tags          = ["${DOCKERHUB_NAMESPACE}/bay-ripple-static:${IMAGE_TAG}"]
+  tags          = ["${GHCR_NAMESPACE}/ripple-static:${IMAGE_TAG}"]
 
   args          = {
     LAGOON_IMAGE_VERSION = "${LAGOON_IMAGE_VERSION}"
