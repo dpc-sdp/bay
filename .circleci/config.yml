@@ -11,7 +11,7 @@ jobs:
           version: 20.10.7
       - run:
           name: Run custom lints
-          command: ./circleci/scripts/custom-lints.sh
+          command: ./.circleci/scripts/custom-lints.sh
   build:
     docker:
       - image: singledigital/ci-buildx:4.x
