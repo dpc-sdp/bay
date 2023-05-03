@@ -137,6 +137,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
+      - lint
       - build:
           context:
             - sdpdeploy
@@ -148,6 +149,7 @@ workflows:
       - deploy:
           requires:
             - build
+            - lint
 
   weekly_build:
     jobs:
