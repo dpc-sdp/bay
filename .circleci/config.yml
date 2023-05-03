@@ -2,6 +2,16 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.10.1
 jobs:
+  lint:
+    docker:
+      - image: singledigital/ci-buildx:4.x
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.7
+      - run:
+          name: Run custom lints
+          command: ./circleci/scripts/custom-lints.sh
   build:
     docker:
       - image: singledigital/ci-buildx:4.x
@@ -38,7 +48,7 @@ jobs:
              docker images | grep bay | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
-               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}'); 
+               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}');
                do
                 echo "container name $line"
                 docker stop $line

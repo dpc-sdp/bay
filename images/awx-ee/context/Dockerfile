@@ -22,6 +22,9 @@ RUN assemble
 
 FROM $EE_BASE_IMAGE
 USER root
+LABEL org.opencontainers.image.authors="Digital Victoria"
+LABEL org.opencontainers.image.description="Provides an AWX execution environment image optimised for use with SDP."
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/awx-ee/context/Dockerfile"
 ARG LAGOON_CLI_VERSION=v0.15.4
 ARG NVM_INSTALL_VERSION=v0.39.1
 ARG NVM_DIR=$HOME/.nvm

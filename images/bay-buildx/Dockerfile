@@ -1,5 +1,9 @@
 FROM debian:stable-slim
 
+LABEL org.opencontainers.image.authors="Digital Victoria"
+LABEL org.opencontainers.image.description="Buildx image for building Bay base images"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-buildx/Dockerfile"
+
 # TODO remove config.json this flag once it's not needed for `buildx` anymore
 COPY config.json /root/.docker/
 COPY debian-backports-pin-600.pref /etc/apt/preferences.d/
