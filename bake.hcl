@@ -6,6 +6,10 @@ variable "DOCKERHUB_NAMESPACE" {
   default = "singledigital"
 }
 
+variable "GHCR_NAMESPACE" {
+  default = "ghcr.io/dpc-sdp/bay"
+}
+
 variable "CONTEXT" {
   default = "images"
 }
@@ -96,6 +100,8 @@ target "bay-node" {
   tags          = [
     "${DOCKERHUB_NAMESPACE}/bay-node:${IMAGE_TAG}",
     "${DOCKERHUB_NAMESPACE}/ripple-node:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/node:${IMAGE_TAG}",
+    "${GHCR_NAMESPACE}/ripple-node:${IMAGE_TAG}",
   ]
 
   args          = {
