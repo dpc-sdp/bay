@@ -34,7 +34,11 @@ RUN  set -eux; \
   add-apt-repository "deb https://download.docker.com/linux/debian $(lsb_release -cs) stable"; \
   apt-get update; \
   apt-get install -y  --no-install-recommends \
+  docker-ce \
   docker-ce-cli \
+  containerd.io \
+  docker-buildx-plugin \
+  docker-compose-plugin \
   docker-compose \
   ; \
   apt-get autoremove --purge -y \
