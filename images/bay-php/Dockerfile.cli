@@ -22,14 +22,15 @@ RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releas
     chmod +x /usr/local/bin/dockerize
 
 # Install redis-cli for debugging.
-RUN apk add redis --no-cache
+RUN apk add redis aws-cli --no-cache
 
 RUN mkdir /bay
+
 COPY 00-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay
 
-# Ensure temp dir exists if required
-COPY bay-shared-temp-files-dir-check.sh /lagoon/entrypoints
+# Bay entrypoints.
+COPY entrypoints/ /lagoon/entrypoints
 
 # Add common drupal config.
 COPY redis-unavailable.services.yml /bay

@@ -10,7 +10,7 @@ COPY 00-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay
 
 # Ensure temp dir exists if required
-COPY bay-shared-temp-files-dir-check.sh /lagoon/entrypoints
+# COPY entrypoints/bay-shared-temp-files-dir-check.sh /lagoon/entrypoints
 
 # Add common drupal config.
 COPY redis-unavailable.services.yml /bay
