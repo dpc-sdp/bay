@@ -38,7 +38,7 @@ jobs:
              docker images | grep bay | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
              for image in `cat images.txt`; do
                echo "scanning image: $image"
-               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}'); 
+               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}');
                do
                 echo "container name $line"
                 docker stop $line
@@ -90,6 +90,11 @@ jobs:
       - run:
           name: Log in to dockerhub
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run:
+          name: Git Log in to GitHub Docker registry
+          command: |
+             GITHUB_USER=$(curl -sSL -H "Authorization:token $GITHUB_TOKEN" https://api.github.com/user | jq -r .login)
+             echo $GITHUB_TOKEN | docker login ghcr.io --username $GITHUB_USER --password-stdin
       - run:
           name: Create the builder for multiarch
           command: |
