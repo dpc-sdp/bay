@@ -113,8 +113,14 @@ services:
       context: ./images/bay-ripple-static
       dockerfile: $PWD/images/bay-ripple-static/Dockerfile
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/bay-ripple-static:${IMAGE_TAG:-5.x}
+    ports:
+      - 3000
     environment:
       << : *default-environment
+      TARGET_PROJECT: "test-vic-static"
+      QUANT_CUSTOMER: "dpc"
+      QUANT_PROJECT: "test-vic-static"
+      QUANT_TOKEN: "supersecretoken"
     networks:
       - default
 
