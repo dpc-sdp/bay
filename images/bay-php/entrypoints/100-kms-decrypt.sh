@@ -1,30 +1,29 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -euo pipefail
 
-####
-# Locate files in /app/keys and attempt to decrypt them using stored
-# IAM account details.
-#
-# Requires:
-#    AWS_ACCESS_KEY_ID
-#    AWS_SECRET_ACCESS_KEY
-#    AWS_DEFAULT_REGION
-####
+#/ Usage:
+#/ Description: Locate files in /app/keys and attempt to decrypt them using stored IAM account details.
+#/ Examples:
+#/ Requires:
+#/   AWS_ACCESS_KEY_ID
+#/   AWS_SECRET_ACCESS_KEY
+#/   AWS_DEFAULT_REGION
+#/ Options:
+#/   --help: Display this help message
+usage() { grep '^#/' "$0" | cut -c4- ; exit 0 ; }
+expr "$*" : ".*--help" > /dev/null && usage
 
+echoerr() { printf "%s\n" "$*" >&2 ; }
+info()    { echoerr "[INFO]    $*" ; }
+warning() { echoerr "[WARNING] $*" ; }
+error()   { echoerr "[ERROR]   $*" ; }
+fatal()   { echoerr "[FATAL]   $*" ; exit 1 ; }
+
+info "decrypting files"
 if ls /app/keys/*.asc > /dev/null 2>&1 && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
     files=$(find /app/keys -name "*.asc")
     for file in $files; do
-        decrypted_output=$(aws kms decrypt \
-            --ciphertext-blob "fileb://${file}" \
-            --output text \
-            --query Plaintext 2> "${file%.asc}.error" | base64 --decode)
-
-        if [ $? -eq 0 ]; then
-            echo "Successfully decrypted $file"
-            echo "${decrypted_output}" > "${file%.asc}"
-        else
-            decryption_error=$(<"${file%.asc}.error")
-            echo "Error decrypting $file: $decryption_error"
-        fi
-        rm "${file%.asc}.error"
+        info " - ${file} > ${file%.asc}"
+        bay kms decrypt < "${file}" > "${file%.asc}" || error "unable to decrypt ${file}"
     done
 fi
