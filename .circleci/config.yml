@@ -138,9 +138,9 @@ workflows:
   build_and_test:
     jobs:
       - lint
-      - build:
-          context:
-            - sdpdeploy
+#       - build:
+#           context:
+#             - sdpdeploy
 #      - pr_comment:
 #          context:
 #            - sdpdeploy
@@ -148,7 +148,7 @@ workflows:
 #            - build
       - deploy:
           requires:
-            - build
+#             - build
             - lint
 
   weekly_build:
