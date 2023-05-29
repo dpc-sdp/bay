@@ -27,3 +27,6 @@ if ls /app/keys/*.asc > /dev/null 2>&1 && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$
         bay kms decrypt < "${file}" > "${file%.asc}" || error "unable to decrypt ${file}"
     done
 fi
+
+# Set optiosn back to previous state.
+set +eu
