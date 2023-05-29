@@ -20,7 +20,7 @@ error()   { echoerr "[ERROR]   $*" ; }
 fatal()   { echoerr "[FATAL]   $*" ; exit 1 ; }
 
 info "decrypting files"
-if ls /app/keys/*.asc > /dev/null 2>&1 && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+if (find /app/keys -name "*.asc" | grep asc) > /dev/null 2>&1 && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
     files=$(find /app/keys -name "*.asc")
     for file in $files; do
         info " - ${file} > ${file%.asc}"
