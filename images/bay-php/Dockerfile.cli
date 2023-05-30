@@ -22,7 +22,11 @@ RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releas
     chmod +x /usr/local/bin/dockerize
 
 # Install redis-cli for debugging.
-RUN apk add redis aws-cli --no-cache
+RUN apk add redis --no-cache
+
+# Install bay-cli.
+RUN wget "https://github.com/dpc-sdp/bay-cli/releases/download/v0.0.2/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" -O /bin/bay && \
+    chmod +x /bin/bay
 
 RUN mkdir /bay
 
