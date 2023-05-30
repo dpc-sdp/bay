@@ -20,12 +20,19 @@ error()   { echoerr "[ERROR]   $*" ; }
 fatal()   { echoerr "[FATAL]   $*" ; exit 1 ; }
 
 info "decrypting files"
-if (find /app/keys -name "*.asc" | grep asc) > /dev/null 2>&1 && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-    files=$(find /app/keys -name "*.asc")
-    for file in $files; do
+
+encrypted_files=""
+if [ -d "/app/keys" ]; then
+    encrypted_files=$(find /app/keys -type f -name "*.asc" -print0 2>/dev/null)
+fi
+
+if [ -n "$encrypted_files" ] && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+    for file in $encrypted_files; do
         info " - ${file} > ${file%.asc}"
         bay kms decrypt < "${file}" > "${file%.asc}" || error "unable to decrypt ${file}"
     done
+else
+    info "no files to decrypt"
 fi
 
 # Set optiosn back to previous state.
