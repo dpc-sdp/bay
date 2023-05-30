@@ -35,5 +35,5 @@ else
     info "no files to decrypt"
 fi
 
-# Set optiosn back to previous state.
+# Set options back to previous state.
 set +eu
