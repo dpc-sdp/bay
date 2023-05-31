@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const apiRouter = require('./router')
 
+const queue = require('./api/queue')
+
 app.use(express.json())
 
 app.get('/', (req, res) => {
@@ -11,6 +13,7 @@ app.get('/', (req, res) => {
     "project": process.env.TARGET_PROJECT,
     "quant_customer": process.env.QUANT_CUSTOMER,
     "quant_project": process.env.QUANT_PROJECT,
+    "queue_ready": queue.ready(),
   })
 })
 

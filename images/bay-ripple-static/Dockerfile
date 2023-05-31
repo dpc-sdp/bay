@@ -13,12 +13,16 @@ LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/i
 
 WORKDIR /builder
 
-RUN apk add git --no-cache && \
+RUN apk add git redis --no-cache && \
     npm i -g @quantcdn/quant-cli
 
 COPY --from=builder /builder/node_modules /builder/node_modules
 COPY app/ /builder/
 
 EXPOSE 3000
+
+# To reduce the number of pods that are in the cluster and to make this more self contained we include
+# redis alognside the node deployment.
+COPY entrypoints/ /lagoon/entrypoints
 
 CMD ["yarn", "run", "start"]

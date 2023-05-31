@@ -1,24 +1,14 @@
 "use strict"
 const Queue = require('bull');
 
-let deployQueue;
-
-// Add Redis support to the queue.
-if (process.env.REDIS_HOST) {
-  const connectionString = process.env.REDIS_HOST ? 'redis://' + process.env.REDIS_HOST + ':6379' : 'redis://redis:6379';
-  deployQueue = new Queue('quant deploy', connectionString);
-} else {
-  // If the  environment has been deployed wihtout Redis support, we can keep an in memory
-  // queue, this is less desirable as it will not be persistent but can keep the deployment
-  // of the ripple-static builder simple.
-  deployQueue = new Queue('quant deploy')
-}
+const connectionString = `redis://${process.env.REDIS_HOST ? process.env.REDIS_HOST : 'localhost'}:6379`
+const deployQueue = new Queue('quant deploy', connectionString);
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 deployQueue.process(async function(job, done) {
-  let quantCommand = `quant deploy -c ${job.data.quant_customer} -p ${job.data.quant_project} -t "${job.data.quant_token}" -r /tmp ${job.data.build_dir}`
+  let quantCommand = `quant deploy -c ${job.data.quant_customer} -p ${job.data.quant_project} -t '${job.data.quant_token}' -r /tmp ${job.data.build_dir}`
 
   const commandOpts = {
     cwd: '/app',
@@ -71,4 +61,8 @@ deployQueue.process(async function(job, done) {
 
 exports.queue = (data) => {
   deployQueue.add(data)
+}
+
+exports.ready = () => {
+  console.log(deployQueue)
 }
