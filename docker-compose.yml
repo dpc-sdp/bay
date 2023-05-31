@@ -3,6 +3,9 @@ version: '3.4'
 x-environment:
   &default-environment
     LAGOON_ROUTE: ${LOCALDEV_URL:-http://bay.docker.amazee.io}
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-southeast-2}
 
 x-args:
   &default-args
@@ -70,12 +73,11 @@ services:
     image: ${DOCKERHUB_NAMESPACE:-singledigital}/php_goss:${IMAGE_TAG:-5.x}
     depends_on:
       - cli
+      - php
     environment:
       << : *default-environment
     networks:
       - default
-    depends_on:
-      - php
 
   node:
     build:
