@@ -26,7 +26,7 @@ if [ -d "/app/keys" ]; then
     encrypted_files=$(find /app/keys -type f -name "*.asc" -printf '%p ' 2>/dev/null)
 fi
 
-if [ -v "$encrypted_files" ] && [ -v "$AWS_ACCESS_KEY_ID" ] && [ -v "$AWS_SECRET_ACCESS_KEY" ]; then
+if [ ! -z "${encrypted_files:-x}" ] && [ ! -z "${AWS_ACCESS_KEY_ID:-x}" ] && [ ! -z "${AWS_SECRET_ACCESS_KEY:-x}" ]; then
     for file in $encrypted_files; do
         info " - ${file} > ${file%.asc}"
         bay kms decrypt < "${file}" > "${file%.asc}" || error "unable to decrypt ${file}"
