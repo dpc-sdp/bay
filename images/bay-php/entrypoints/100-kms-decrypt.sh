@@ -23,7 +23,7 @@ info "decrypting files"
 
 encrypted_files=""
 if [ -d "/app/keys" ]; then
-    encrypted_files=$(find /app/keys -type f -name "*.asc" -print0 2>/dev/null)
+    encrypted_files=$(find /app/keys -type f -name "*.asc" -printf '%p ' 2>/dev/null)
 fi
 
 if [ -n "$encrypted_files" ] && [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
