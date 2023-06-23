@@ -61,13 +61,13 @@ RUN  set -eux; \
 
 
 RUN apt-get update
-RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-mbstring php-soap php-gd python3 python3-pip
+RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-mbstring php-soap php-gd python3 pipx
 
 ENV PATH="/govcms/vendor/bin:/usr/local/bin:${PATH}"
 
-# Install composer
-RUN wget -O composer-setup.php https://getcomposer.org/installer &&\
-  php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+## Install composer
+#RUN wget -O composer-setup.php https://getcomposer.org/installer &&\
+#  php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 # Install yq (jq already installed)
 RUN curl -L "https://github.com/mikefarah/yq/releases/download/v4.14.1/yq_linux_amd64" -o /usr/local/bin/yq &&\
@@ -105,7 +105,7 @@ RUN git --version \
   && shellcheck --version \
   && bats -v \
   && docker --version \
-  && docker compose version \
-  && composer --version
+  && docker compose version
 
-RUN pip install ansible ansible-builder
+RUN pipx install ansible && \
+    pipx install ansible-builder
