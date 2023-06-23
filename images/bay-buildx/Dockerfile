@@ -24,6 +24,7 @@ RUN  set -eux; \
   ca-certificates \
   \
   git \
+  shellcheck \
   jq \
   curl \
   wget \
@@ -79,12 +80,6 @@ RUN wget -O /usr/local/bin/goss https://github.com/aelsabbahy/goss/releases/down
   && chmod +x /usr/local/bin/goss \
   && wget -O /usr/local/bin/dgoss https://raw.githubusercontent.com/aelsabbahy/goss/master/extras/dgoss/dgoss \
   && chmod +x /usr/local/bin/dgoss
-
-# Install shellcheck.
-RUN curl -L -o "/tmp/shellcheck-v0.7.1.tar.xz" "https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.linux.x86_64.tar.xz" \
-  && tar -C /tmp --xz -xvf "/tmp/shellcheck-v0.7.1.tar.xz" \
-  && mv "/tmp/shellcheck-v0.7.1/shellcheck" /usr/bin/ \
-  && chmod +x /usr/bin/shellcheck
 
 # Install a stub for pygmy.
 # Some frameworks may require presence of pygmy to run, but pygmy is not required in CI container.
