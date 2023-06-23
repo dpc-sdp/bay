@@ -65,10 +65,6 @@ RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-
 
 ENV PATH="/govcms/vendor/bin:/usr/local/bin:${PATH}"
 
-## Install composer
-#RUN wget -O composer-setup.php https://getcomposer.org/installer &&\
-#  php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
 # Install yq (jq already installed)
 RUN curl -L "https://github.com/mikefarah/yq/releases/download/v4.14.1/yq_linux_amd64" -o /usr/local/bin/yq &&\
   chmod +x /usr/local/bin/yq
