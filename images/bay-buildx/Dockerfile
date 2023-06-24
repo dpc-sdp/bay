@@ -24,6 +24,7 @@ RUN  set -eux; \
   ca-certificates \
   \
   git \
+  shellcheck \
   jq \
   curl \
   wget \
@@ -61,13 +62,9 @@ RUN  set -eux; \
 
 
 RUN apt-get update
-RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-mbstring php-soap php-gd python3 python3-pip
+RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-mbstring php-soap php-gd python3 pipx
 
 ENV PATH="/govcms/vendor/bin:/usr/local/bin:${PATH}"
-
-# Install composer
-RUN wget -O composer-setup.php https://getcomposer.org/installer &&\
-  php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 # Install yq (jq already installed)
 RUN curl -L "https://github.com/mikefarah/yq/releases/download/v4.14.1/yq_linux_amd64" -o /usr/local/bin/yq &&\
@@ -84,12 +81,6 @@ RUN wget -O /usr/local/bin/goss https://github.com/aelsabbahy/goss/releases/down
   && wget -O /usr/local/bin/dgoss https://raw.githubusercontent.com/aelsabbahy/goss/master/extras/dgoss/dgoss \
   && chmod +x /usr/local/bin/dgoss
 
-# Install shellcheck.
-RUN curl -L -o "/tmp/shellcheck-v0.7.1.tar.xz" "https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.linux.x86_64.tar.xz" \
-  && tar -C /tmp --xz -xvf "/tmp/shellcheck-v0.7.1.tar.xz" \
-  && mv "/tmp/shellcheck-v0.7.1/shellcheck" /usr/bin/ \
-  && chmod +x /usr/bin/shellcheck
-
 # Install a stub for pygmy.
 # Some frameworks may require presence of pygmy to run, but pygmy is not required in CI container.
 RUN touch /usr/local/bin/pygmy \
@@ -105,7 +96,7 @@ RUN git --version \
   && shellcheck --version \
   && bats -v \
   && docker --version \
-  && docker compose version \
-  && composer --version
+  && docker compose version
 
-RUN pip install ansible ansible-builder
+RUN pipx install ansible && \
+    pipx install ansible-builder
