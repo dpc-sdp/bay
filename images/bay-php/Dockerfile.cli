@@ -30,7 +30,7 @@ RUN wget "https://github.com/dpc-sdp/bay-cli/releases/download/v0.0.2/bay_$(echo
 
 RUN mkdir /bay
 
-COPY 00-bay.ini /usr/local/etc/php/conf.d/
+COPY 01-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay
 
 # Bay entrypoints.

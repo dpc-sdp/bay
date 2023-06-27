@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.description="PHP-FPM image for Bay container plat
 LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.fpm"
 
 RUN mkdir /bay
-COPY 00-bay.ini /usr/local/etc/php/conf.d/
+COPY 01-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay
 
 # Ensure temp dir exists if required
