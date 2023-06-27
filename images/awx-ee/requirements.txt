@@ -6,3 +6,4 @@ ansible-lint
 flake8
 yamllint
 ruamel.yaml
+pygithub

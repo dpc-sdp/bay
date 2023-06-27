@@ -34,7 +34,7 @@ command:
     stdout:
       - '/8\.1/'
 file:
-  /usr/local/etc/php/conf.d/00-bay.ini:
+  /usr/local/etc/php/conf.d/01-bay.ini:
     exists: true
     mode: "0644"
     owner: root
