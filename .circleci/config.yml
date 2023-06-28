@@ -4,7 +4,7 @@ orbs:
 jobs:
   lint:
     docker:
-      - image: singledigital/ci-buildx:4.x
+      - image: singledigital/ci-buildx:5.x
     steps:
       - checkout
       - setup_remote_docker
@@ -13,10 +13,9 @@ jobs:
           command: ./.circleci/scripts/custom-lints.sh
   build:
     docker:
-      - image: singledigital/ci-buildx:4.x
+      - image: singledigital/ci-buildx:5.x
         environment:
           GOSS_FILES_STRATEGY: cp
-          DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: singledigital
           DOCKER_CLI_EXPERIMENTAL: enabled
           CIRCLE_ARTIFACT_DOMAIN: output.circle-artifacts.com
@@ -85,10 +84,9 @@ jobs:
 
   deploy:
     docker:
-      - image: singledigital/ci-buildx:4.x
+      - image: singledigital/ci-buildx:5.x
         environment:
           GOSS_FILES_STRATEGY: cp
-          DOCKER_VERSION: 20.10.7
           DOCKERHUB_NAMESPACE: singledigital
           DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
