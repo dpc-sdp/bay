@@ -13,7 +13,7 @@ You can also use it in your Docker Compose stack with the following snippet:
 ```
 services:
   clamav:
-    image: singledigital/bay-clamav:5.x
+    image: ghcr.io/dpc-sdp/bay/clamav:5.x
     ports:
       - 3310
 ```
