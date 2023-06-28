@@ -22,6 +22,7 @@ variable "LAGOON_IMAGE_VERSION" {
 
 group "default" {
     targets = [
+      "bay-buildx",
       "bay-ci-builder",
       "bay-php-cli",
       "bay-mariadb",
