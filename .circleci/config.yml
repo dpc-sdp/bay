@@ -4,7 +4,7 @@ orbs:
 jobs:
   lint:
     docker:
-      - image: singledigital/ci-buildx:4.x
+      - image: ghcr.io/dpc-sdp/bay/ci-buildx:5.x
     steps:
       - checkout
       - setup_remote_docker
@@ -13,7 +13,7 @@ jobs:
           command: ./.circleci/scripts/custom-lints.sh
   build:
     docker:
-      - image: singledigital/ci-buildx:4.x
+      - image: ghcr.io/dpc-sdp/bay/ci-buildx:5.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
@@ -76,7 +76,13 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Build the AWX EE
-          command: ansible-builder build --verbosity 3 --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
+          command: |
+            ansible-builder build \
+            --context=images/awx-ee/context \
+            --tag ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh) \
+            --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) \
+            --container-runtime docker \
+            -f images/awx-ee/execution-environment.yml
 
       - slack/notify:
           channel: G015H7K158D
@@ -85,7 +91,7 @@ jobs:
 
   deploy:
     docker:
-      - image: singledigital/ci-buildx:4.x
+      - image: ghcr.io/dpc-sdp/bay/ci-buildx:5.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
