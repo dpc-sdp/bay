@@ -64,7 +64,9 @@ RUN  set -eux; \
 RUN apt-get update
 RUN apt-get install -y zip unzip ssh xz-utils bats php-cli php-curl php-dom php-mbstring php-soap php-gd python3 pipx
 
-ENV PATH="/govcms/vendor/bin:/usr/local/bin:${PATH}"
+ENV PATH="/usr/local/bin:${PATH}"
+
+RUN pipx ensurepath
 
 # Install yq (jq already installed)
 RUN curl -L "https://github.com/mikefarah/yq/releases/download/v4.14.1/yq_linux_amd64" -o /usr/local/bin/yq &&\
