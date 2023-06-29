@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: Start the containers
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker-compose up -d
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker compose up -d
       - run:
           name: Scan the images with clair
           command: |
