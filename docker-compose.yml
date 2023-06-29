@@ -18,7 +18,7 @@ services:
       dockerfile: $PWD/images/bay-buildx/Dockerfile
       args:
         << : *default-args
-    image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/ci-buildx
+    image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/buildx
     environment:
       << : *default-environment
     networks:
