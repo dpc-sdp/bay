@@ -4,7 +4,7 @@ orbs:
 jobs:
   lint:
     docker:
-      - image: ghcr.io/dpc-sdp/bay/ci-buildx:5.x
+      - image: ghcr.io/dpc-sdp/bay/buildx:5.x
     steps:
       - checkout
       - setup_remote_docker
@@ -13,7 +13,7 @@ jobs:
           command: ./.circleci/scripts/custom-lints.sh
   build:
     docker:
-      - image: ghcr.io/dpc-sdp/bay/ci-buildx:5.x
+      - image: ghcr.io/dpc-sdp/bay/buildx:5.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
@@ -91,7 +91,7 @@ jobs:
 
   deploy:
     docker:
-      - image: ghcr.io/dpc-sdp/bay/ci-buildx:5.x
+      - image: ghcr.io/dpc-sdp/bay/buildx:5.x
         environment:
           GOSS_FILES_STRATEGY: cp
           DOCKER_VERSION: 20.10.7
