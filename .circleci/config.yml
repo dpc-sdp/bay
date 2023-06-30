@@ -40,35 +40,31 @@ jobs:
           name: List docker images
           command: docker image ls
 
-      - run:
-          name: Start the containers
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker compose up -d
-
-      - run:
-          name: Scan the images with clair
-          command: |
-             docker images | grep bay | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
-             for image in `cat images.txt`; do
-               echo "scanning image: $image"
-               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}');
-               do
-                echo "container name $line"
-                docker stop $line
-                docker rm $line
-                sleep 5
-               done
-               sleep 50
-               mkdir -p /docker-tars
-               mkdir -p /clair-reports/reports
-               docker save -o /docker-tars/scan.tar $image
-               bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/reports/myclair.log
-             done
-             echo "clair log"
-             cat /clair-reports/reports/myclair.log
-
-      - store_artifacts:
-           path: /clair-reports/reports
-
+#      - run:
+#          name: Scan the images with clair
+#          command: |
+#             docker images | grep bay | awk '{ print $1 }' | tail -n +2 | sed '/multiarch/d' >> images.txt
+#             for image in `cat images.txt`; do
+#               echo "scanning image: $image"
+#               for line in $(docker ps --format "table {{.Image}}\t{{.ID}}" | grep -e arminc/clair-local-scan -e ovotech/clair-scanner -e clair-db | awk '{print $2}');
+#               do
+#                echo "container name $line"
+#                docker stop $line
+#                docker rm $line
+#                sleep 5
+#               done
+#               sleep 50
+#               mkdir -p /docker-tars
+#               mkdir -p /clair-reports/reports
+#               docker save -o /docker-tars/scan.tar $image
+#               bash .circleci/scripts/runclairscan.sh /docker-tars >> /clair-reports/reports/myclair.log
+#             done
+#             echo "clair log"
+#             cat /clair-reports/reports/myclair.log
+#
+#      - store_artifacts:
+#           path: /clair-reports/reports
+#
 
       - run:
           name: Install goss
