@@ -36,6 +36,13 @@ jobs:
       - run:
           name: Build the images
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
+      - run:
+          name: List docker images
+          command: docker image ls
+
+      - run:
+          name: Start the containers
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker compose up -d
 
       - run:
           name: Start the containers

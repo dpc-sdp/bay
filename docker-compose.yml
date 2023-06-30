@@ -89,7 +89,7 @@ services:
       - default
 
   test:
-    image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/test
+    image: test
     networks:
       - default
 
