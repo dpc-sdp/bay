@@ -28,7 +28,7 @@ jobs:
           command: |
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             docker context create dpc
-            docker buildx create --platform linux/amd64,linux/arm64 dpc --name dpc --use
+            docker buildx create --platform linux/amd64,linux/arm64 --name dpc --use dpc
             docker buildx inspect --bootstrap
       - run:
           name: Prepare the manifest
@@ -44,9 +44,6 @@ jobs:
           name: Start the containers
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker compose up -d
 
-      - run:
-          name: Start the containers
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker compose up -d
       - run:
           name: Scan the images with clair
           command: |
