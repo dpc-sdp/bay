@@ -32,10 +32,10 @@ jobs:
             docker buildx inspect --bootstrap
       - run:
           name: Prepare the manifest
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --print --no-cache
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx --builder dpc bake -f bake.hcl --print --no-cache
       - run:
           name: Build the images
-          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cache
+          command: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx --builder dpc bake -f bake.hcl --no-cache
       - run:
           name: List docker images
           command: docker image ls
