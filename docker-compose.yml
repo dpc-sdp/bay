@@ -13,11 +13,6 @@ x-args:
 
 services:
   buildx:
-    build:
-      context: ./images/bay-buildx
-      dockerfile: $PWD/images/bay-buildx/Dockerfile
-      args:
-        << : *default-args
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/buildx
     environment:
       << : *default-environment
@@ -25,11 +20,6 @@ services:
       - default
 
   cli:
-    build:
-      context: ./images/bay-php
-      dockerfile: $PWD/images/bay-php/Dockerfile.cli
-      args:
-        << : *default-args
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/php-cli:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
@@ -37,11 +27,6 @@ services:
       - default
 
   nginx:
-    build:
-      context: ./images/bay-nginx
-      dockerfile: $PWD/images/bay-nginx/Dockerfile
-      args:
-        << : *default-args
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/nginx:${IMAGE_TAG:-5.x}
     ports:
       - 8080
@@ -53,11 +38,6 @@ services:
       - default
 
   php:
-    build:
-      context: ./images/bay-php
-      dockerfile: $PWD/images/bay-php/Dockerfile.fpm
-      args:
-        << : *default-args
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/php-fpm:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
@@ -80,9 +60,6 @@ services:
       - default
 
   node:
-    build:
-      context: ./images/bay-node
-      dockerfile: $PWD/images/bay-node/Dockerfile
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/node:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
@@ -90,9 +67,6 @@ services:
       - default
 
   mariadb:
-    build:
-      context: ./images/bay-mariadb
-      dockerfile: $PWD/images/bay-mariadb/Dockerfile
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/mariadb:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
@@ -100,9 +74,6 @@ services:
       - default
 
   ci-builder:
-    build:
-      context: ./images/bay-ci-builder
-      dockerfile: $PWD/images/bay-ci-builder/Dockerfile
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/ci-builder:${IMAGE_TAG:-5.x}
     command: tail -F anything
     environment:
@@ -111,9 +82,6 @@ services:
       - default
 
   ripple-static:
-    build:
-      context: ./images/bay-ripple-static
-      dockerfile: $PWD/images/bay-ripple-static/Dockerfile
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/ripple-static:${IMAGE_TAG:-5.x}
     environment:
       << : *default-environment
@@ -121,9 +89,6 @@ services:
       - default
 
   test:
-    build:
-      context: ./images/bay-test
-      dockerfile: $PWD/images/bay-test/Dockerfile
     image: ${REGISTRY_NAMESPACE:-ghcr.io/dpc-sdp/bay}/test
     networks:
       - default
