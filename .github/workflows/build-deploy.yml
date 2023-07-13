@@ -3,7 +3,7 @@ run-name: Build and deploy Bay images
 on: [push]
 jobs:
   buildx:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
