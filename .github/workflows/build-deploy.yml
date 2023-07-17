@@ -5,14 +5,27 @@ jobs:
   buildx:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Build the images
-        run: IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --no-cach
-      - name: List images
-        run: docker image ls
 
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@4.6.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+
+      - name: Build and push the images
+        uses: docker/bake-action@v3.1.0
+        with:
+          files: |
+            ./gh-actions-bake.hcl
+            ${{ steps.meta.outputs.bake-file }}
+          set: |
+            target.args.LAGOON_IMAGE_VERSION=DOCKER_META_VERSION
+          # Target the default group - probably unnecessary.
+          targets: default
