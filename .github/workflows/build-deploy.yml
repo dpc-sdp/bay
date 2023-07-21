@@ -38,7 +38,6 @@ jobs:
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
-          bake-target: docker-metadata-${{ matrix.images }}
           tags: |
             type=ref,event=branch
 
