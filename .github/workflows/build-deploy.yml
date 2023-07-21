@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
       #  images: [ci-builder, php-cli, mariadb, nginx, node, php-fpm, elasticsearch, mailhog, clamav, ripple-static]
-        images: [ci-builder]
+        images: [ci-builder, node]
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -29,6 +29,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v4.6.0
@@ -42,6 +43,7 @@ jobs:
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
         with:
+          push: true
           files: |
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
