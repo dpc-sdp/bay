@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
       #  images: [ci-builder, php-cli, mariadb, nginx, node, php-fpm, elasticsearch, mailhog, clamav, ripple-static]
-        images: [ci-builder, php-cli]
+        images: [ci-builder]
     needs: build-setup
     steps:
       - name: Set up QEMU
@@ -45,6 +45,7 @@ jobs:
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
         with:
+          push: true
           files: |
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
