@@ -11,12 +11,6 @@ jobs:
   build-setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Login to registry ${{ env.REGISTRY }}
         uses: docker/login-action@v2.2.0
         with:
@@ -31,6 +25,12 @@ jobs:
         images: [ci-builder, php-cli]
     needs: build-setup
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - uses: actions/checkout@v2
       - name: Extract Docker metadata
         id: meta
