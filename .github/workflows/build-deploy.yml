@@ -1,6 +1,7 @@
 name: build-deploy-bay-images
 run-name: Build and deploy Bay images
-on: [branch]
+on:
+  push
 env:
   REGISTRY: ghcr.io
 #defaults:
