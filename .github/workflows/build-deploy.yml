@@ -7,7 +7,7 @@ env:
 #  run:
 #    working-directory: ${{ github.workspace }}
 jobs:
-  buildx:
+  build-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -24,24 +24,29 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
+  buildx:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+      #  images: [ci-builder, php-cli, mariadb, nginx, node, php-fpm, elasticsearch, mailhog, clamav, ripple-static]
+        images: [ci-builder, php-cli]
+    needs: build-setup
+    steps:
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v4.6.0
         with:
           images: |
-            ${{ env.REGISTRY }}/${{ github.repository }}/php-cli
+            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
+          bake-target: docker-metadata-${{ matrix.images }}
           tags: |
             type=ref,event=branch
 
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
-        working-directory: ${{ github.workspace }}
         with:
           files: |
-            ./gh-actions-bake.hcl
+            gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
-          set: |
-            target.args.LAGOON_IMAGE_VERSION=${{ DOCKER_META_VERSION }}
           # Target the default group - probably unnecessary.
-          targets: default
+          targets: ${{ matrix.images }}
