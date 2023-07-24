@@ -1,0 +1,23 @@
+name: clair-scan
+run-name: Scan published images using Clair.
+env:
+  REGISTRY: ghcr.io
+on: push
+  # registry_package:
+  #   types:
+  #     - "published"
+  # schedule:
+  #   - cron: '0 0 * * 4'
+
+jobs:
+  vulnerability-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        images: [nginx, node]
+        tags: [5.x]
+    steps:
+      - name: Scan for vulnerabilities
+        uses: crazy-max/ghaction-container-scan@v2
+        with:
+          image: ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}:${{matrix.tags}}
