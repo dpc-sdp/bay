@@ -21,3 +21,4 @@ jobs:
         uses: crazy-max/ghaction-container-scan@v2
         with:
           image: ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}:${{matrix.tags}}
+          dockerfile: ./images/${{ matrix.images }}
