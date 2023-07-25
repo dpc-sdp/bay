@@ -1,12 +1,13 @@
 name: build-deploy-bay-images
 run-name: Build and deploy Bay images
 on:
-  push
+  push:
+    branches:
+      - '4.x'
+      - '5.x'
+      - 'build/**'
 env:
   REGISTRY: ghcr.io
-#defaults:
-#  run:
-#    working-directory: ${{ github.workspace }}
 jobs:
   buildx:
     runs-on: ubuntu-latest
