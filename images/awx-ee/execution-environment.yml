@@ -35,3 +35,5 @@ additional_build_steps:
     - RUN az aks install-cli
     - RUN touch $HOME/.bashrc && chmod +x $HOME/.bashrc
     - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
+    - RUN curl -L "https://get.helm.sh/helm-v3.12.2-linux-amd64.tar.gz" -o /tmp/helm && tar -xvf /tmp/helm -C /tmp && mv /tmp/linux-amd64/helm /usr/local/bin
+    - RUN chmod +x /usr/local/bin/helm
