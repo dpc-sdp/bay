@@ -6,6 +6,8 @@ on:
       - '4.x'
       - '5.x'
       - 'build/**'
+  schedule:
+    - cron: '0 20 * * 0'
 env:
   REGISTRY: ghcr.io
 jobs:
