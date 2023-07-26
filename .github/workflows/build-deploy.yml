@@ -7,7 +7,8 @@ on:
       - '5.x'
       - 'build/**'
   schedule:
-    - cron: '0 20 * * 0'
+    # Schedules only run on the default branch. '5.x' in this instance.
+    - cron: '23 20 * * 0'
 env:
   REGISTRY: ghcr.io
 jobs:
