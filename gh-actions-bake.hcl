@@ -1,23 +1,5 @@
-variable "IMAGE_TAG" {
-  default = "5.x"
-}
-
-variable "DOCKERHUB_NAMESPACE" {
-  default = "singledigital"
-}
-
-variable "GHCR_NAMESPACE" {
-  default = "ghcr.io/dpc-sdp/bay"
-}
-
 variable "CONTEXT" {
   default = "images"
-}
-
-variable "LAGOON_IMAGE_VERSION" {
-  # Used to control which version of upstream Lagoon
-  # images the bay images are built from.
-  default = "latest"
 }
 
 target "docker-metadata-action" {}
