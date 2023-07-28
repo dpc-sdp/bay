@@ -2,10 +2,6 @@ name: build-deploy-bay-images
 run-name: Build and deploy Bay images
 on:
   push:
-    branches:
-      - '4.x'
-      - '5.x'
-      - 'build/**'
   schedule:
     # Schedules only run on the default branch. '5.x' in this instance.
     - cron: '23 20 * * 0'
@@ -45,9 +41,7 @@ jobs:
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
         with:
-          # push: true
-          load: true
-          provenance: false
+          push: true
           files: |
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
