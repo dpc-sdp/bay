@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        images: ${{ fromJson(vars.IMAGES) }}
+        images: ["node"]
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -45,9 +45,15 @@ jobs:
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
         with:
-          push: true
+          # push: true
+          load: true
+          provenance: false
           files: |
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
           # Target the default group - probably unnecessary.
           targets: ${{ matrix.images }}
+
+      - name: Test image
+        run: |
+          docker run --rm ${{ steps.meta.outputs.tags }}
