@@ -1,0 +1,34 @@
+name: goss-tests
+run-name: Execute Goss tests
+env:
+  REGISTRY: ghcr.io
+on:
+  workflow_run:
+    workflows: ["Build and deploy Bay images"]
+    types: [completed]
+  workflow_dispatch:
+  push:
+
+jobs:
+  goss-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        images: ["php-fpm", "php-cli"]
+        type:
+          - php
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4.6.0
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
+          tags: |
+            type=ref,event=branch
+      - name: Install Goss
+        uses: e1himself/goss-installation-action@v1.0.3
+      - name: Execute Goss tests
+        run: |
+          GOSS_FILE=./tests/goss.${{ matrix.type }}_goss.yaml 'dgoss run -i ${{ steps.meta.outputs.tags }}'
