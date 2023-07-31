@@ -45,10 +45,11 @@ jobs:
         with:
           push: false
           context: ./images/bay-php_goss
+          load: true
           build-args: |
             BASE_IMAGE=${{ env.REGISTRY }}/${{ github.repository }}/php-cli:${{ steps.sanitise-ref-name.outputs.SANITISED-REF-NAME }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
 
       - name: Install Goss
         uses: e1himself/goss-installation-action@v1.0.3
