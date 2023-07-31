@@ -2,7 +2,6 @@ name: build-deploy-bay-images
 run-name: Build and deploy Bay images
 on:
   schedule:
-    # Schedules only run on the default branch. '5.x' in this instance.
     - cron: '23 20 * * 0'
   workflow_dispatch:
   push:
