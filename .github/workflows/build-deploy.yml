@@ -5,6 +5,10 @@ on:
     # Schedules only run on the default branch. '5.x' in this instance.
     - cron: '23 20 * * 0'
   workflow_dispatch:
+  push:
+    branches:
+      - "build/**"
+
 env:
   REGISTRY: ghcr.io
 jobs:
