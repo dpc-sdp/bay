@@ -1,5 +1,6 @@
 ARG PHP_VERSION=8.1
 FROM php:${PHP_VERSION}-cli-alpine AS php-cli
+FROM skpr/mtk-dump:v3-latest AS mtk-dump
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
 LABEL org.opencontainers.image.authors="Digital Victoria"
@@ -50,6 +51,9 @@ ARG TZ=Australia/Melbourne
 RUN  apk add --no-cache tzdata \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
+
+# mtk for dev db snapshots
+COPY --from=mtk-dump /usr/local/bin/mtk-dump /usr/local/bin
 
 ONBUILD ARG BAY_DISABLE_FUNCTIONS=phpinfo,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,system,exec,shell_exec,passthru,phpinfo,show_source,highlight_file,popen,fopen_with_path,dbmopen,dbase_open,filepro,filepro_rowcount,filepro_retrieve,posix_mkfifo
 ONBUILD ARG BAY_UPLOAD_LIMIT=100M
