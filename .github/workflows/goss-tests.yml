@@ -46,6 +46,7 @@ jobs:
           push: false
           context: ./images/bay-php_goss
           load: true
+          tags: ${{ steps.meta.outputs.tags }}
           build-args: |
             BASE_IMAGE=${{ env.REGISTRY }}/${{ github.repository }}/php-cli:${{ steps.sanitise-ref-name.outputs.SANITISED-REF-NAME }}
           # cache-from: type=gha
