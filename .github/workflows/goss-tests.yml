@@ -30,5 +30,7 @@ jobs:
       - name: Install Goss
         uses: e1himself/goss-installation-action@v1.0.3
       - name: Execute Goss tests
+        working-directory: ./tests
         run: |
-          GOSS_FILE=./tests/goss.${{ matrix.type }}_goss.yaml 'dgoss run -i ${{ steps.meta.outputs.tags }}'
+          ls -al .
+          GOSS_FILES_STRATEGY=cp GOSS_FILE=goss.${{ matrix.type }}_goss.yaml bash -c 'dgoss run -i ${{ steps.meta.outputs.tags }}'
