@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        images: ["node"]
+        images: ${{ fromJson(vars.IMAGES) }}
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
