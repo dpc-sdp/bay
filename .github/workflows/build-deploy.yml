@@ -41,16 +41,18 @@ jobs:
           tags: |
             type=ref,event=branch
           labels: |
-            org.maintainer=Digital Victoria
+            maintainer=Digital Victoria
             repository=${{ github.repositoryUrl }}
             org.opencontainers.image.authors=Digital Victoria
             org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}/images/${{ matrix.images }}/Dockerfile
+            org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
 
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
         with:
           push: true
+          set: annotation-index.org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
           files: |
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
