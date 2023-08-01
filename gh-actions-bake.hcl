@@ -46,6 +46,11 @@ target "nginx" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
+
+  labels = {
+    "org.opencontainers.image.description" = "Drupal-optimised nginx image for Bay container platform"
+  }
+
 }
 target "node" {
   inherits = ["docker-metadata-action"]
@@ -60,6 +65,11 @@ target "php-cli" {
   dockerfile    = "Dockerfile.cli"
 
   platforms     = ["linux/amd64", "linux/arm64"]
+
+  labels = {
+    "org.opencontainers.image.description" = "PHP Drupal CLI image for Bay container platform"
+    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.cli"
+  }
 }
 target "php-fpm" {
   inherits = ["docker-metadata-action"]
@@ -67,6 +77,11 @@ target "php-fpm" {
   dockerfile    = "Dockerfile.fpm"
 
   platforms     = ["linux/amd64", "linux/arm64"]
+
+  labels = {
+    "org.opencontainers.image.description" = "PHP-FPM image for Bay container platform"
+    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.fpm"
+  }
 }
 target "ripple-static" {
   inherits = ["docker-metadata-action"]
@@ -74,5 +89,9 @@ target "ripple-static" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
+
+  labels = {
+    "org.opencontainers.image.description" = "Ripple static site generator image optimised for the Bay container platform"
+  }
 }
 
