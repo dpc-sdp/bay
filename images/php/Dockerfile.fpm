@@ -1,10 +1,6 @@
 ARG PHP_VERSION=8.1
 FROM uselagoon/php-${PHP_VERSION}-fpm:latest
 
-LABEL org.opencontainers.image.authors="Digital Victoria"
-LABEL org.opencontainers.image.description="PHP-FPM image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.fpm"
-
 RUN mkdir /bay
 COPY 01-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay

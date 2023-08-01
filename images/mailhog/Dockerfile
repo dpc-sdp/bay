@@ -4,10 +4,6 @@
 
 FROM alpine:3.4
 
-LABEL org.opencontainers.image.authors="Digital Victoria"
-LABEL org.opencontainers.image.description="mailhog image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-mailhog/Dockerfile"
-
 # Install ca-certificates, required for the "release message" feature:
 RUN apk --no-cache add \
     ca-certificates

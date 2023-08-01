@@ -3,10 +3,6 @@ FROM php:${PHP_VERSION}-cli-alpine AS php-cli
 FROM skpr/mtk-dump:v3-latest AS mtk-dump
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
-LABEL org.opencontainers.image.authors="Digital Victoria"
-LABEL org.opencontainers.image.description="PHP Drupal CLI image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.cli"
-
 COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
 ENV WEBROOT=docroot
 ENV COMPOSER_CACHE_DIR=/tmp/.composer/cache
