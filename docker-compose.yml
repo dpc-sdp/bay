@@ -74,8 +74,6 @@ services:
       << : *default-environment
     networks:
       - default
-    depends_on:
-      - php
 
   node:
     build:

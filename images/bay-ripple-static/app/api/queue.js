@@ -1,7 +1,7 @@
 "use strict"
 const Queue = require('bull');
 
-const connectionString = `redis://${process.env.REDIS_HOST ? process.env.REDIS_HOST : 'localhost'}:6379`
+const connectionString = `redis://${process.env.REDIS_HOST ? process.env.REDIS_HOST : 'localhost'}:${process.env.REDIS_PORT ? process.env.REDIS_PORT : '6379' }`
 const deployQueue = new Queue('quant deploy', connectionString);
 
 const util = require('util');
