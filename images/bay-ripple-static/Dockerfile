@@ -1,3 +1,10 @@
+FROM uselagoon/node-18-builder:latest as builder
+
+WORKDIR /builder
+
+COPY app/package.json app/package-lock.json /builder/
+RUN npm ci
+
 FROM uselagoon/node-18:latest
 
 LABEL org.opencontainers.image.authors="Digital Victoria"
@@ -8,3 +15,10 @@ WORKDIR /builder
 
 RUN apk add git --no-cache && \
     npm i -g @quantcdn/quant-cli
+
+COPY --from=builder /builder/node_modules /builder/node_modules
+COPY app/ /builder/
+
+EXPOSE 3000
+
+CMD ["yarn", "run", "start"]
