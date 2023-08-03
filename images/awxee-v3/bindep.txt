@@ -1,4 +1,4 @@
-php ==7.4
+php
 php-cli
 php-json
 php-pdo

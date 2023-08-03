@@ -1,0 +1,17 @@
+boto>=2.49.0
+botocore>=1.12.249
+boto3>=1.9.249
+requests-oauthlib
+ansible-lint
+flake8
+yamllint
+kubernetes
+lxml
+gql
+# Dependencies for the gql requests transport.
+requests-toolbelt<1,>=0.9.1
+urllib3>=1.26
+requests<3,>=2.26
+ruamel.yaml
+pygithub
+azure-cli
