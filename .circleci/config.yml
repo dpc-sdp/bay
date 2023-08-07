@@ -120,14 +120,10 @@ jobs:
               IMAGE_TAG=$(.circleci/scripts/tag.sh) docker buildx bake -f bake.hcl --push --no-cache
               echo "==> Push the AWX Executor Environment image"
               pip install --upgrade ansible-builder
-              ansible-builder build \
-                --context=images/awx-ee/context \
-                --tag ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh) \
-                --tag singledigital/awx-ee:$(.circleci/scripts/tag.sh) \
-                --container-runtime docker \
-                -f images/awx-ee/execution-environment.yml
-              docker push singledigital/awx-ee:$(.circleci/scripts/tag.sh)
-              docker push ghcr.io/dpc-sdp/bay/awx-ee:$(.circleci/scripts/tag.sh)
+              cd images/awx-ee
+              ansible-builder create -f execution-environment.yml
+              docker buildx create --name sdp-amd-arm --platform linux/amd64,linux/arm64 --use
+              docker buildx bake --progress=plain --push --provenance false
             fi
 
 workflows:
