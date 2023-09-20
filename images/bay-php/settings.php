@@ -257,9 +257,11 @@ if (getenv("BAY_SHARED_TEMP_FILES") == "true") {
 } else {
   $settings['file_temp_path'] = getenv("TMPDIR") ?: "/tmp";
 }
-
 // Hash Salt.
-$settings['hash_salt'] = hash('sha256', getenv('LAGOON_PROJECT'));
+$settings['hash_salt'] = getenv('DRUPAL_HASH_SALT');
+if (empty($settings['hash_salt'])) {
+  throw new \Exception('DRUPAL_HASH_SALT missing.');
+}
 
 // Configure platformwide cache tag blacklists.
 // These will be excluded when Drupal outputs the cache tag list
