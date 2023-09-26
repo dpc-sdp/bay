@@ -85,9 +85,6 @@ $settings['file_scan_ignore_directories'] = [
 // The default number of entities to update in a batch process.
 $settings['entity_update_batch_size'] = 50;
 
-// The token for the bay_monitoring Healthz endpoint.
-$settings['baywatch.healthz_key'] = getenv('BAY_HEALTHZ_TOKEN');
-
 // Environment indicator settings.
 $config['environment_indicator.indicator']['name'] = isset($settings['environment']) ? $settings['environment'] : 'local';
 $config['environment_indicator.indicator']['bg_color'] = !empty($config['environment_indicator.indicator']['bg_color']) ? $config['environment_indicator.indicator']['bg_color'] : 'green';
@@ -344,6 +341,11 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
 } else {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
+}
+
+// Override data_pipelines url.
+if (isset($config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'])) {
+  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
 }
 
 // Configure tide_logs.
