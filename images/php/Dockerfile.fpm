@@ -1,41 +1,12 @@
 ARG PHP_VERSION=8.1
-FROM php:${PHP_VERSION}-cli-alpine AS php-cli
-FROM skpr/mtk-dump:v3-latest AS mtk-dump
-FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
-
-LABEL org.opencontainers.image.authors="Digital Victoria"
-LABEL org.opencontainers.image.description="PHP Drupal CLI image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.cli"
-
-COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
-ENV WEBROOT=docroot
-ENV COMPOSER_CACHE_DIR=/tmp/.composer/cache
-
-# Install gojq.
-ARG GOJQ_VERSION=0.12.4
-RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
-    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
-    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
-    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
-
-ARG DOCKERIZE_VERSION=v0.6.1
-RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize_amd64_linux && \
-    chmod +x /usr/local/bin/dockerize
-
-# Install redis-cli for debugging.
-RUN apk add redis --no-cache
-
-# Install bay-cli.
-RUN wget "https://github.com/dpc-sdp/bay-cli/releases/download/v0.0.2/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" -O /bin/bay && \
-    chmod +x /bin/bay
+FROM uselagoon/php-${PHP_VERSION}-fpm:latest
 
 RUN mkdir /bay
-
 COPY 01-bay.ini /usr/local/etc/php/conf.d/
 COPY bay-php-config.sh /bay
 
-# Bay entrypoints.
-COPY entrypoints/ /lagoon/entrypoints
+# Ensure temp dir exists if required
+COPY entrypoints/bay-shared-temp-files-dir-check.sh /lagoon/entrypoints
 
 # Add common drupal config.
 COPY redis-unavailable.services.yml /bay
@@ -52,8 +23,9 @@ RUN  apk add --no-cache tzdata \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-# mtk for dev db snapshots
-COPY --from=mtk-dump /usr/local/bin/mtk-dump /usr/local/bin
+# Install bay-cli.
+RUN wget "https://github.com/dpc-sdp/bay-cli/releases/download/v0.0.1/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" -O /bin/bay && \
+    chmod +x /bin/bay
 
 ONBUILD ARG BAY_DISABLE_FUNCTIONS=phpinfo,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,system,exec,shell_exec,passthru,phpinfo,show_source,highlight_file,popen,fopen_with_path,dbmopen,dbase_open,filepro,filepro_rowcount,filepro_retrieve,posix_mkfifo
 ONBUILD ARG BAY_UPLOAD_LIMIT=100M

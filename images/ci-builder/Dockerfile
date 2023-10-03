@@ -5,10 +5,6 @@ ARG GOJQ_VERSION=0.12.4
 ARG HUB_VERSION=2.14.2
 ARG LAGOON_CLI_VERSION=0.10.0
 
-LABEL org.opencontainers.image.authors="Digital Victoria"
-LABEL org.opencontainers.image.description="CI image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-ci-builder/Dockerfile.cli"
-
 # Ensure temp files dont end up in image.
 VOLUME /tmp
 

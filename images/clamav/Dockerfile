@@ -1,8 +1,4 @@
 FROM debian:buster-slim
-LABEL maintainer="Markus Kosmal <code@m-ko.de>"
-LABEL org.opencontainers.image.authors="Digital Victoria"
-LABEL org.opencontainers.image.description="clamav image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-clamav/Dockerfile"
 
 # Debian Base to use
 ENV DEBIAN_VERSION buster

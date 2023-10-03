@@ -45,15 +45,42 @@ Once deployed, if the header is missing in the request nginx will return a `405 
 ### Multiple architecture support
 Bay images are available in both amd64 and arm64 architectures.
 
+## CI/CD
+GitHub Actions is the platform used for CI/CD processes.
+
+The process of building images is controlled in the GitHub Actions workflow (build-deploy-bay-images)[./.github/workflows/build-deploy.yml]
+
+Images are built using [Docker's buildx image builder](https://docs.docker.com/engine/reference/commandline/buildx/) in combination with the [bake command](https://docs.docker.com/build/bake/) and the corresponding bake file (gh-actions-bake.hcl)[./gh-actions-bake.hcl]
+
+### Breaking down the workflow
+A matrix strategy is employed to concurrently build the images. 
+
+**Note**
+The matrix relies on the (repository variable)[https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-a-repository] IMAGES
+
+#### Required variables
+These variables are set as either GitHub Actions secrets or variables on the repository.
+`IMAGES` A JSON array object consisting of the names of the images to build.
+`REGISTRY_TOKEN` Required for container registry access.
+`REGISTRY_USER` Required for container registry access.
+
+#### metadata-action
+The workflow makes use of the (docker/metadata-action)[https://github.com/docker/metadata-action]. This Action takes the `IMAGES` variable as an input and creates the labels for the images.
+
+This Action outputs a bake file inherited by the projects (bake file)[./gh-actions-bake.hcl] and provides the labels and tags used by the build process.
+
+### Vulnerability scanning
+Published images are scanned using Trivy and any CVEs identified are reported in the repositories (Security Advisories)[https://github.com/dpc-sdp/bay/security/advisories].
+
 ## Contribute
 [Open an issue](https://github.com/dpc-sdp/bay) on GitHub or submit a pull request with suggested changes.
 
-### Builds
-Dockerhub is configured to automatically build images for pull requests that use the branch naming convention `build/<docker_image_tag>`. This will generate the tag `pr-<docker_image_tag>`.
+### Development Builds
+GitHub Actions is configured to automatically build images for pull requests that use the branch naming convention `build/<docker_image_tag>`. This will generate the tag `build-<docker_image_tag>`.
 
 For example
 
-`build/2.x-updated-cli` will generate the tag `pr-2.x-updated-cli` and would be referenced as `singledigital/<bay-image>:pr-2.x-updated-cli`.
+`build/2.x-updated-cli` will generate the tag `build-2-x-updated-cli` and would be referenced as `ghcr.io/dpc-sdp/bay/<bay-image>:build-2-x-updated-cli`.
 
 ## Support
 [Digital Engagement, Department of Premier and Cabinet, Victoria, Australia](https://github.com/dpc-sdp)

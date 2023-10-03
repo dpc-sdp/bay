@@ -1,9 +1,5 @@
 FROM uselagoon/nginx-drupal:latest
 
-LABEL org.opencontainers.image.authors="Digital Victoria"
-LABEL org.opencontainers.image.description="Drupal-optimised nginx image for Bay container platform"
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-nginx/Dockerfile"
-
 ENV WEBROOT=docroot
 ENV TZ=Australia/Melbourne
 ENV BAY_INGRESS_ENABLED=false
