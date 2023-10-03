@@ -76,7 +76,14 @@ jobs:
           command: IMAGE_TAG=$(.circleci/scripts/tag.sh) tests/run.sh
       - run:
           name: Build the AWX EE
-          command: ansible-builder build --verbosity 3 --context=images/awx-ee/context --tag singledigital/awx-ee:latest --container-runtime docker -f images/awx-ee/execution-environment.yml
+          command: |
+            pip install --upgrade ansible-builder
+            cd images/awx-ee
+            ansible-builder build \
+              --file execution-environment.yml \
+              --build-arg PYCMD="/usr/local/bin/python3" \
+              --build-arg PKGMGR="/usr/bin/apt-get" \
+              --verbosity 3
 
       - slack/notify:
           channel: G015H7K158D
