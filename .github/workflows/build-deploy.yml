@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "build/**"
+      - 'build/**'
   pull_request_target:
     types:
       - closed
@@ -15,6 +15,7 @@ env:
   REGISTRY: ghcr.io
 jobs:
   buildx:
+    if: github.event.pull_request.merged == true || startsWith(github.head_ref, 'build/') || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       matrix:
