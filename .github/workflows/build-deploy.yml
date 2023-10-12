@@ -15,7 +15,7 @@ env:
   REGISTRY: ghcr.io
 jobs:
   buildx:
-    if: github.event.pull_request.merged == true || startsWith(github.head_ref, 'build/') || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event.pull_request.merged == true || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/build/')) || contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name)
     runs-on: ubuntu-latest
     strategy:
       matrix:
