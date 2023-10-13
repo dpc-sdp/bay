@@ -43,7 +43,8 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
           tags: |
-            type=ref,event=branch
+            type=ref,event=pull_request
+            type=raw,value={{github.event.pull_request.head.ref}},enable=${{ github.event.pull_request.merged == true }}
           labels: |
             maintainer=Digital Victoria
             repository=${{ github.repositoryUrl }}
