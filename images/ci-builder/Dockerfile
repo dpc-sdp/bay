@@ -1,9 +1,9 @@
 FROM hashicorp/terraform:light AS terraform
-FROM php:7.4-cli-alpine
-ARG AHOY_VERSION=2.0.0
+FROM php:8.1-cli-alpine
+ARG AHOY_VERSION=2.1.1
 ARG GOJQ_VERSION=0.12.4
 ARG HUB_VERSION=2.14.2
-ARG LAGOON_CLI_VERSION=0.10.0
+ARG LAGOON_CLI_VERSION=0.19.0
 
 # Ensure temp files dont end up in image.
 VOLUME /tmp
@@ -32,9 +32,6 @@ RUN apk add --update --no-cache \
     python3 \
     python3-dev
 
-## Python3 by default.
-RUN ln -s /usr/bin/python3 /usr/bin/python
-
 ## Install GitHub CLI tool.
 RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-386-${HUB_VERSION}.tgz" -o /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
     tar -C /tmp -xzvf /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
@@ -61,24 +58,22 @@ RUN apk add --no-cache \
     && docker-php-ext-install -j$(nproc) gd
 
 # Install Lagoon CLI.
-RUN curl -L "https://github.com/amazeeio/lagoon-cli/releases/download/${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-linux-amd64" -o /usr/local/bin/lagoon && \
+RUN curl -L "https://github.com/uselagoon/lagoon-cli/releases/download/v${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')" -o /usr/local/bin/lagoon && \
     chmod +x /usr/local/bin/lagoon
-RUN lagoon config feature --disable-project-directory-check true
 
 # Install gojq.
-RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
-    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
-    chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
-    mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
+RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz --output /tmp/gojq_v${GOJQ_VERSION}.tar.gz && \
+    tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}.tar.gz && \
+    mv /tmp/gojq_v${GOJQ_VERSION}_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')/gojq /usr/local/bin/gojq && \
+    chmod +x /usr/local/bin/gojq
 
 # Install Ahoy.
-# @see https://github.com/ahoy-cli/ahoy/releases
-RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/download/${AHOY_VERSION}/ahoy-bin-$(uname -s)-amd64" \
-  && chmod +x /usr/local/bin/ahoy \
-  && ahoy --version
+RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/download/v${AHOY_VERSION}/ahoy-bin-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')" && \
+    chmod +x /usr/local/bin/ahoy && \
+    ahoy --version
 
 # Install bats and shellcheck.
-RUN npm install -g bats@1.2.1
+RUN npm install -g bats@1.10.0
 RUN apk add --no-cache shellcheck
 
 # Cleanup tmp when we're done.
