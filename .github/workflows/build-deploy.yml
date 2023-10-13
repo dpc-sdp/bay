@@ -44,6 +44,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
           tags: |
             type=ref,event=pr
+            type=ref,event=branch
             type=raw,value={{github.event.pull_request.head.ref}},enable=${{ github.event.pull_request.merged == true }}
           labels: |
             maintainer=Digital Victoria
@@ -61,4 +62,5 @@ jobs:
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
           # Target the default group - probably unnecessary.
+          # Target the default group - branchobably unnecessary.
           targets: ${{ matrix.images }}
