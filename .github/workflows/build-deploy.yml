@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - 'build/**'
+      - '5.x'
   pull_request_target:
     types:
       - closed
@@ -15,7 +15,7 @@ env:
   REGISTRY: ghcr.io
 jobs:
   buildx:
-    if: github.event.pull_request.merged == true || contains(fromJson('["schedule", "workflow_dispatch", "pull_request"]'), github.event_name)
+    if: github.event.pull_request.merged == true || contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || github.event_name == 'pull_request' && startsWith(github.head_ref,'build/')
     runs-on: ubuntu-latest
     strategy:
       matrix:
