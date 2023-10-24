@@ -45,16 +45,17 @@ jobs:
           tags: |
             type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
             type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
-            type=ref,event=branch,enable=${{ github.event_name == 'schedule' }}
+            type=ref,event=branch,enable=${{ contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) }}
           labels: |
             maintainer=Digital Victoria
             repository=${{ github.repositoryUrl }}
             org.opencontainers.image.authors=Digital Victoria
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}/images/${{ matrix.images }}/Dockerfile
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
             org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
 
       - name: Build and push the images
+        if: ${{ !env.ACT }}
         uses: docker/bake-action@v3.1.0
         with:
           push: true
