@@ -1,15 +1,14 @@
 name: build-deploy-bay-images
 run-name: Build and deploy Bay images
 on:
+  pull_request:
+    types:
+      - closed
+      - opened
+      - synchronize
   schedule:
     - cron: '23 20 * * 0'
   workflow_dispatch:
-  pull_request:
-    branches:
-      - '5.x'
-  pull_request_target:
-    types:
-      - closed
 
 env:
   REGISTRY: ghcr.io
@@ -43,14 +42,14 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
           tags: |
-            type=ref,event=pr
-            type=ref,event=branch
-            type=raw,value={{github.event.pull_request.head.ref}},enable=${{ github.event.pull_request.merged == true }}
+            type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
+            type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
+            type=ref,event=branch,enable=${{ contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) }}
           labels: |
             maintainer=Digital Victoria
             repository=${{ github.repositoryUrl }}
             org.opencontainers.image.authors=Digital Victoria
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}/images/${{ matrix.images }}/Dockerfile
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
             org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
 
@@ -62,5 +61,4 @@ jobs:
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
           # Target the default group - probably unnecessary.
-          # Target the default group - branchobably unnecessary.
           targets: ${{ matrix.images }}

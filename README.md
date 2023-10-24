@@ -75,12 +75,8 @@ Published images are scanned using Trivy and any CVEs identified are reported in
 ## Contribute
 [Open an issue](https://github.com/dpc-sdp/bay) on GitHub or submit a pull request with suggested changes.
 
-### Development Builds
-GitHub Actions is configured to automatically build images for pull requests that use the branch naming convention `build/<docker_image_tag>`. This will generate the tag `build-<docker_image_tag>`.
-
-For example
-
-`build/2.x-updated-cli` will generate the tag `build-2-x-updated-cli` and would be referenced as `ghcr.io/dpc-sdp/bay/<bay-image>:build-2-x-updated-cli`.
+### Development builds
+GitHub Actions is configured via the [build-deploy workflow](.github/workflows/build-deploy.yml) to build images for pull requests when they are opened and receive updates. These images are tagged with the PR number i.e. pr-86.
 
 ## Support
 [Digital Engagement, Department of Premier and Cabinet, Victoria, Australia](https://github.com/dpc-sdp)
