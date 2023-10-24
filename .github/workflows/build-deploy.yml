@@ -39,7 +39,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4.6.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
           tags: |
