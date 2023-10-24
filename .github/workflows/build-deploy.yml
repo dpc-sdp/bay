@@ -54,7 +54,6 @@ jobs:
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
 
       - name: Build and push the images
-        if: ${{ !env.ACT }}
         uses: docker/bake-action@v3.1.0
         with:
           push: true
