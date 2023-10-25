@@ -11,14 +11,6 @@ target "ci-builder" {
 
   platforms     = ["linux/amd64"]
 }
-
-target "clamav" {
-  inherits = ["docker-metadata-action"]
-  context       = "${CONTEXT}/clamav"
-  dockerfile    = "Dockerfile"
-
-  platforms     = ["linux/amd64", "linux/arm64"]
-}
 target "elasticsearch" {
   inherits = ["docker-metadata-action"]
   context       = "${CONTEXT}/elasticsearch"
