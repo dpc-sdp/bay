@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.1
+ARG PHP_VERSION=8.2
 FROM php:${PHP_VERSION}-cli-alpine AS php-cli
 FROM skpr/mtk-dump:v3-latest AS mtk-dump
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
