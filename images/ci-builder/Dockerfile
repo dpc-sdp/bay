@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:light AS terraform
+FROM hashicorp/terraform:latest AS terraform
 FROM php:8.1-cli-alpine
 ARG AHOY_VERSION=2.1.1
 ARG GOJQ_VERSION=0.12.4
