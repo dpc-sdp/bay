@@ -27,20 +27,20 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
   trap cleanup EXIT
   info "creating sanitized database dump with mtk - https://github.com/skpr/mtk"
   mtk-dump \
-    --user ${MARIADB_USERNAME} \
-    --password ${MARIADB_PASSWORD} \
-    --port ${MARIADB_PORT} \
-    --host ${MARIADB_HOST} \
-    ${MARIADB_DATABASE} > ${DB_TEMPORARY_FILE} || fatal "failed to dump database"
+    --user "${MARIADB_USERNAME}" \
+    --password "${MARIADB_PASSWORD}" \
+    --port "${MARIADB_PORT}" \
+    --host "${MARIADB_HOST}" \
+    "${MARIADB_DATABASE}" > "${DB_TEMPORARY_FILE}" || fatal "failed to dump database"
 
   info "pushing database dump to s3"
-  aws s3 cp --no-progress ${DB_TEMPORARY_FILE} ${S3_OBJECT_PATH} || fatal "failed to push dump to s3"
+  aws s3 cp --no-progress "${DB_TEMPORARY_FILE}" "${S3_OBJECT_PATH}" || fatal "failed to push dump to s3"
 
   info "triggering github actions db image workflow"
   ESTUARY_URL="${ESTUARY_URL:-http://estuary.sdp-services:8080/v1/actions/trigger-db}"
   ESTUARY_TOKEN_PATH="${ESTUARY_TOKEN_PATH:-/run/secrets/kubernetes.io/serviceaccount/token}"
   curl --location --request POST "${ESTUARY_URL}" \
-    --header "Authorization: Bearer $(cat ${ESTUARY_TOKEN_PATH})" \
+    --header "Authorization: Bearer $(cat "${ESTUARY_TOKEN_PATH}")" \
     --header "Content-Type: application/json" \
     --data-raw '{
       "owner": "dpc-sdp",
