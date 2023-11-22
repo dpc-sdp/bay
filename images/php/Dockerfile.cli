@@ -53,6 +53,8 @@ RUN  apk add --no-cache tzdata \
 # mtk for dev db snapshots
 COPY --from=mtk /usr/local/bin/mtk /usr/local/bin
 
+# aws cli for pushing db snapshots to s3.
+RUN  apk add --no-cache aws-cli
 
 ONBUILD ARG MTK_CONFIG=/bay/mtk/drupal.conf
 ONBUILD ARG BAY_DISABLE_FUNCTIONS=phpinfo,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,system,exec,shell_exec,passthru,phpinfo,show_source,highlight_file,popen,fopen_with_path,dbmopen,dbase_open,filepro,filepro_rowcount,filepro_retrieve,posix_mkfifo

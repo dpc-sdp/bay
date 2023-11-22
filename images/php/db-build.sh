@@ -39,18 +39,15 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
   info "triggering github actions db image workflow"
   ESTUARY_URL="${ESTUARY_URL:-http://estuary.sdp-services:8080/v1/actions/trigger-db}"
   ESTUARY_TOKEN_PATH="${ESTUARY_TOKEN_PATH:-/run/secrets/kubernetes.io/serviceaccount/token}"
+  BRANCH="${LAGOON_GIT_BRANCH:-develop}"
   curl --location --request POST "${ESTUARY_URL}" \
     --header "Authorization: Bearer $(cat "${ESTUARY_TOKEN_PATH}")" \
     --header "Content-Type: application/json" \
     --data-raw '{
-      "owner": "dpc-sdp",
-      "repo": "reference-sdp-vic-gov-au",
-      "workflow": "e2e.yaml",
+      "workflow": "db-trigger.yml",
       "ref": "'"$BRANCH"'",
-      "be_url": "'"$BE_URL"'",
-      "fe_url": "'"$FE_URL"'",
       "project": "'"$LAGOON_PROJECT"'",
-      "s3_uri":  "'"$LAGOON_PROJECT"'"
+      "s3_uri":  "'"$S3_OBJECT_PATH"'"
     }' || fatal "failed to trigger db build action"
 
     info "db snapshot trigger complete - please see the Actions tab on the github project for build logs"
