@@ -33,7 +33,7 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
     --host "${MARIADB_HOST}" \
     "${MARIADB_DATABASE}" > "${DB_TEMPORARY_FILE}" || fatal "failed to dump database"
 
-  info "pushing database dump to s3"
+  info "pushing database dump to s3 - ${S3_OBJECT_PATH}"
   aws s3 cp --no-progress "${DB_TEMPORARY_FILE}" "${S3_OBJECT_PATH}" || fatal "failed to push dump to s3"
 
   info "triggering github actions db image workflow"
