@@ -1,4 +1,4 @@
-FROM elasticsearch:8
+FROM elasticsearch:8.11.1
 
 ENV ES_PATH=/usr/share/elasticsearch
 
