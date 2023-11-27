@@ -26,7 +26,7 @@ cleanup() {
 if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
   trap cleanup EXIT
   info "creating sanitized database dump with mtk - https://github.com/skpr/mtk"
-  mtk-dump \
+  mtk dump \
     --user "${MARIADB_USERNAME}" \
     --password "${MARIADB_PASSWORD}" \
     --port "${MARIADB_PORT}" \
