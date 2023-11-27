@@ -39,6 +39,9 @@ $databases['default']['default'] = $connection_info;
 // queries to the replica.
 //
 // @see core/services.yml database.replica
+//
+// This is not compatible with Azure Flexible Server for MySQL without 
+// provisioning new read-only instances in the db cluster.
 if (getenv('DB_READREPLICA_HOSTS')) {
   $replica_hosts = explode(' ', getenv('DB_READREPLICA_HOSTS'));
   $replica_hosts = array_map('trim', $replica_hosts);
