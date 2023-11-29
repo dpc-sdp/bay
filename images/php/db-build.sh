@@ -39,7 +39,7 @@ if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
   info "triggering github actions db image workflow"
   ESTUARY_URL="${ESTUARY_URL:-http://estuary.sdp-services:8080/v1/actions/trigger-db}"
   ESTUARY_TOKEN_PATH="${ESTUARY_TOKEN_PATH:-/run/secrets/kubernetes.io/serviceaccount/token}"
-  BRANCH="${LAGOON_GIT_BRANCH:-develop}"
+  BRANCH="develop"
   curl --location --request POST "${ESTUARY_URL}" \
     --header "Authorization: Bearer $(cat "${ESTUARY_TOKEN_PATH}")" \
     --header "Content-Type: application/json" \
