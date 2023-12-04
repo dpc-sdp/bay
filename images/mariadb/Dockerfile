@@ -1,4 +1,4 @@
-FROM uselagoon/mariadb-10.6-drupal:latest
+FROM uselagoon/mariadb-drupal:latest
 
 ENV MARIADB_CHARSET=latin1
 ENV MARIADB_COLLATION=latin1_swedish_ci

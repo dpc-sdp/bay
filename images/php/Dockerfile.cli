@@ -1,6 +1,6 @@
 ARG PHP_VERSION=8.2
 FROM php:${PHP_VERSION}-cli-alpine AS php-cli
-FROM skpr/mtk-dump:v3-latest AS mtk-dump
+FROM ghcr.io/skpr/mtk:latest AS mtk
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
 COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
@@ -38,6 +38,8 @@ COPY redis-unavailable.services.yml /bay
 COPY redis-cluster.services.yml /bay
 COPY redis-single.services.yml /bay
 COPY settings.php /bay
+COPY db-build.sh /bay
+COPY mtk /bay/mtk
 
 # Change worker pool from dynamic to static. Change default value to 24.
 RUN sed -i "s/pm = dynamic/pm = static/" /usr/local/etc/php-fpm.d/www.conf
@@ -49,8 +51,12 @@ RUN  apk add --no-cache tzdata \
     && echo $TZ > /etc/timezone
 
 # mtk for dev db snapshots
-COPY --from=mtk-dump /usr/local/bin/mtk-dump /usr/local/bin
+COPY --from=mtk /usr/local/bin/mtk /usr/local/bin
 
+# aws cli for pushing db snapshots to s3.
+RUN  apk add --no-cache aws-cli
+
+ONBUILD ARG MTK_CONFIG=/bay/mtk/drupal.conf
 ONBUILD ARG BAY_DISABLE_FUNCTIONS=phpinfo,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,system,exec,shell_exec,passthru,phpinfo,show_source,highlight_file,popen,fopen_with_path,dbmopen,dbase_open,filepro,filepro_rowcount,filepro_retrieve,posix_mkfifo
 ONBUILD ARG BAY_UPLOAD_LIMIT=100M
 ONBUILD ARG BAY_POST_MAX=100M
@@ -60,6 +66,7 @@ ONBUILD ARG BAY_SESSION_STRICT=1
 ONBUILD ARG BAY_SESSION_SID_LEN=256
 ONBUILD ARG BAY_SESSION_SID_BITS=6
 
+ONBUILD ENV MTK_CONFIG $MTK_CONFIG
 ONBUILD ENV BAY_DISABLE_FUNCTIONS $BAY_DISABLE_FUNCTIONS
 ONBUILD ENV BAY_UPLOAD_LIMIT $BAY_UPLOAD_LIMIT
 ONBUILD ENV BAY_POST_MAX $BAY_POST_MAX
