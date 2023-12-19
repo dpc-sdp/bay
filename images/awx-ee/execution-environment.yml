@@ -70,3 +70,7 @@ additional_build_steps:
     - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
     - RUN curl -L "https://get.helm.sh/helm-v3.12.2-linux-amd64.tar.gz" -o /tmp/helm && tar -xvf /tmp/helm -C /tmp && mv /tmp/linux-amd64/helm /usr/local/bin
     - RUN chmod +x /usr/local/bin/helm
+    - RUN curl -L https://github.com/google/yamlfmt/releases/download/v0.10.0/yamlfmt_0.10.0_Linux_x86_64.tar.gz --output /tmp/yamlfmt_0.10.0_Linux_x86_64.tar.gz
+    - RUN tar -C /tmp -xvf /tmp/yamlfmt_0.10.0_Linux_x86_64.tar.gz
+    - RUN chmod +x /tmp/yamlfmt
+    - RUN mv /tmp/yamlfmt /usr/local/bin
