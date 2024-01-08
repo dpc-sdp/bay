@@ -39,6 +39,7 @@ COPY redis-cluster.services.yml /bay
 COPY redis-single.services.yml /bay
 COPY settings.php /bay
 COPY db-build.sh /bay
+COPY db-dump-sanitized.sh /bay
 COPY mtk /bay/mtk
 
 # Change worker pool from dynamic to static. Change default value to 24.
