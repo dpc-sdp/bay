@@ -1,4 +1,4 @@
-FROM uselagoon/node-18:latest
+FROM uselagoon/node-20:latest
 
 RUN apk --update add curl git
 
