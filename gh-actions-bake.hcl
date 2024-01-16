@@ -60,7 +60,7 @@ target "php-cli" {
 
   labels = {
     "org.opencontainers.image.description" = "PHP Drupal CLI image for Bay container platform"
-    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.cli"
+    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/6.x/images/bay-php/Dockerfile.cli"
   }
 }
 target "php-fpm" {
@@ -72,7 +72,7 @@ target "php-fpm" {
 
   labels = {
     "org.opencontainers.image.description" = "PHP-FPM image for Bay container platform"
-    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php/Dockerfile.fpm"
+    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/6.x/images/bay-php/Dockerfile.fpm"
   }
 }
 target "ripple-static" {

@@ -4,4 +4,4 @@
 
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
-LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php_goss/Dockerfile"
+LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/6.x/images/bay-php_goss/Dockerfile"

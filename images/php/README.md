@@ -19,7 +19,7 @@ You can also use it in your Docker Compose stack with the following snippet:
 ```
 services:
   nginx:
-    image: singledigital/bay-php-fpm:5.x
+    image: singledigital/bay-php-fpm:6.x
     volumes:
       - path/to/app:/app
     ports:
