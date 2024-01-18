@@ -15,7 +15,6 @@ target "docker-metadata-action" {}
 target "ee" {
     inherits = ["docker-metadata-action"]
     context = "./context"
-    dockerfile = "Dockerfile"
     platforms = ["linux/amd64", "linux/arm64"]
     args = {
         PYCMD = "/usr/local/bin/python3"
