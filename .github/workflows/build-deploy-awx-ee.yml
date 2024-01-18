@@ -41,7 +41,7 @@ jobs:
         uses: docker/metadata-action@v4.6.0
         with:
           images: |
-            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
+            ${{ env.REGISTRY }}/${{ github.repository }}/awx-ee
           tags: |
             type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
             type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
