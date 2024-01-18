@@ -58,7 +58,7 @@ jobs:
         run: |
           pip install --upgrade ansible-builder
           ansible-builder create \
-            --output-filename Dockerfile
+            --output-filename Dockerfile \
             --verbosity 3
 
       - name: Push the AWX-EE image
