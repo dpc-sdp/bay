@@ -62,19 +62,3 @@ jobs:
             ${{ steps.meta.outputs.bake-file }}
           # Target the default group - probably unnecessary.
           targets: ${{ matrix.images }}
-
-      - name: Build and push AWX-EE
-        run: |
-          pip install --upgrade ansible-builder
-          cd images/awx-ee
-          ansible-builder build \
-            --file execution-environment.yml \
-            --build-arg PYCMD="/usr/local/bin/python3" \
-            --build-arg PKGMGR="/usr/bin/apt-get" \
-            --verbosity 3
-
-      - name: Build and push the images
-        uses: docker/bake-action@v4
-        with:
-          push: true
-          workdir: ./images/awx-ee
