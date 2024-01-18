@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
-      - name: Build and push AWX-EE
+      - name: Build the AWX-EE image
         run: |
           pip install --upgrade ansible-builder
           cd images/awx-ee
@@ -43,7 +43,7 @@ jobs:
             --build-arg PKGMGR="/usr/bin/apt-get" \
             --verbosity 3
 
-      - name: Build and push the images
+      - name: Push the AWX-EE image
         uses: docker/bake-action@v4
         with:
           push: true
