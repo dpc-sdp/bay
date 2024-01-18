@@ -10,14 +10,13 @@ group "default" {
     targets = ["ee"]
 }
 
+target "docker-metadata-action" {}
+
 target "ee" {
+    inherits = ["docker-metadata-action"]
     context = "./context"
     dockerfile = "Dockerfile"
     platforms = ["linux/amd64", "linux/arm64"]
-    tags = [
-        // "singledigital/awx-ee:${IMAGE_TAG}",
-        "${GHCR}/dpc-sdp/bay/awx-ee:${IMAGE_TAG}"
-    ]
     args = {
         PYCMD = "/usr/local/bin/python3"
         PKGMGR = "/usr/bin/apt-get"

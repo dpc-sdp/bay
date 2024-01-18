@@ -16,6 +16,9 @@ jobs:
   buildx:
     if: github.event.pull_request.merged == true || contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || github.event_name == 'pull_request' && startsWith(github.head_ref,'build/')
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./images/awx-ee
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -32,15 +35,30 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4.6.0
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
+          tags: |
+            type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
+            type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
+            type=ref,event=branch,enable=${{ contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) }}
+          labels: |
+            maintainer=Digital Transformation
+            repository=${{ github.repositoryUrl }}
+            org.opencontainers.image.authors=Digital Victoria
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
+            org.opencontainers.image.title=AWX Execution Environment image.
+            org.opencontainers.image.description=AWX Execution Environment image.
+
       - name: Build the AWX-EE image
         run: |
           pip install --upgrade ansible-builder
-          cd images/awx-ee
-          ansible-builder build \
-            --container-runtime=docker \
+          ansible-builder create \
             --file execution-environment.yml \
-            --build-arg PYCMD="/usr/local/bin/python3" \
-            --build-arg PKGMGR="/usr/bin/apt-get" \
             --verbosity 3
 
       - name: Push the AWX-EE image
@@ -48,3 +66,6 @@ jobs:
         with:
           push: true
           workdir: ./images/awx-ee
+          files: |
+            ./docker-bake.hcl
+            ${{ steps.meta.outputs.bake-file }}
