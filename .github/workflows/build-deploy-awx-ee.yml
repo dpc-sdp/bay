@@ -1,5 +1,5 @@
-name: build-deploy-bay-images
-run-name: Build and deploy Bay images
+name: build-deploy-bay-awx-ee
+run-name: Build and deploy Bay AWX Execution Environment
 on:
   pull_request:
     types:
