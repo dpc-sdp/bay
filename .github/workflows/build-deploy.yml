@@ -74,7 +74,7 @@ jobs:
             --verbosity 3
 
       - name: Build and push the images
-        working-directory: ./images/awx-ee
         uses: docker/bake-action@v4
         with:
           push: true
+          workdir: ./images/awx-ee
