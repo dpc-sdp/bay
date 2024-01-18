@@ -67,6 +67,14 @@ jobs:
         run: |
           pip install --upgrade ansible-builder
           cd images/awx-ee
-          ansible-builder create -f execution-environment.yml
-          docker buildx create --name sdp-amd-arm --platform linux/amd64,linux/arm64 --use
-          docker buildx bake --progress=plain --push --provenance false
+          ansible-builder build \
+            --file execution-environment.yml \
+            --build-arg PYCMD="/usr/local/bin/python3" \
+            --build-arg PKGMGR="/usr/bin/apt-get" \
+            --verbosity 3
+
+      - name: Build and push the images
+        working-directory: ./images/awx-ee
+        uses: docker/bake-action@v4
+        with:
+          push: true
