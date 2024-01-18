@@ -62,3 +62,11 @@ jobs:
             ${{ steps.meta.outputs.bake-file }}
           # Target the default group - probably unnecessary.
           targets: ${{ matrix.images }}
+
+      - name: Build and push AWX-EE
+        run: |
+          pip install --upgrade ansible-builder
+          cd images/awx-ee
+          ansible-builder create -f execution-environment.yml
+          docker buildx create --name sdp-amd-arm --platform linux/amd64,linux/arm64 --use
+          docker buildx bake --progress=plain --push --provenance false
