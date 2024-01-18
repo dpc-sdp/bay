@@ -59,6 +59,7 @@ jobs:
           pip install --upgrade ansible-builder
           ansible-builder create \
             --file execution-environment.yml \
+            --container-runtime docker
             --verbosity 3
 
       - name: Debug contents of context dir
