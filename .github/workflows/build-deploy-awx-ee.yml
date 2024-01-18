@@ -61,11 +61,6 @@ jobs:
             --output-filename Dockerfile
             --verbosity 3
 
-      - name: Debug contents of context dir
-        run: |
-          ls -al context
-          ls -al .
-
       - name: Push the AWX-EE image
         uses: docker/bake-action@v4
         with:
