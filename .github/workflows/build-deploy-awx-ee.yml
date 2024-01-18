@@ -54,18 +54,21 @@ jobs:
             org.opencontainers.image.title=AWX Execution Environment image.
             org.opencontainers.image.description=AWX Execution Environment image.
 
-      - name: Build the AWX-EE image
+      - name: Create context and build instruction file
         run: |
           pip install --upgrade ansible-builder
-          ansible-builder create \
+          ansible-builder build \
+            --container-runtime=docker \
+            --build-arg PKGMGR="/usr/bin/apt-get" \
+            --build-arg PYCMD="/usr/local/bin/python3" \
             --output-filename Dockerfile \
             --verbosity 3
 
-      - name: Push the AWX-EE image
-        uses: docker/bake-action@v4
-        with:
-          push: true
-          workdir: ./images/awx-ee
-          files: |
-            ./docker-bake.hcl
-            ${{ steps.meta.outputs.bake-file }}
+      # - name: Build and push the AWX-EE image
+      #   uses: docker/bake-action@v4
+      #   with:
+      #     push: true
+      #     workdir: ./images/awx-ee
+      #     files: |
+      #       ./docker-bake.hcl
+      #       ${{ steps.meta.outputs.bake-file }}
