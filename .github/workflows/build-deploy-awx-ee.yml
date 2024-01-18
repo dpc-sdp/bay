@@ -37,6 +37,7 @@ jobs:
           pip install --upgrade ansible-builder
           cd images/awx-ee
           ansible-builder build \
+            --container-runtime=docker \
             --file execution-environment.yml \
             --build-arg PYCMD="/usr/local/bin/python3" \
             --build-arg PKGMGR="/usr/bin/apt-get" \
