@@ -52,7 +52,7 @@ jobs:
           pip install --upgrade ansible-builder
           ansible-builder build \
             --container-runtime docker \
-            --tag ${{ steps.meta.outputs.tags }}
+            --tag ${{ steps.meta.outputs.tags }} \
             --build-arg PKGMGR="/usr/bin/apt-get" \
             --build-arg PYCMD="/usr/local/bin/python3" \
             --verbosity 3
