@@ -17,19 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./images/awx-ee
-    strategy:
-      matrix:
-        images: ${{ fromJson(vars.IMAGES) }}
+        working-directory: images/awx-ee
     steps:
       - name: Create the AWX-EE build instruction file
-        if: matrix.images == 'awx-ee'
         run: |
           pip install --upgrade ansible-builder
           ansible-builder create \
             --output-filename Dockerfile \
             --verbosity 3
   buildx:
+    needs: awx-ee-context
     if: github.event.pull_request.merged == true || contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || github.event_name == 'pull_request' && startsWith(github.head_ref,'build/')
     runs-on: ubuntu-latest
     strategy:
