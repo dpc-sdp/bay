@@ -53,6 +53,15 @@ jobs:
             org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
 
+      - name: Create the AWX-EE build instruction file
+        if: matrix.images == 'awx-ee'
+        run: |
+          pip install --upgrade ansible-builder
+          ansible-builder create \
+            --output-filename Dockerfile \
+            --verbosity 3
+        working-directory: ./images/awx-ee
+
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
         with:
