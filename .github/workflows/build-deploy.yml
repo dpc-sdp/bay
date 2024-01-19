@@ -35,6 +35,9 @@ jobs:
       matrix:
         images: ${{ fromJson(vars.IMAGES) }}
     steps:
+      - name: Create the AWX-EE build instruction file
+        run: ls -al ./images/awx-ee
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
