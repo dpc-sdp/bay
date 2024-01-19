@@ -21,7 +21,8 @@ jobs:
     steps:
       - name: Create the AWX-EE build instruction file
         run: |
-          cd images/awx-ee
+          pwd
+          cd ./images/awx-ee
           pip install --upgrade ansible-builder
           ansible-builder create \
             --output-filename Dockerfile \
