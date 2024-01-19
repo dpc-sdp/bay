@@ -88,7 +88,7 @@ target "ripple-static" {
 }
 target "awx-ee" {
     inherits = ["docker-metadata-action"]
-    context = "./images/awx-ee/context"
+    context = "${CONTEXT}/awx-ee/context"
     platforms = ["linux/amd64", "linux/arm64"]
     args = {
         PYCMD = "/usr/local/bin/python3"
