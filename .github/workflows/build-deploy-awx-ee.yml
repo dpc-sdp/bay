@@ -46,23 +46,29 @@ jobs:
             type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
             type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
             type=ref,event=branch,enable=${{ contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) }}
-          labels: |
-            maintainer=Digital Transformation
-            repository=${{ github.repositoryUrl }}
-            org.opencontainers.image.authors=Digital Victoria
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
-            org.opencontainers.image.title=AWX Execution Environment image.
-            org.opencontainers.image.description=AWX Execution Environment image.
 
       - name: Create context and build instruction file
         run: |
           pip install --upgrade ansible-builder
           ansible-builder build \
-            --container-runtime=docker \
+            --container-runtime docker \
+            --tag ${{ steps.meta.outputs.tags }}
             --build-arg PKGMGR="/usr/bin/apt-get" \
             --build-arg PYCMD="/usr/local/bin/python3" \
-            --output-filename Dockerfile \
             --verbosity 3
+
+
+      # Refactored to use bake but it's substantially slower so we'll do a push instead
+      # see https://github.com/docker/build-push-action/issues/538#issuecomment-1869681934
+      # However this approach may be at the cost of multi-arch support.
+      - name: Test
+        run: |
+          docker images
+
+      - name: Push
+        run: |
+          docker push --all-tags ${{ env.REGISTRY }}/${{ github.repository }}/awx-ee
+
 
       # - name: Build and push the AWX-EE image
       #   uses: docker/bake-action@v4
