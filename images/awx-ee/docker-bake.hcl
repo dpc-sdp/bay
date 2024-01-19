@@ -7,12 +7,12 @@ variable "IMAGE_TAG" {
 }
 
 group "default" {
-    targets = ["ee"]
+    targets = ["awx-ee"]
 }
 
 target "docker-metadata-action" {}
 
-target "ee" {
+target "awx-ee" {
     inherits = ["docker-metadata-action"]
     context = "./context"
     platforms = ["linux/amd64", "linux/arm64"]
