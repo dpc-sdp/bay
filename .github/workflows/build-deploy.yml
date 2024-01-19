@@ -15,14 +15,14 @@ env:
 jobs:
   awx-ee-context:
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: images/awx-ee
+    defaults:
+      run:
+        working-directory: ./images/awx-ee
     steps:
+      - uses: actions/checkout@v3
+
       - name: Create the AWX-EE build instruction file
         run: |
-          pwd
-          cd ./images/awx-ee
           pip install --upgrade ansible-builder
           ansible-builder create \
             --output-filename Dockerfile \
