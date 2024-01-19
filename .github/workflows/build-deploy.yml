@@ -13,6 +13,22 @@ on:
 env:
   REGISTRY: ghcr.io
 jobs:
+  awx-ee-context:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./images/awx-ee
+    strategy:
+      matrix:
+        images: ${{ fromJson(vars.IMAGES) }}
+    steps:
+      - name: Create the AWX-EE build instruction file
+        if: matrix.images == 'awx-ee'
+        run: |
+          pip install --upgrade ansible-builder
+          ansible-builder create \
+            --output-filename Dockerfile \
+            --verbosity 3
   buildx:
     if: github.event.pull_request.merged == true || contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || github.event_name == 'pull_request' && startsWith(github.head_ref,'build/')
     runs-on: ubuntu-latest
@@ -52,15 +68,6 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
             org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
-
-      - name: Create the AWX-EE build instruction file
-        if: matrix.images == 'awx-ee'
-        run: |
-          pip install --upgrade ansible-builder
-          ansible-builder create \
-            --output-filename Dockerfile \
-            --verbosity 3
-        working-directory: ./images/awx-ee
 
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
