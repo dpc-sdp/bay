@@ -27,12 +27,11 @@ additional_build_steps:
     - ARG LAGOON_CLI_VERSION=v0.15.4
     - ARG NVM_INSTALL_VERSION=v0.39.1
     - ARG NODE_VERSION=v14.15.1
-    - RUN ulimit -n 1024000
 
   append_final:
     - | # Required dependencies.
       RUN set -eux; \
-          apt-get update && apt-get install -y \
+          apt-get update && ulimit -n 1024000 && apt-get install -y \
               git git-lfs \
               jq \
               rsync \
@@ -42,7 +41,7 @@ additional_build_steps:
     - | # Install php & composer.
       RUN set -eux; \
           curl -sSL https://packages.sury.org/php/README.txt | bash -x; \
-          apt-get update && apt-get install -y \
+          apt-get update && ulimit -n 1024000 && apt-get install -y \
               php8.3-cli \
               php8.3-gd \
               php8.3-zip; \
@@ -55,7 +54,6 @@ additional_build_steps:
           curl -LO "https://dl.k8s.io/release/v1.25.12/bin/linux/${arch_linux}/kubectl"; \
           chmod +x kubectl; \
           mv ./kubectl /usr/local/bin/kubectl;
-
     - RUN curl -L "https://github.com/uselagoon/lagoon-cli/releases/download/$LAGOON_CLI_VERSION/lagoon-cli-$LAGOON_CLI_VERSION-linux-amd64" -o /usr/local/bin/lagoon
     - RUN chmod +x /usr/local/bin/lagoon
     - RUN curl -L "https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz" -o /tmp/hub && tar -xvf /tmp/hub -C /tmp && mv /tmp/hub-linux-amd64-2.14.2/bin/hub /usr/local/bin
