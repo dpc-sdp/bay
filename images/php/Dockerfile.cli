@@ -22,7 +22,10 @@ RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releas
 RUN apk add redis --no-cache
 
 # Install bay-cli.
-RUN wget "https://github.com/dpc-sdp/bay-cli/releases/download/v0.1.0/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" -O /bin/bay && \
+RUN wget "https://github.com/dpc-sdp/bay-cli/releases/download/v0.1.1/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz" -O /tmp/bay.tgz && \
+    cd /tmp && \
+    tar -vxxzf bay.tgz && \
+    mv bay /bin/bay && \
     chmod +x /bin/bay
 
 RUN mkdir /bay
