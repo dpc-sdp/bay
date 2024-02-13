@@ -62,5 +62,6 @@ jobs:
           files: |
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
+            ${{ steps.meta.outputs.bake-file-annotations }}
           # Target the default group - probably unnecessary.
           targets: ${{ matrix.images }}
