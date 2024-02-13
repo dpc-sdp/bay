@@ -52,6 +52,9 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
             org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
+          annotations: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
+            org.opencontainers.image.description=Test annotation description for ghcr
 
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
@@ -60,5 +63,6 @@ jobs:
           files: |
             ./gh-actions-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
+            ${{ steps.meta.outputs.bake-file-annotations }}
           # Target the default group - probably unnecessary.
           targets: ${{ matrix.images }}
