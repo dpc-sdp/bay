@@ -35,11 +35,12 @@ additional_build_steps:
 
     - | # Required dependencies.
       RUN set -eux; \
-          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               git git-lfs \
               jq \
               rsync \
               zip unzip; \
+          rm -rf /var/lib/apt/lists/*;
 
     - | # Install php & composer.
       RUN set -eux; \
