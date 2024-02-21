@@ -19,9 +19,11 @@ additional_build_steps:
   append_base: []
 
   prepend_final:
-    - LABEL org.opencontainers.image.authors="Digital Victoria"
-    - LABEL org.opencontainers.image.description="Provides an AWX execution environment image optimised for use with SDP."
-    - LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/6.x/images/awx-ee/context/Dockerfile"
+    - LABEL maintainer="Digital Transformation"
+    - LABEL org.opencontainers.image.authors="Digital Transformation"
+    - LABEL org.opencontainers.image.title="SDP AWX Execution Environment image."
+    - LABEL org.opencontainers.image.description="Provides an AWX execution environment image optimised for use with SDP. Built with ansible-builder."
+    - LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/6.x/images/awx-ee/"
     - ARG LAGOON_CLI_VERSION=v0.15.4
     - ARG NVM_INSTALL_VERSION=v0.39.1
     - ARG NODE_VERSION=v14.15.1
@@ -29,7 +31,7 @@ additional_build_steps:
   append_final:
     - | # Required dependencies.
       RUN set -eux; \
-          apt-get update && apt-get install -y \
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               git git-lfs \
               jq \
               rsync \
@@ -39,7 +41,7 @@ additional_build_steps:
     - | # Install php & composer.
       RUN set -eux; \
           curl -sSL https://packages.sury.org/php/README.txt | bash -x; \
-          apt-get update && apt-get install -y \
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               php8.3-cli \
               php8.3-gd \
               php8.3-zip; \
@@ -74,3 +76,11 @@ additional_build_steps:
     - RUN tar -C /tmp -xvf /tmp/yamlfmt_0.10.0_Linux_x86_64.tar.gz
     - RUN chmod +x /tmp/yamlfmt
     - RUN mv /tmp/yamlfmt /usr/local/bin
+    - | # Install GitHub gh cli tool
+      SHELL ["/bin/bash", "-c"]
+      RUN set -eux; \
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+        && apt update \
+        && DEBIAN_FRONTEND=noninteractive apt install gh -y
