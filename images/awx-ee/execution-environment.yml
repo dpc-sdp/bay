@@ -31,10 +31,6 @@ additional_build_steps:
   append_final:
     - | # Required dependencies.
       RUN set -eux; \
-          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install apt-utils -y
-
-    - | # Required dependencies.
-      RUN set -eux; \
           apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               git git-lfs \
               jq \
@@ -45,7 +41,7 @@ additional_build_steps:
     - | # Install php & composer.
       RUN set -eux; \
           curl -sSL https://packages.sury.org/php/README.txt | bash -x; \
-          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               php8.3-cli \
               php8.3-gd \
               php8.3-zip; \
@@ -87,4 +83,4 @@ additional_build_steps:
         && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
         && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
         && apt update \
-        && apt install gh -y
+        && DEBIAN_FRONTEND=noninteractive apt install gh -y
