@@ -62,6 +62,14 @@ jobs:
             --verbosity 3
         working-directory: ./images/awx-ee
 
+      - name: Upload AWX-EE context for review
+        if: matrix.images == 'awx-ee'
+        uses: actions/upload-artifact@v4
+        with:
+          name: awx-ee-context
+          path: ./images/awx-ee/context
+          retention-days: 1
+
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
         with:
