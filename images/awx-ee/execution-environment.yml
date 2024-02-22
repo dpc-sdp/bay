@@ -68,8 +68,6 @@ additional_build_steps:
     - RUN tar -C /tmp -xvf /tmp/gojq_v0.12.4_linux_amd64.tar.gz
     - RUN chmod +x /tmp/gojq_v0.12.4_linux_amd64/gojq
     - RUN mv /tmp/gojq_v0.12.4_linux_amd64/gojq /usr/local/bin
-    - RUN touch /runner/.bashrc && chmod +x /runner/.bashrc
-    - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
     - RUN curl -L "https://get.helm.sh/helm-v3.12.2-linux-amd64.tar.gz" -o /tmp/helm && tar -xvf /tmp/helm -C /tmp && mv /tmp/linux-amd64/helm /usr/local/bin
     - RUN chmod +x /usr/local/bin/helm
     - RUN curl -L https://github.com/google/yamlfmt/releases/download/v0.10.0/yamlfmt_0.10.0_Linux_x86_64.tar.gz --output /tmp/yamlfmt_0.10.0_Linux_x86_64.tar.gz
@@ -84,3 +82,6 @@ additional_build_steps:
         && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
         && apt update \
         && DEBIAN_FRONTEND=noninteractive apt install gh -y
+    - USER 1000
+    - RUN touch $HOME/.bashrc && chmod +x $HOME/.bashrc
+    - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
