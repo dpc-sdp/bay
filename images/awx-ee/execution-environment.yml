@@ -19,17 +19,19 @@ additional_build_steps:
   append_base: []
 
   prepend_final:
-    - LABEL org.opencontainers.image.authors="Digital Victoria"
-    - LABEL org.opencontainers.image.description="Provides an AWX execution environment image optimised for use with SDP."
-    - LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/awx-ee/context/Dockerfile"
+    - LABEL maintainer="Digital Victoria"
+    - LABEL org.opencontainers.image.title="SDP AWX Execution Environment image."
+    - LABEL org.opencontainers.image.description="Provides an AWX execution environment image optimised for use with SDP. Built with ansible-builder."
+    - LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/5.x/images/awx-ee/"
     - ARG LAGOON_CLI_VERSION=v0.15.4
-    - ARG NVM_INSTALL_VERSION=v0.39.1
-    - ARG NODE_VERSION=v14.15.1
+    - ARG NVM_INSTALL_VERSION=v0.39.7
+    - ARG NODE_VERSION=v18.17.0
+    - ARG NVM_DIR="/runner/.nvm"
 
   append_final:
     - | # Required dependencies.
       RUN set -eux; \
-          apt-get update && apt-get install -y \
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               git git-lfs \
               jq \
               rsync \
@@ -66,11 +68,20 @@ additional_build_steps:
     - RUN tar -C /tmp -xvf /tmp/gojq_v0.12.4_linux_amd64.tar.gz
     - RUN chmod +x /tmp/gojq_v0.12.4_linux_amd64/gojq
     - RUN mv /tmp/gojq_v0.12.4_linux_amd64/gojq /usr/local/bin
-    - RUN touch $HOME/.bashrc && chmod +x $HOME/.bashrc
-    - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | bash
+    - RUN touch /runner/.bashrc && chmod +x /runner/.bashrc
+    - RUN mkdir -p /runner/.nvm && chgrp 0 /runner/.nvm && chmod -R ug+rwx /runner/.nvm
+    - RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_INSTALL_VERSION/install.sh | PROFILE="/runner/.bashrc" bash
     - RUN curl -L "https://get.helm.sh/helm-v3.12.2-linux-amd64.tar.gz" -o /tmp/helm && tar -xvf /tmp/helm -C /tmp && mv /tmp/linux-amd64/helm /usr/local/bin
     - RUN chmod +x /usr/local/bin/helm
     - RUN curl -L https://github.com/google/yamlfmt/releases/download/v0.10.0/yamlfmt_0.10.0_Linux_x86_64.tar.gz --output /tmp/yamlfmt_0.10.0_Linux_x86_64.tar.gz
     - RUN tar -C /tmp -xvf /tmp/yamlfmt_0.10.0_Linux_x86_64.tar.gz
     - RUN chmod +x /tmp/yamlfmt
     - RUN mv /tmp/yamlfmt /usr/local/bin
+    - | # Install GitHub gh cli tool
+      SHELL ["/bin/bash", "-c"]
+      RUN set -eux; \
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+        && apt update \
+        && DEBIAN_FRONTEND=noninteractive apt install gh -y

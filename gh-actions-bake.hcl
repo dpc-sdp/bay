@@ -86,4 +86,12 @@ target "ripple-static" {
     "org.opencontainers.image.description" = "Ripple static site generator image optimised for the Bay container platform"
   }
 }
-
+target "awx-ee" {
+    inherits = ["docker-metadata-action"]
+    context = "${CONTEXT}/awx-ee/context"
+    platforms = ["linux/amd64", "linux/arm64"]
+    args = {
+        PYCMD = "/usr/local/bin/python3"
+        PKGMGR = "/usr/bin/apt-get"
+    }
+}
