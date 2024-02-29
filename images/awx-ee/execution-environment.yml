@@ -42,9 +42,11 @@ additional_build_steps:
     - | # Install php & composer.
       RUN set -eux; \
           curl -sSL https://packages.sury.org/php/README.txt | bash -x; \
-          apt-get update && apt-get install -y \
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               php${PHP_VERSION}-cli \
+              php${PHP_VERSION}-curl \
               php${PHP_VERSION}-gd \
+              php${PHP_VERSION}-xml \
               php${PHP_VERSION}-zip; \
           rm -rf /var/lib/apt/lists/*;
 
