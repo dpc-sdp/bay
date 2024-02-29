@@ -25,7 +25,7 @@ additional_build_steps:
     - LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/6.x/images/awx-ee/"
     - ARG LAGOON_CLI_VERSION=v0.15.4
     - ARG NVM_INSTALL_VERSION=v0.39.7
-    - ARG NODE_VERSION=v18.17.0
+    - ARG NODE_VERSION=v20.9.0
     - ARG NVM_DIR="/runner/.nvm"
     - ARG PHP_VERSION="8.3"
 
