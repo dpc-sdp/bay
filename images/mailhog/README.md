@@ -13,7 +13,7 @@ You can also use it in your Docker Compose stack with the following snippet:
 ```
 services:
   mailhog:
-    image: singledigital/bay-mailhog:5.x
+    image: ghcr.io/dpc-sdp/bay/mailhog:5.x
     ports:
       - 1025
       - 8025
