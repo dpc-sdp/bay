@@ -19,15 +19,15 @@ additional_build_steps:
   append_base: []
 
   prepend_final:
-    - LABEL maintainer="Digital Transformation"
-    - LABEL org.opencontainers.image.authors="Digital Transformation"
+    - LABEL maintainer="Department of Government Services (Victoria)"
     - LABEL org.opencontainers.image.title="SDP AWX Execution Environment image."
     - LABEL org.opencontainers.image.description="Provides an AWX execution environment image optimised for use with SDP. Built with ansible-builder."
     - LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/6.x/images/awx-ee/"
     - ARG LAGOON_CLI_VERSION=v0.15.4
     - ARG NVM_INSTALL_VERSION=v0.39.7
-    - ARG NODE_VERSION=v18.17.0
+    - ARG NODE_VERSION=v20.9.0
     - ARG NVM_DIR="/runner/.nvm"
+    - ARG PHP_VERSION="8.3"
 
   append_final:
     - | # Required dependencies.
@@ -43,9 +43,11 @@ additional_build_steps:
       RUN set -eux; \
           curl -sSL https://packages.sury.org/php/README.txt | bash -x; \
           apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-              php8.3-cli \
-              php8.3-gd \
-              php8.3-zip; \
+              php${PHP_VERSION}-cli \
+              php${PHP_VERSION}-curl \
+              php${PHP_VERSION}-gd \
+              php${PHP_VERSION}-xml \
+              php${PHP_VERSION}-zip; \
           rm -rf /var/lib/apt/lists/*;
 
     - | # Install cli tools.

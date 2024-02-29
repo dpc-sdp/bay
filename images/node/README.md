@@ -14,7 +14,7 @@ You can also use it in your Docker Compose stack with the following snippet:
 ```
 services:
   app:
-    image: singledigital/bay-node:6.x
+    image: ghcr.io/dpc-sdp/bay/node:6.x
     volumes:
       - path/to/app:/app
     ports:
