@@ -19,8 +19,7 @@ additional_build_steps:
   append_base: []
 
   prepend_final:
-    - LABEL maintainer="Digital Transformation"
-    - LABEL org.opencontainers.image.authors="Digital Transformation"
+    - LABEL maintainer="Department of Government Services (Victoria)"
     - LABEL org.opencontainers.image.title="SDP AWX Execution Environment image."
     - LABEL org.opencontainers.image.description="Provides an AWX execution environment image optimised for use with SDP. Built with ansible-builder."
     - LABEL org.opencontainers.image.source="https://github.com/dpc-sdp/bay/blob/6.x/images/awx-ee/"
