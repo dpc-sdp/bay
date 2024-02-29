@@ -9,7 +9,7 @@ The AWX execution environment is a container image that AWX will use to execute 
 - `requirements.txt`: Defined python dependencies
 - `requirements.yml`: Ansible collections to install
 
-AWX has `ghcr.io/dpc-sdp/bay/awx-ee:5.x` added as an execution environment with a pull policy of always, when the image is updated kuberenetes will pull a new image to run the plays in.
+AWX has `ghcr.io/dpc-sdp/bay/awx-ee:6.x` added as an execution environment with a pull policy of always, when the image is updated kuberenetes will pull a new image to run the plays in.
 
 ## Dependencies
 
@@ -20,7 +20,7 @@ AWX has `ghcr.io/dpc-sdp/bay/awx-ee:5.x` added as an execution environment with 
 Commands run from this directory if you have ansible-builder installed locally.
 
 ```
-$ ansible-builder build --tag ghcr.io/dpc-sdp/bay/awx-ee:5.x --container-runtime docker
+$ ansible-builder build --tag ghcr.io/dpc-sdp/bay/awx-ee:6.x --container-runtime docker
 ```
 
 OR run with docker.
@@ -31,14 +31,14 @@ $ docker run --rm -it \
     -v $(pwd):/data \
     -w /data \
     quay.io/ansible/ansible-builder:latest \
-      ansible-builder build --tag ghcr.io/dpc-sdp/bay/awx-ee:5.x --container-runtime docker
+      ansible-builder build --tag ghcr.io/dpc-sdp/bay/awx-ee:6.x --container-runtime docker
 
 # Build the image
-$ docker build -f context/Dockerfile -t ghcr.io/dpc-sdp/bay/awx-ee:5.x context
+$ docker build -f context/Dockerfile -t ghcr.io/dpc-sdp/bay/awx-ee:6.x context
 ```
 
 ## Deploying the image
 
 ```
-$ docker push ghcr.io/dpc-sdp/bay/awx-ee:5.x
+$ docker push ghcr.io/dpc-sdp/bay/awx-ee:6.x
 ```
