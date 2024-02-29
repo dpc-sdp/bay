@@ -27,6 +27,7 @@ additional_build_steps:
     - ARG NVM_INSTALL_VERSION=v0.39.7
     - ARG NODE_VERSION=v18.17.0
     - ARG NVM_DIR="/runner/.nvm"
+    - ARG PHP_VERSION="8.2"
 
   append_final:
     - | # Required dependencies.
@@ -42,9 +43,9 @@ additional_build_steps:
       RUN set -eux; \
           curl -sSL https://packages.sury.org/php/README.txt | bash -x; \
           apt-get update && apt-get install -y \
-              php8.2-cli \
-              php8.2-gd \
-              php8.2-zip; \
+              php${PHP_VERSION}-cli \
+              php${PHP_VERSION}-gd \
+              php${PHP_VERSION}-zip; \
           rm -rf /var/lib/apt/lists/*;
 
     - | # Install cli tools.
