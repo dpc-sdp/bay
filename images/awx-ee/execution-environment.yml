@@ -35,6 +35,7 @@ additional_build_steps:
           apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
               git git-lfs \
               jq \
+              apache2-utils \
               rsync \
               zip unzip; \
           rm -rf /var/lib/apt/lists/*;
