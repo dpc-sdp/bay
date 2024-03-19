@@ -1,5 +1,5 @@
 FROM hashicorp/terraform:latest AS terraform
-FROM php:8.1-cli-alpine
+FROM php:8.2-cli-alpine
 ARG AHOY_VERSION=2.1.1
 ARG GOJQ_VERSION=0.12.4
 ARG HUB_VERSION=2.14.2
@@ -38,15 +38,12 @@ RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub
     chmod +x /tmp/hub-linux-386-${HUB_VERSION}/bin/hub && \
     mv /tmp/hub-linux-386-${HUB_VERSION}/bin/hub /usr/local/bin
 
-# Install Python dependencies not available in apk.
-RUN pip install --ignore-installed \
-    flake8 \
-    yamllint \
-    ansible-lint \
-    boto3
-
-## Install required PHP extensions for Drupal
+## Install required PHP extensions for Drupal and python packages.
 RUN apk add --no-cache \
+    py3-flake8 \
+    py3-ansible-lint \
+    py3-boto3 \
+    yamllint \
     libpng \
     libpng-dev \
     libjpeg-turbo-dev \

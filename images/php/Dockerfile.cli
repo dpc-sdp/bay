@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.1
+ARG PHP_VERSION=8.2
 FROM php:${PHP_VERSION}-cli-alpine AS php-cli
 FROM ghcr.io/skpr/mtk:latest AS mtk
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
@@ -22,8 +22,10 @@ RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releas
 RUN apk add redis --no-cache
 
 # Install bay-cli.
-RUN wget "https://github.com/dpc-sdp/bay-cli/releases/download/v0.0.2/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" -O /bin/bay && \
-    chmod +x /bin/bay
+RUN curl -L "https://github.com/dpc-sdp/bay-cli/releases/download/v0.1.1/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz" --output /tmp/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz
+RUN tar -C /tmp -xvf /tmp/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz
+RUN chmod +x /tmp/bay
+RUN mv /tmp/bay /bin/bay
 
 RUN mkdir /bay
 

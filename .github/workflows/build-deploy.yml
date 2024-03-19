@@ -21,10 +21,10 @@ jobs:
         images: ${{ fromJson(vars.IMAGES) }}
     steps:
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - uses: actions/checkout@v3
 
@@ -52,6 +52,23 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
             org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
+
+      - name: Create the AWX-EE context
+        if: matrix.images == 'awx-ee'
+        run: |
+          pip install --upgrade ansible-builder
+          ansible-builder create \
+            --output-filename Dockerfile \
+            --verbosity 3
+        working-directory: ./images/awx-ee
+
+      - name: Upload AWX-EE context for review
+        if: matrix.images == 'awx-ee'
+        uses: actions/upload-artifact@v4
+        with:
+          name: awx-ee-context
+          path: ./images/awx-ee/context
+          retention-days: 1
 
       - name: Build and push the images
         uses: docker/bake-action@v3.1.0
