@@ -346,6 +346,11 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
 }
 
+// Override data_pipelines url.
+if (isset($config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'])) {
+  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
+}
+
 // Configure tide_logs.
 if (getenv('TIDE_LOGS_UDPLOG_HOST')) {
   $config['tide_logs.settings']['host'] = getenv('TIDE_LOGS_UDPLOG_HOST');
