@@ -319,7 +319,7 @@ $config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
 
 // Configure elasticsearch connections from environment variables.
 if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('https://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
 } else {
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] =  "http://elasticsearch:9200";
 }
@@ -347,7 +347,7 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
 }
 
 // Override data_pipelines url.
-$config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('https://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
+$config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
 
 // Configure tide_logs.
 if (getenv('TIDE_LOGS_UDPLOG_HOST')) {
