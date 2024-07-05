@@ -25,6 +25,13 @@ target "mailhog" {
 
   platforms     = ["linux/amd64", "linux/arm64"]
 }
+target "mailpit" {
+  inherits = ["docker-metadata-action"]
+  context       = "${CONTEXT}/mailhog"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+}
 target "mariadb" {
   inherits = ["docker-metadata-action"]
   context       = "${CONTEXT}/mariadb"
