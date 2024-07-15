@@ -20,7 +20,14 @@ target "elasticsearch" {
 }
 target "mailhog" {
   inherits = ["docker-metadata-action"]
-  context       = "${CONTEXT}/mailhog"
+  context       = "${CONTEXT}/mailpit"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+}
+target "mailpit" {
+  inherits = ["docker-metadata-action"]
+  context       = "${CONTEXT}/mailpit"
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
