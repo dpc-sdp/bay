@@ -347,7 +347,14 @@ if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
 }
 
 // Override data_pipelines url.
-$config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
+$elasticsearch_url = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
+$data_pipeline_configs = [
+  'sdp_elasticsearch',
+  'sdp_elasticsearch_v1',
+];
+foreach ($data_pipeline_configs as $config_name) {
+  $config["data_pipelines.dataset_destination.{$config_name}"]['destinationSettings']['url'] = $elasticsearch_url;
+}
 
 // Configure tide_logs.
 if (getenv('TIDE_LOGS_UDPLOG_HOST')) {
