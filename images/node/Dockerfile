@@ -2,7 +2,7 @@ FROM uselagoon/node-20:latest
 ARG BAY_CLI_VERSION=v0.1.1
 
 
-RUN apk --update add curl git findutils && \
+RUN apk --update add curl git findutils openssh-client && \
     rm -rf /var/cache/apk/*
 
 # Install bay-cli.
