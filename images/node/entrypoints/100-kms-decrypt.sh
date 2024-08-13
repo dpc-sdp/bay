@@ -19,6 +19,11 @@ warning() { echoerr "[WARNING] $*" ; }
 error()   { echoerr "[ERROR]   $*" ; }
 fatal()   { echoerr "[FATAL]   $*" ; exit 1 ; }
 
+info "set umask to least permissive for SSH keys by default"
+if [ -d "/app/keys" ]; then
+    umask 0177
+fi
+
 info "decrypting files"
 
 encrypted_files=""
