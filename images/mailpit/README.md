@@ -1,6 +1,6 @@
-# Container Image - bay-mailhog
+# Container Image - bay-mailpit
 
-Provides a mailhog image for local development.
+Provides a [mailpit](https://github.com/axllent/mailpit) image for local development.
 
 ## Usage
 
@@ -12,8 +12,8 @@ You can also use it in your Docker Compose stack with the following snippet:
 
 ```
 services:
-  mailhog:
-    image: singledigital/bay-mailhog:6.x
+  mailpit:
+    image: ghcr.io/dpc-sdp/bay/mailpit:6.x
     ports:
       - 1025
       - 8025

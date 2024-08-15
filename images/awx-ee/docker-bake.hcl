@@ -7,17 +7,15 @@ variable "IMAGE_TAG" {
 }
 
 group "default" {
-    targets = ["ee"]
+    targets = ["awx-ee"]
 }
 
-target "ee" {
+target "docker-metadata-action" {}
+
+target "awx-ee" {
+    inherits = ["docker-metadata-action"]
     context = "./context"
-    dockerfile = "Dockerfile"
     platforms = ["linux/amd64", "linux/arm64"]
-    tags = [
-        // "singledigital/awx-ee:${IMAGE_TAG}",
-        "${GHCR}/dpc-sdp/bay/awx-ee:${IMAGE_TAG}"
-    ]
     args = {
         PYCMD = "/usr/local/bin/python3"
         PKGMGR = "/usr/bin/apt-get"

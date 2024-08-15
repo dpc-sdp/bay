@@ -8,10 +8,11 @@ yamllint
 kubernetes
 lxml
 gql
-# Dependencies for the gql requests transport.
-requests-toolbelt<1,>=0.9.1
-urllib3>=1.26
-requests<3,>=2.26
 ruamel.yaml
 pygithub
 azure-cli
+
+# Dependencies for the gql requests transport.
+requests<3,>=2.26
+requests-toolbelt<1,>=0.10.1
+urllib3<2.0.0
