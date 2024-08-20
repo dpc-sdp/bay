@@ -19,6 +19,7 @@ COPY content /etc/nginx/conf.d/drupal/content
 
 # Add server append directives.
 COPY append/server_append-healthz.conf /etc/nginx/conf.d/drupal/server_append-healthz.conf
+COPY append/http-log-format.conf /etc/nginx/conf.d/http-log-format.conf
 
 RUN fix-permissions /etc/nginx \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
