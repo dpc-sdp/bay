@@ -6,6 +6,9 @@ on:
       - closed
       - opened
       - synchronize
+  issue_comment:
+    types:
+      - created
   schedule:
     - cron: '23 20 * * 0'
   workflow_dispatch:
@@ -14,7 +17,11 @@ env:
   REGISTRY: ghcr.io
 jobs:
   buildx:
-    if: github.event.pull_request.merged == true || contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || github.event_name == 'pull_request' && startsWith(github.head_ref,'build/')
+    if: |-
+      github.event.pull_request.merged == true || 
+      contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || 
+      github.event_name == 'pull_request' && startsWith(github.head_ref,'build/') ||
+      ( github.event.issue.pull_request && contains(github.event.comment.body, '/build') )
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -45,6 +52,7 @@ jobs:
             type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
             type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
             type=ref,event=branch,enable=${{ contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) }}
+            type=raw,event=default,value=pr-${{ github.event.issue.number }},enable=${{ github.event.issue.pull_request != null }}
           labels: |
             maintainer=Digital Victoria
             repository=${{ github.repositoryUrl }}
