@@ -26,3 +26,7 @@ Improvement - Description (#ISSUENUMBER)
 
 # Closing issues
 Put `closes #XXXX` in your comment to auto-close the issue that your PR fixes (if such).
+
+# PR Comment Commands
+
+- Commenting `/build` on a pull request will trigger the build & deploy workflow for the current branch.
