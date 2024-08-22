@@ -21,7 +21,7 @@ jobs:
       github.event.pull_request.merged == true || 
       contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || 
       github.event_name == 'pull_request' && startsWith(github.head_ref,'build/') ||
-      ( github.event.issue.pull_request && github.event.comment.body == '/build' )
+      ( github.event.issue.pull_request && contains(github.event.comment.body, '/build') )
     runs-on: ubuntu-latest
     strategy:
       matrix:
