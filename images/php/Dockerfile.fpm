@@ -1,7 +1,7 @@
 ARG PHP_VERSION=8.3
 FROM uselagoon/php-${PHP_VERSION}-fpm:latest
 
-ARG BAY_CLI_VERSION=v1.1.2
+ARG BAY_CLI_VERSION=v1.1.3
 
 RUN mkdir /bay
 COPY 01-bay.ini /usr/local/etc/php/conf.d/
