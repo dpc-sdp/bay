@@ -3,18 +3,20 @@ FROM php:${PHP_VERSION}-cli-alpine AS php-cli
 FROM ghcr.io/skpr/mtk:latest AS mtk
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
+ARG GOJQ_VERSION=0.12.16
+ARG DOCKERIZE_VERSION=v0.8.0
+ARG BAY_CLI_VERSION=v1.1.2
+
 COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
 ENV WEBROOT=docroot
 ENV COMPOSER_CACHE_DIR=/tmp/.composer/cache
 
 # Install gojq.
-ARG GOJQ_VERSION=0.12.4
 RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz --output /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
     tar -C /tmp -xvf /tmp/gojq_v${GOJQ_VERSION}_linux_amd64.tar.gz && \
     chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
     mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
 
-ARG DOCKERIZE_VERSION=v0.6.1
 RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize_amd64_linux && \
     chmod +x /usr/local/bin/dockerize
 
@@ -22,7 +24,6 @@ RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releas
 RUN apk add redis --no-cache
 
 # Install bay-cli.
-ARG BAY_CLI_VERSION=v1.1.2
 RUN curl -L "https://github.com/dpc-sdp/bay-cli/releases/download/${BAY_CLI_VERSION}/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz" --output /tmp/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz
 RUN tar -C /tmp -xvf /tmp/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz
 RUN chmod +x /tmp/bay
