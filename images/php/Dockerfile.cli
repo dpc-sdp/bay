@@ -4,7 +4,7 @@ FROM ghcr.io/skpr/mtk:v2.0.2 AS mtk
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
 ARG GOJQ_VERSION=0.12.16
-ARG DOCKERIZE_VERSION=v0.6.1
+ARG DOCKERIZE_VERSION=v0.8.0
 ARG BAY_CLI_VERSION=v1.1.3
 
 COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
@@ -17,7 +17,7 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/g
     chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
     mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
 
-RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize_amd64_linux && \
+RUN wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \ 
     chmod +x /usr/local/bin/dockerize
 
 # Install redis-cli for debugging.
