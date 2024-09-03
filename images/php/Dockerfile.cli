@@ -17,7 +17,7 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/g
     chmod +x /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq && \
     mv /tmp/gojq_v${GOJQ_VERSION}_linux_amd64/gojq /usr/local/bin
 
-RUN wget -O /usr/local/bin/dockerize https://github.com/dpc-sdp/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize_amd64_linux && \
+RUN wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \ 
     chmod +x /usr/local/bin/dockerize
 
 # Install redis-cli for debugging.
