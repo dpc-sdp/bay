@@ -4,7 +4,7 @@ FROM ghcr.io/skpr/mtk:latest AS mtk
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
 ARG GOJQ_VERSION=0.12.16
-ARG DOCKERIZE_VERSION=v0.6.1
+ARG DOCKERIZE_VERSION=v0.8.0
 ARG BAY_CLI_VERSION=v1.1.3
 
 COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
