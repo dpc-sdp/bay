@@ -19,6 +19,8 @@ jobs:
     strategy:
       matrix:
         images: ${{ fromJson(vars.IMAGES) }}
+        exclude:
+          - images: mailpit
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
