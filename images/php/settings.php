@@ -101,73 +101,44 @@ $config['stage_file_proxy.settings']['hotlink'] = TRUE;
 // Skip unprotected files error.
 $settings['skip_permissions_hardening'] = TRUE;
 
-if (getenv('ENABLE_REDIS')) {
+if (getenv('ENABLE_REDIS') && !\Drupal\Core\Installer\InstallerKernel::installationAttempted()) {
   $redis_host = getenv('REDIS_HOST') ?: 'redis';
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
-  $redis_timeout = getenv('REDIS_TIMEOUT') ?: 2;
+  $redis_timeout = getenv('REDIS_TIMEOUT') ?: 1;
   $redis_password = getenv('REDIS_PASSWORD') ?: '';
 
-  try {
-    if (\Drupal\Core\Installer\InstallerKernel::installationAttempted()) {
-      throw new \Exception('Drupal installation underway.');
-    }
+  $redis_interface = 'PhpRedis';
 
-    $redis = new \Redis();
+  if (class_exists('\Drupal\redis\Cache\PhpRedisCluster')) {
+    // Assume that if the cluster class exists we need to use it.
+    $redis_interface = 'PhpRedisCluster';
+  }
 
-    if ($redis->connect($redis_host, $redis_port, $redis_timeout) === FALSE) {
-      throw new \Exception('Redis service unreachable');
-    }
+  if (getenv('REDIS_INTERFACE')) {
+    // Allow environment variable override for the interface (eg. forcing
+    // connection via a standalone pod).
+    $redis_interface = getenv('REDIS_INTERFACE');
+  }
 
-    if (!empty($redis_password)) {
-      $redis->auth($redis_password);
-    }
+  $settings['redis.connection']['host'] = $redis_host;
+  $settings['redis.connection']['port'] = $redis_port;
+  $settings['redis.connection']['password'] = $redis_password;
+  $settings['redis.connection']['base'] = 0;
+  $settings['redis.connection']['interface'] = $redis_interface;
+  $settings['redis.connection']['read_timeout'] = $redis_timeout;
+  $settings['redis.connection']['timeout'] = $redis_timeout;
+  $settings['cache']['default'] = 'cache.backend.redis';
+  $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+  $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+  $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
 
-    // Check the redis mode - to determine which interface we use to connect.
-    $info = $redis->info();
-    $redis_interface = 'PhpRedis';
+  $settings['cache_prefix']['default'] = getenv('REDIS_CACHE_PREFIX') ?: getenv('LAGOON_PROJECT') . '_' . getenv('LAGOON_GIT_SAFE_BRANCH');
 
-    if (isset($info['redis_mode']) && $info['redis_mode'] == 'cluster' && class_exists('\Drupal\redis\Cache\PhpRedisCluster')) {
-      $redis_interface = 'PhpRedisCluster';
-    }
-
-    if (getenv('REDIS_INTERFACE')) {
-      // Allow environment variable override for the interface (eg. forcing
-      // connection via a standalone pod).
-      $redis_interface = getenv('REDIS_INTERFACE');
-    }
-
-    if ($redis->ping() == FALSE) {
-      throw new \Exception('Redis reachable but is not responding correctly.');
-    }
-
-    $settings['redis.connection']['host'] = $redis_host;
-    $settings['redis.connection']['port'] = $redis_port;
-    $settings['redis.connection']['password'] = $redis_password;
-    $settings['redis.connection']['base'] = 0;
-    $settings['redis.connection']['interface'] = $redis_interface;
-    $settings['redis.connection']['read_timeout'] = $redis_timeout;
-    $settings['redis.connection']['timeout'] = $redis_timeout;
-    $settings['cache']['default'] = 'cache.backend.redis';
-    $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
-    $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
-    $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
-
-    $settings['cache_prefix']['default'] = getenv('REDIS_CACHE_PREFIX') ?: getenv('LAGOON_PROJECT') . '_' . getenv('LAGOON_GIT_SAFE_BRANCH');
-
-    if ($redis_interface == 'PhpRedisCluster') {
-      $settings['redis.connection']['seeds'] = ["$redis_host:$redis_port"];
-      $settings['container_yamls'][] = '/bay/redis-cluster.services.yml';
-    } else {
-      $settings['container_yamls'][] = '/bay/redis-single.services.yml';
-    }
-
-  } catch (\Exception $error) {
-    // Make the reqeust unacacheable until redis is available.
-    // This will ensure that cache partials are not added to separate bins,
-    // Drupal is available even when Redis is down and that when redis is
-    // available again we can start filling the correct bins up again.
-    $settings['container_yamls'][] = '/bay/redis-unavailable.services.yml';
-    $settings['cache']['default'] = 'cache.backend.null';
+  if ($redis_interface == 'PhpRedisCluster') {
+    $settings['redis.connection']['seeds'] = ["$redis_host:$redis_port"];
+    $settings['container_yamls'][] = '/bay/redis-cluster.services.yml';
+  } else {
+    $settings['container_yamls'][] = '/bay/redis-single.services.yml';
   }
 }
 
