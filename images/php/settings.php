@@ -106,19 +106,7 @@ if (getenv('ENABLE_REDIS') && !\Drupal\Core\Installer\InstallerKernel::installat
   $redis_port = getenv('REDIS_SERVICE_PORT') ?: '6379';
   $redis_timeout = getenv('REDIS_TIMEOUT') ?: 1;
   $redis_password = getenv('REDIS_PASSWORD') ?: '';
-
-  $redis_interface = 'PhpRedis';
-
-  if (class_exists('\Drupal\redis\Cache\PhpRedisCluster')) {
-    // Assume that if the cluster class exists we need to use it.
-    $redis_interface = 'PhpRedisCluster';
-  }
-
-  if (getenv('REDIS_INTERFACE')) {
-    // Allow environment variable override for the interface (eg. forcing
-    // connection via a standalone pod).
-    $redis_interface = getenv('REDIS_INTERFACE');
-  }
+  $redis_interface = getenv('REDIS_INTERFACE') ?: 'PhpRedis';
 
   $settings['redis.connection']['host'] = $redis_host;
   $settings['redis.connection']['port'] = $redis_port;
