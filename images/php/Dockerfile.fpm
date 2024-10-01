@@ -34,7 +34,7 @@ RUN chmod +x /tmp/bay
 RUN mv /tmp/bay /bin/bay
 
 # Install php-fpm_exporter
-RUN curl -s -L "https://github.com/hipages/php-fpm_exporter/releases/download/v2.2.0/php-fpm_exporter_${PHP_FPM_EXPORTER_VERSION}_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" --output /bin/php-fpm_exporter
+RUN curl -s -L "https://github.com/hipages/php-fpm_exporter/releases/download/v${PHP_FPM_EXPORTER_VERSION}/php-fpm_exporter_${PHP_FPM_EXPORTER_VERSION}_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" --output /bin/php-fpm_exporter
 RUN chmod +x /bin/php-fpm_exporter
 EXPOSE 9253
 
