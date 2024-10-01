@@ -2,6 +2,7 @@ ARG PHP_VERSION=8.2
 FROM uselagoon/php-${PHP_VERSION}-fpm:latest
 
 ARG BAY_CLI_VERSION=v1.1.3
+ARG PHP_FPM_EXPORTER_VERSION=2.2.0
 
 RUN mkdir /bay
 COPY 01-bay.ini /usr/local/etc/php/conf.d/
@@ -9,6 +10,7 @@ COPY bay-php-config.sh /bay
 
 # Ensure temp dir exists if required
 COPY entrypoints/bay-shared-temp-files-dir-check.sh /lagoon/entrypoints
+COPY entrypoints/bay-php-fpm_exporter.sh /lagoon/entrypoints
 
 # Add common drupal config.
 COPY redis-unavailable.services.yml /bay
@@ -26,10 +28,15 @@ RUN  apk add --no-cache tzdata \
     && echo $TZ > /etc/timezone
 
 # Install bay-cli.
-RUN curl -L "https://github.com/dpc-sdp/bay-cli/releases/download/${BAY_CLI_VERSION}/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz" --output /tmp/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz
+RUN curl -s -L "https://github.com/dpc-sdp/bay-cli/releases/download/${BAY_CLI_VERSION}/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz" --output /tmp/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz
 RUN tar -C /tmp -xvf /tmp/bay_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz
 RUN chmod +x /tmp/bay
 RUN mv /tmp/bay /bin/bay
+
+# Install php-fpm_exporter
+RUN curl -s -L "https://github.com/hipages/php-fpm_exporter/releases/download/v${PHP_FPM_EXPORTER_VERSION}/php-fpm_exporter_${PHP_FPM_EXPORTER_VERSION}_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_')" --output /bin/php-fpm_exporter
+RUN chmod +x /bin/php-fpm_exporter
+EXPOSE 9253
 
 ONBUILD ARG BAY_DISABLE_FUNCTIONS=phpinfo,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,system,exec,shell_exec,passthru,phpinfo,show_source,highlight_file,popen,fopen_with_path,dbmopen,dbase_open,filepro,filepro_rowcount,filepro_retrieve,posix_mkfifo
 ONBUILD ARG BAY_UPLOAD_LIMIT=100M
