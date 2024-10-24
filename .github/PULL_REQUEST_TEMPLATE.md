@@ -1,32 +1,13 @@
- <!--
-**IMPORTANT: Please do not create a Pull Request without creating an issue first.**
-*Any change needs to be discussed before proceeding. Failure to do so may result in the rejection of the pull request.*
+<!-- PLEASE UPDATE THIS COTENT. NO PR WILL BE REVIEWED WITHOUT A PROPER DESCRIPTION. -->
+## Motivation
 
-Please provide enough information so that others can review your pull request:
- -->
- 
-<!-- You can skip this if you're fixing a typo. -->
-# Checklist
-- [ ] Affected Issues have been mentioned in the Closing issues section
-- [ ] Documentation has been written/updated.
-- [ ] Changelog entry has been written
+Foo was causing bar to run poorly.
 
-Explain the **details** for making this change. What existing problem does the pull request solve?
+## Changes
 
-# Changelog Entry
-<!--
-Describe the change in order to make it visible in the changelog
-If the change breaks anything document this - how was the functionality before - how does it work after the change
+- foo
+- bar
 
-Prefix the change with: Feature, Change, Bugfix, Improvement, Documentation
+## Testing
 
-Use following format:
-Improvement - Description (#ISSUENUMBER)
--->
-
-# Closing issues
-Put `closes #XXXX` in your comment to auto-close the issue that your PR fixes (if such).
-
-# PR Comment Commands
-
-- Commenting `/build` on a pull request will trigger the build & deploy workflow for the current branch.
+Build image with `docker build -t test -f images/foo/Dockerfile` and run with `docker run --rm -it test`
