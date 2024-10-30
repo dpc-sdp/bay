@@ -28,17 +28,20 @@ services:
 
 ## Environment Variables
 
-| Name | Default Value | Description |
-|------|---------------|-------------|
-| `BAY_DISABLE_FUNCTIONS` | (see source code) | A list of PHP functions to disable. Security feature to disable potential attack vectors. |
-| `BAY_UPLOAD_LIMIT` | `100M` | Payload size supported by PHP. Synchronises the value across several php configuration elements. |
-| `BAY_POST_MAX` | `100M` |  |
-| `BAY_SESSION_NAME` | `PHPSESSID` |   |
-| `BAY_SESSION_COOKIE_LIFETIME` | `28800` |   |
-| `BAY_SESSION_STRICT` | `1` |   |
-| `BAY_SESSION_SID_LEN` | `256` |   |
-| `BAY_SESSION_SID_BITS` | `6` |   |
+| Name | Default Value     | Description                                                                                      |
+|------|-------------------|--------------------------------------------------------------------------------------------------|
+| `BAY_DISABLE_FUNCTIONS` | (see source code) | A list of PHP functions to disable. Security feature to disable potential attack vectors.        |
+| `BAY_UPLOAD_LIMIT` | `100M`            | Payload size supported by PHP. Synchronises the value across several php configuration elements. |
+| `BAY_POST_MAX` | `100M`            |                                                                                                  |
+| `BAY_SESSION_NAME` | `PHPSESSID`       |                                                                                                  |
+| `BAY_SESSION_COOKIE_LIFETIME` | `28800`           |                                                                                                  |
+| `BAY_SESSION_STRICT` | `1`               |                                                                                                  |
+| `BAY_SESSION_SID_LEN` | `256`             |                                                                                                  |
+| `BAY_SESSION_SID_BITS` | `6`               |                                                                                                  |
+| `PHP_CLI_MEMORY_LIMIT` | `1024M`           | Default memory_limit for CLI container.                                                          |
+| `PHP_FPM_EXPORTER_ENABLED` | `false`           | Toggle for php-fpm metrics exporter.                                                             |
 
 ## Ports
 
 - 9000 - PHP FPM port
+- 9253 - php-fpm_exporter metrics endpoint

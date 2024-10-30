@@ -46,9 +46,9 @@ COPY db-build.sh /bay
 COPY db-dump-sanitized.sh /bay
 COPY mtk /bay/mtk
 
-# Change worker pool from dynamic to static. Change default value to 24.
-RUN sed -i "s/pm = dynamic/pm = static/" /usr/local/etc/php-fpm.d/www.conf
-ENV PHP_FPM_PM_MAX_CHILDREN=24
+# Provide a separate environment variable to configure the php cli memory limit.
+ENV PHP_CLI_MEMORY_LIMIT=1024M
+RUN sed -i 's/\${PHP_MEMORY_LIMIT:/\${PHP_CLI_MEMORY_LIMIT:/g' "$PHP_INI_DIR/conf.d/00-lagoon-php.ini.tpl"
 
 ARG TZ=Australia/Melbourne
 RUN  apk add --no-cache tzdata \
