@@ -82,6 +82,17 @@ target "php-fpm" {
     "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/6.x/images/bay-php/Dockerfile.fpm"
   }
 }
+target "php-fpm-exporter" {
+  inherits = ["docker-metadata-action"]
+  context       = "${CONTEXT}/php-fpm-exporter"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+
+  labels = {
+    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/6.x/images/bay-php-exporter/Dockerfile"
+  }
+}
 target "ripple-static" {
   inherits = ["docker-metadata-action"]
   context       = "${CONTEXT}/ripple-static"
