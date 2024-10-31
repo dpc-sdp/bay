@@ -17,6 +17,7 @@ COPY redis-unavailable.services.yml /bay
 COPY redis-cluster.services.yml /bay
 COPY redis-single.services.yml /bay
 COPY settings.php /bay
+COPY log-fatals.php /bay
 
 # Change worker pool from dynamic to static. Change default value to 24.
 RUN sed -i "s/pm = dynamic/pm = static/" /usr/local/etc/php-fpm.d/www.conf

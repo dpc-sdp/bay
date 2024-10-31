@@ -42,6 +42,7 @@ COPY redis-unavailable.services.yml /bay
 COPY redis-cluster.services.yml /bay
 COPY redis-single.services.yml /bay
 COPY settings.php /bay
+COPY log-fatals.php /bay
 COPY db-build.sh /bay
 COPY db-dump-sanitized.sh /bay
 COPY mtk /bay/mtk
