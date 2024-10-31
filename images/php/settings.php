@@ -21,6 +21,11 @@ $settings_path = $app_root . DIRECTORY_SEPARATOR . 'sites/default';
 $contrib_path = $app_root . DIRECTORY_SEPARATOR . (is_dir('modules/contrib') ? 'modules/contrib' : 'modules');
 $lagoon_env_type = getenv('LAGOON_ENVIRONMENT_TYPE') ?: 'local';
 
+// Feature flag that enables some enhanced logging of fatal errors.
+if (getenv('BAY_PHP_FATAL_LOGS') == "true") {
+  include $bay_settings_path . '/log-fatals.php';
+}
+
 // Database connection.
 $connection_info = [
   'driver' => 'mysql',
