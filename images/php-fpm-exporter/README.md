@@ -1,6 +1,6 @@
-# # Container Image - php-fpm-metrics
+# # Container Image - php-fpm-exporter
 
-Provides a [php-fpm-metrics](https://github.com/hipages/php-fpm_exporter/) image.
+Provides a [php-fpm-exporter](https://github.com/hipages/php-fpm_exporter/) image.
 
 ## Usage
 
