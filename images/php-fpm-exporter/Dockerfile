@@ -2,6 +2,7 @@ FROM golang:latest as builder
 RUN git clone https://github.com/hipages/php-fpm_exporter.git /workspace
 WORKDIR /workspace
 RUN make deps
+ENV CGO_ENABLED=0
 RUN TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}; \
     GOOS=${TARGETPLATFORM%%/*} GOARCH=${TARGETPLATFORM#*/} go build -o php-fpm-exporter -ldflags='-extldflags "-static"' .
 
