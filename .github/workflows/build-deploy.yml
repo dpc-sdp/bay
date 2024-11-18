@@ -36,12 +36,11 @@ jobs:
       - uses: actions/checkout@v3
         if: |-
           github.event.pull_request.merged == true || 
-          contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name)
+          contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) || 
+          github.event_name == 'pull_request' && startsWith(github.head_ref,'build/')
 
       - uses: actions/checkout@v3
-        if: |-
-          github.event_name == 'pull_request' && startsWith(github.head_ref,'build/') ||
-          ( github.event.issue.pull_request && contains(github.event.comment.body, '/build') )
+        if: ( github.event.issue.pull_request && contains(github.event.comment.body, '/build') )
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
 
