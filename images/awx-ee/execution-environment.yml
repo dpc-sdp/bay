@@ -95,6 +95,3 @@ additional_build_steps:
         && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
         && apt update \
         && DEBIAN_FRONTEND=noninteractive apt install gh -y
-    # @todo remove this once following issue resolved
-    # https://github.com/Azure/azure-cli/issues/30102#issuecomment-2427682019
-    - RUN pip install --force-reinstall -v "azure-mgmt-rdbms==10.2.0b17"
