@@ -3,9 +3,12 @@ FROM php:${PHP_VERSION}-cli-alpine AS php-cli
 FROM ghcr.io/skpr/mtk:v2.1.0 AS mtk
 FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
+# Remove unnecessary packages that increase our attack surface area.
+RUN apk del postgresql-client
+
 ARG GOJQ_VERSION=0.12.16
 ARG DOCKERIZE_VERSION=v0.8.0
-ARG BAY_CLI_VERSION=v1.1.3
+ARG BAY_CLI_VERSION=v1.1.5
 
 COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
 ENV WEBROOT=docroot
