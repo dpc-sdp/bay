@@ -2,7 +2,7 @@ ARG PHP_VERSION=8.3
 FROM ghcr.io/dpc-sdp/bay/php-fpm-exporter:6.x AS php-fpm-exporter
 FROM uselagoon/php-${PHP_VERSION}-fpm:latest
 
-ARG BAY_CLI_VERSION=v1.1.3
+ARG BAY_CLI_VERSION=v1.1.5
 
 RUN mkdir /bay
 COPY 01-bay.ini /usr/local/etc/php/conf.d/
