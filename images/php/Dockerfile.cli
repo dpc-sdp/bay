@@ -8,7 +8,7 @@ RUN apk del postgresql-client
 
 ARG GOJQ_VERSION=0.12.16
 ARG DOCKERIZE_VERSION=v0.8.0
-ARG BAY_CLI_VERSION=v1.1.5
+ARG BAY_CLI_VERSION=v1.2.0
 
 COPY --from=php-cli /usr/local/bin/phpdbg /usr/local/bin/
 ENV WEBROOT=docroot
