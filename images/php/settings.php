@@ -157,6 +157,9 @@ if (strtolower(getenv('ENABLE_SMTP')) === "true") {
   // @see baywatch.module for SMTP_REPLYTO setting.
   $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@dpc.vic.gov.au';
 }
+else {
+  $config['system.mail']['interface']['default'] = 'php_mail';
+}
 
 /**
  * Fast 404 settings.
