@@ -33,7 +33,7 @@ additional_build_steps:
     - ARG GOJQ_VERSION="0.12.17"
     - ARG HELM_VERSION="3.16.3"
     - ARG YAMLFMT_VERSION="0.13.0"
-    - ARG KUBECTL_VERSION="1.31.0"
+    - ARG KUBECTL_VERSION="1.32.0"
 
   append_final:
     - | # Required dependencies.
