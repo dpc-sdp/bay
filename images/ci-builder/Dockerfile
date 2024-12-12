@@ -1,9 +1,9 @@
 FROM hashicorp/terraform:latest AS terraform
 FROM php:8.3-cli-alpine
 ARG AHOY_VERSION=2.2.0
-ARG GOJQ_VERSION=0.12.16
+ARG GOJQ_VERSION=0.12.17
 ARG HUB_VERSION=2.14.2
-ARG LAGOON_CLI_VERSION=0.21.3
+ARG LAGOON_CLI_VERSION=0.31.2
 
 # Ensure temp files dont end up in image.
 VOLUME /tmp
