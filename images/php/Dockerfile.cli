@@ -6,7 +6,7 @@ FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 # Remove unnecessary packages that increase our attack surface area.
 RUN apk del postgresql-client
 
-ARG GOJQ_VERSION=0.12.16
+ARG GOJQ_VERSION=0.12.17
 ARG DOCKERIZE_VERSION=v0.8.0
 ARG BAY_CLI_VERSION=v1.2.0
 
