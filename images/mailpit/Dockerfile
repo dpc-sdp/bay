@@ -3,7 +3,7 @@
 #
 
 FROM alpine:latest
-ARG MAILPIT_VERSION=1.20.2
+ARG MAILPIT_VERSION=1.21.6
 
 # Install ca-certificates, required for the "release message" feature:
 RUN apk --no-cache add \
