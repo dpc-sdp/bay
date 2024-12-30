@@ -14,7 +14,7 @@ VOLUME /tmp
 COPY --from=terraform /bin/terraform /bin/terraform
 
 # Install sumocli.
-COPY --from=sumocli /bin/sumocli /bin/sumocli
+COPY --from=sumocli /sumocli /bin/sumocli
 
 RUN apk add --update --no-cache \
     ansible \
