@@ -31,8 +31,8 @@ additional_build_steps:
     - ARG COMPOSER_VERSION="2.7.7"
     - ARG HUB_VERSION="2.14.2"
     - ARG GOJQ_VERSION="0.12.17"
-    - ARG HELM_VERSION="3.16.3"
-    - ARG YAMLFMT_VERSION="0.14.0"
+    - ARG HELM_VERSION="3.17.0"
+    - ARG YAMLFMT_VERSION="0.15.0"
     - ARG KUBECTL_VERSION="1.32.0"
 
   append_final:
