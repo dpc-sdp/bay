@@ -186,7 +186,6 @@ if (strtolower(getenv('ENABLE_SMTP')) === "true") {
       })($region, $aws_key);
     }
   }
-  var_dump($config['smtp.settings']);
 }
 else {
   $config['system.mail']['interface']['default'] = 'php_mail';
