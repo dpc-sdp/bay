@@ -155,7 +155,37 @@ if (strtolower(getenv('ENABLE_SMTP')) === "true") {
   $config['smtp.settings']['smtp_allowhtml'] = 1;
 
   // @see baywatch.module for SMTP_REPLYTO setting.
-  $config['system.site']['mail'] = getenv('SMTP_FROM') ?: 'admin@dpc.vic.gov.au';
+  $config['system.site']['mail'] = getenv('SMTP_FROM') ?: sprintf("%s.%s@sdp.delivery", getenv('LAGOON_ENVIRONMENT'), getenv('LAGOON_PROJECT'));
+  
+  // If no SMTP_PASSWORD value set, derive from the AWS API keys.
+  if (empty($config['smtp.settings']['smtp_password']) &&
+    str_contains($config['smtp.settings']['smtp_host'], "amazonaws.com")) {
+    if ($aws_key = getenv('AWS_SECRET_ACCESS_KEY')) {
+      // Parse the region out of the smtp host.
+      $parts = explode('.', $config['smtp.settings']['smtp_host']);
+      $region = $parts[1];
+      
+      $config['smtp.settings']['smtp_username'] = getenv('AWS_ACCESS_KEY_ID');
+      $config['smtp.settings']['smtp_password'] = (function(string $region, string $awsSecretAccessKey): string {
+        // Adapted from AWS SDK.
+        // @see https://github.com/aws/aws-sdk-php/blob/a63e79c15a972c54bf015a16cce3f3572e0c8221/src/Ses/SesClient.php#L195
+        $date = "11111111";
+        $service = "ses";
+        $terminal = "aws4_request";
+        $message = "SendRawEmail";
+        $version = 0x04;
+        
+        $signature = hash_hmac('sha256', $date, "AWS4" . $awsSecretAccessKey, true);
+        $signature = hash_hmac('sha256', $region, $signature, true);
+        $signature = hash_hmac('sha256', $service, $signature, true);
+        $signature = hash_hmac('sha256', $terminal, $signature, true);
+        $signature = hash_hmac('sha256', $message, $signature, true);
+        $signatureAndVersion = pack('c', $version) . $signature;
+        
+        return  base64_encode($signatureAndVersion);
+      })($region, $aws_key);
+    }
+  }
 }
 else {
   $config['system.mail']['interface']['default'] = 'php_mail';
