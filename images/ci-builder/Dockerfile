@@ -73,8 +73,7 @@ RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/
     chmod +x /usr/local/bin/ahoy && \
     ahoy --version
 
-# Install bats and shellcheck.
-RUN npm install -g bats@1.10.0
+# Install shellcheck.
 RUN apk add --no-cache shellcheck
 
 # Cleanup tmp when we're done.
