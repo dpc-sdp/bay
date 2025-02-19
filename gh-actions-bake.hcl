@@ -95,3 +95,15 @@ target "awx-ee" {
         PKGMGR = "/usr/bin/apt-get"
     }
 }
+
+target "php-fpm-exporter" {
+  inherits = ["docker-metadata-action"]
+  context       = "${CONTEXT}/php-fpm-exporter"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+
+  labels = {
+    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/5.x/images/bay-php-exporter/Dockerfile"
+  }
+}
