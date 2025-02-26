@@ -15,6 +15,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
+
 jobs:
   buildx:
     if: |-
@@ -50,6 +51,12 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
+
+      - name: Verify Docker Login and User Info
+        run: |
+          echo "Docker Info - Verifying user and login status"
+          docker info
+          # curl -s -I https://ghcr.io/v2/${{ github.repository }}/manifests/latest | grep -i 'X-RateLimit'
 
       - name: Extract Docker metadata
         id: meta
