@@ -46,6 +46,7 @@ jobs:
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
 
+      # GitHub Container Registry Login (this remains as is)
       - name: Login to registry ${{ env.REGISTRY }}
         uses: docker/login-action@v2.2.0
         with:
@@ -53,7 +54,12 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
-      # Docker Hub Login 
+      # Verify Docker Login and User Info (after GitHub Container Registry login)
+      - name: Verify Docker Info - GitHub Registry
+        run: |
+          echo "Docker Info - Verifying user and login status for GitHub Container Registry"
+          docker info
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2.2.0
         with:
@@ -61,11 +67,11 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}  # Add secret for Docker Hub username
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}  # Add secret for Docker Hub password
 
-      - name: Verify Docker Login and User Info
+      # Verify Docker Login and User Info (after Docker Hub login)
+      - name: Verify Docker Info - Docker Hub
         run: |
-          echo "Docker Info - Verifying user and login status"
+          echo "Docker Info - Verifying user and login status for Docker Hub"
           docker info
-          # curl -s -I https://ghcr.io/v2/${{ github.repository }}/manifests/latest | grep -i 'X-RateLimit'
 
       - name: Extract Docker metadata
         id: meta
