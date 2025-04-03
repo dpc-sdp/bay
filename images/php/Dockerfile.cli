@@ -49,6 +49,7 @@ COPY log-fatals.php /bay
 COPY db-build.sh /bay
 COPY db-dump-sanitized.sh /bay
 COPY mtk /bay/mtk
+COPY drush.yml /home/.drush/drush.yml
 
 # Provide a separate environment variable to configure the php cli memory limit.
 ENV PHP_CLI_MEMORY_LIMIT=1024M
