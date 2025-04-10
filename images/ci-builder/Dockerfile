@@ -37,10 +37,10 @@ RUN apk add --update --no-cache \
     python3-dev
 
 ## Install GitHub CLI tool.
-RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-386-${HUB_VERSION}.tgz" -o /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
-    tar -C /tmp -xzvf /tmp/hub-linux-386-${HUB_VERSION}.tgz && \
-    chmod +x /tmp/hub-linux-386-${HUB_VERSION}/bin/hub && \
-    mv /tmp/hub-linux-386-${HUB_VERSION}/bin/hub /usr/local/bin
+RUN curl -sL "https://github.com/mislav/hub/releases/download/v${HUB_VERSION}/hub-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')-${HUB_VERSION}.tgz" -o /tmp/hub.tgz && \
+    tar -C /tmp -xzvf /tmp/hub.tgz && \
+    mv /tmp/hub-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')-${HUB_VERSION}/bin/hub /usr/local/bin && \
+    chmod 755 /usr/local/bin
 
 ## Install required PHP extensions for Drupal and python packages.
 RUN apk add --no-cache \
