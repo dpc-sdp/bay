@@ -406,7 +406,9 @@ if (file_exists($deployment_metadata_path)) {
     $sha_full = $deployment_data['deployment']['sha'] ?? '';
     $short_sha = substr($sha_full, 0, 7);
     $tag = $deployment_data['deployment']['tag'] ?? '';
-    $label = ($tag !== 'No tag found') ? "$tag ($short_sha)" : $short_sha;
+    $msg = $deployment_data['deployment']['msg'] ?? 'Automated commit for release SDP Release';
+    $authorName = $deployment_data['deployment']['authorName'] ?? 'Deploy+User';
+    $label = ($tag !== 'No tag found') ? "$msg - $authorName ($short_sha)" : $short_sha;
 
     $config['environment_indicator.indicator']['name'] = "Deployed: $label";
     $config['environment_indicator.indicator']['bg_color'] = '#fff176';
