@@ -395,3 +395,23 @@ if (getenv('LAGOON_GIT_SAFE_BRANCH')) {
     $settings['container_yamls'][] = $settings_path . '/branch/' . getenv('LAGOON_GIT_SAFE_BRANCH') . '/services.yml';
   }
 }
+
+// Add environment indicator to Tide projects
+$deployment_metadata_path = '/app/deployment-metadata.json';
+if (file_exists($deployment_metadata_path)) {
+  $metadata_json = file_get_contents($deployment_metadata_path);
+  $deployment_data = json_decode($metadata_json, true);
+
+  if (!empty($deployment_data['deployment'])) {
+    $sha_full = $deployment_data['deployment']['sha'] ?? '';
+    $short_sha = substr($sha_full, 0, 7);
+    $tag = $deployment_data['deployment']['tag'] ?? '';
+    $msg = $deployment_data['deployment']['msg'] ?? 'Automated commit for release SDP Release';
+    $authorName = $deployment_data['deployment']['authorName'] ?? 'Deploy+User';
+    $label = ($tag !== 'No tag found') ? "$msg - $authorName ($short_sha)" : $short_sha;
+
+    $config['environment_indicator.indicator']['name'] = "Deployed: $label";
+    $config['environment_indicator.indicator']['bg_color'] = '#fff176';
+    $config['environment_indicator.indicator']['fg_color'] = '#000000';
+  }
+}
