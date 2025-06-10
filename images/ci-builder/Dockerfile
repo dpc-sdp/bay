@@ -5,6 +5,7 @@ ARG AHOY_VERSION=2.2.0
 ARG GOJQ_VERSION=0.12.17
 ARG HUB_VERSION=2.14.2
 ARG LAGOON_CLI_VERSION=0.31.2
+ARG SHIPSHAPE_VERSION=1.0.0-alpha.1.5.1
 
 # Ensure temp files dont end up in image.
 VOLUME /tmp
@@ -72,6 +73,10 @@ RUN curl -L https://github.com/itchyny/gojq/releases/download/v${GOJQ_VERSION}/g
 RUN curl -L -o "/usr/local/bin/ahoy" "https://github.com/ahoy-cli/ahoy/releases/download/v${AHOY_VERSION}/ahoy-bin-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')" && \
     chmod +x /usr/local/bin/ahoy && \
     ahoy --version
+
+# Install shipshape.
+RUN curl -L -o /usr/local/bin/shipshape https://github.com/salsadigitalauorg/shipshape/releases/download/v${SHIPSHAPE_VERSION}/shipshape-$(uname -s)-$(uname -m) && \
+    chmod +x /usr/local/bin/shipshape
 
 # Install shellcheck.
 RUN apk add --no-cache shellcheck
