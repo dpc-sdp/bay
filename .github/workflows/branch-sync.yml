@@ -1,0 +1,59 @@
+name: Merge 6.x into 7.x
+
+on:
+  push:
+    branches:
+      - "6.x"
+
+concurrency:
+  group: merge-6x-to-7x
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  # Update from v3 to v4
+        with:
+          fetch-depth: 0  # Fetch all history for better merging
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull latest changes
+        run: |
+          git fetch origin
+          git checkout 6.x
+          git pull origin 6.x
+
+      - name: Check for conflicts
+        id: check_conflicts
+        run: |
+          git fetch origin 7.x
+          if git merge-tree $(git merge-base 6.x 7.x) 6.x 7.x | grep -q "^<<<<<<< "; then
+            echo "has_conflicts=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_conflicts=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create a pull request from 6.x to 7.x
+        if: steps.check_conflicts.outputs.has_conflicts == 'false'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: 7.x
+          head: 6.x
+          title: "Merge 6.x into 7.x"
+          body: >
+            This pull request merges changes from the `6.x` branch into the `7.x` branch.
+          branch: auto/merge-6.x-into-7.x
+          labels: merge, automated
+          draft: false
+          auto-merge: true
