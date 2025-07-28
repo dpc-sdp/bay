@@ -1,6 +1,7 @@
 name: Merge 6.x into 7.x
 
 on:
+  workflow_dispatch: {}
   schedule:
     - cron: '0 23 * * 0'  # Run every Sunday at 11 PM UTC (Monday 9 AM AEST)
 
