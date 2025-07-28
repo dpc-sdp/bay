@@ -49,7 +49,7 @@ jobs:
           git push origin temp-sync-branch --force
 
       - name: Create a pull request from sync branch to 7.x
-        if: env.NO_CHANGES != 'true' && steps.check_conflicts.outputs.has_conflicts == 'false'
+        if: env.NO_CHANGES != 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -65,13 +65,8 @@ jobs:
           sign-commits: true
 
       - name: Enable auto-merge
-        if: env.NO_CHANGES != 'true' && steps.check_conflicts.outputs.has_conflicts == 'false'
+        if: env.NO_CHANGES != 'true'
         run: |
           gh pr merge temp-sync-branch --auto --merge
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Notify about conflicts
-        if: env.NO_CHANGES != 'true' && steps.check_conflicts.outputs.has_conflicts == 'true'
-        run: |
-          echo "::warning::Potential conflicts detected when syncing changes from 6.x to 7.x. Manual intervention required."
