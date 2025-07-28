@@ -2,7 +2,7 @@ name: Merge 6.x into 7.x
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight UTC
+    - cron: '0 23 * * 0'  # Run every Sunday at 11 PM UTC (Monday 9 AM AEST)
 
 concurrency:
   group: merge-6x-to-7x
