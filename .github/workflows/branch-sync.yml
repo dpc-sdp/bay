@@ -4,6 +4,9 @@ on:
   workflow_dispatch: {}
   schedule:
     - cron: '0 23 * * 0'  # Run every Sunday at 11 PM UTC (Monday 9 AM AEST)
+  push:
+    branches:
+      - 'feature/6.x-7.x-sync'
 
 permissions:
   contents: write
