@@ -41,8 +41,9 @@ jobs:
             exit 0
           fi
 
-          for commit in $COMMITS; do
-            git cherry-pick $commit || { echo "Cherry-pick failed"; exit 1; }
+          for COMMIT in $COMMITS; do
+            git log -1 --format=%s "${COMMIT}"
+            git cherry-pick "${COMMIT}" || { echo "Cherry-pick failed"; exit 1; }
           done
 
           git push origin temp-sync-branch --force
