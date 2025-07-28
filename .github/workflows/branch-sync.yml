@@ -48,17 +48,6 @@ jobs:
 
           git push origin temp-sync-branch --force
 
-      - name: Check for conflicts
-        if: env.NO_CHANGES != 'true'
-        id: check_conflicts
-        run: |
-          # Test if this would create conflicts with 7.x
-          if git diff --check; then
-            echo "has_conflicts=false" >> "${GITHUB_OUTPUT}"
-          else
-            echo "has_conflicts=true" >> "${GITHUB_OUTPUT}"
-          fi
-
       - name: Create a pull request from sync branch to 7.x
         if: env.NO_CHANGES != 'true' && steps.check_conflicts.outputs.has_conflicts == 'false'
         uses: peter-evans/create-pull-request@v7
