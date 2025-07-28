@@ -33,21 +33,18 @@ jobs:
 
           # Create a new sync branch from 7.x (target)
           git checkout -b temp-sync-branch origin/7.x
-          
-          # Cherry-pick or merge changes from 6.x that are not in 7.x
-          git checkout origin/6.x -- .
-          
-          # Check if there are any changes
-          if [[ -z $(git status --porcelain) ]]; then
+
+          # Find all 6.x commits not on 7.x and cherry-pick them
+          COMMITS=$(git log --reverse --pretty=format:"%H" origin/7.x..origin/6.x)
+          if [ -z "$COMMITS" ]; then
             echo "NO_CHANGES=true" >> "${GITHUB_ENV}"
             exit 0
           fi
-          
-          # Commit the changes to our temporary branch
-          git add .
-          git commit -m "Sync changes from 6.x to 7.x"
-          
-          # Push the sync branch
+
+          for commit in $COMMITS; do
+            git cherry-pick $commit || { echo "Cherry-pick failed"; exit 1; }
+          done
+
           git push origin temp-sync-branch --force
 
       - name: Check for conflicts
