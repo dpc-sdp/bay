@@ -46,8 +46,6 @@ jobs:
             git cherry-pick "${COMMIT}" || { echo "Cherry-pick failed"; exit 1; }
           done
 
-          git push origin temp-sync-branch --force
-
       - name: Create a pull request from sync branch to 7.x
         if: env.NO_CHANGES != 'true'
         uses: peter-evans/create-pull-request@v7
