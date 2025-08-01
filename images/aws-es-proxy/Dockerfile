@@ -1,0 +1,24 @@
+FROM golang:alpine AS build
+
+RUN apk add --no-cache git
+RUN git clone https://github.com/abutaha/aws-es-proxy.git /go/src/github.com/abutaha/aws-es-proxy
+WORKDIR /go/src/github.com/abutaha/aws-es-proxy
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o aws-es-proxy
+
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+WORKDIR /home/
+COPY --from=build /go/src/github.com/abutaha/aws-es-proxy/aws-es-proxy /usr/local/bin/
+COPY entrypoint.sh /entrypoint.sh
+RUN apk add --no-cache bash aws-cli
+
+ENV BAY_OPENSEARCH_ENDPOINT=
+ENV BAY_OPENSEARCH_ROLE=
+ENV BAY_OPENSEARCH_PROXY_TIMEOUT=60
+ENV BAY_OPENSEARCH_PROXY_FLAGS=
+ENV BAY_OPENSEARCH_PROXY_PORT=3000
+EXPOSE 3000
+
+ENTRYPOINT ["/entrypoint.sh"]
