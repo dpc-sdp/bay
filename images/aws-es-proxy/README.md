@@ -30,13 +30,14 @@ services:
 
 ## Environment Variables
 
-| Name                      | Default Value | Description                                                                                   |
-|---------------------------|--------------|-----------------------------------------------------------------------------------------------|
-| `BAY_OPENSEARCH_ENDPOINT` | _(required)_ | The AWS OpenSearch domain endpoint to proxy requests to.                                       |
-| `BAY_OPENSEARCH_ROLE`     | _(required)_ | The AWS IAM role to assume for accessing the OpenSearch domain.                                |
-| `BAY_OPENSEARCH_PROXY_PORT`    | `3000`       | The port that the proxy listens on, inside the container.                                      |
-| `BAY_OPENSEARCH_PROXY_TIMEOUT` | `60`         | Timeout (in seconds) for incoming connections.                                                 |
-| `BAY_OPENSEARCH_PROXY_FLAGS`   | (empty)      | Extra flags passed to aws-es-proxy (e.g., `-debug -verbose`). See [aws-es-proxy docs](https://github.com/abutaha/aws-es-proxy?tab=readme-ov-file#usage-example) for options. |
+| Name                      | Default Value | Description                                                     |
+|---------------------------|---------------|-----------------------------------------------------------------|
+| `BAY_OPENSEARCH_ENDPOINT` | _(required)_  | The AWS OpenSearch domain endpoint to proxy requests to.        |
+| `BAY_OPENSEARCH_ROLE`     | _(required)_  | The AWS IAM role to assume for accessing the OpenSearch domain. |
+| `BAY_OPENSEARCH_PROXY_PORT`    | `3000`        | The port that the proxy listens on, inside the container.       |
+| `BAY_OPENSEARCH_PROXY_TIMEOUT` | `60`          | Timeout (in seconds) for incoming connections.                  |
+| `BAY_OPENSEARCH_PROXY_VERBOSE` | `false`        | enables verbose logging                                         |
+| `BAY_OPENSEARCH_PROXY_DEBUG` |    `false`       | enables debug logging                                           |
 
 ### Example: Enabling Debug and Verbose Logging
 
