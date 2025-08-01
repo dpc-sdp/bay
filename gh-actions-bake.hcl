@@ -93,6 +93,15 @@ target "php-fpm-exporter" {
     "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/6.x/images/bay-php-exporter/Dockerfile"
   }
 }
+
+target "aws-es-proxy" {
+  inherits = ["docker-metadata-action"]
+  context       = "${CONTEXT}/aws-es-proxy"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+
+}
 target "ripple-static" {
   inherits = ["docker-metadata-action"]
   context       = "${CONTEXT}/ripple-static"
