@@ -14,10 +14,8 @@
 #                                 domain.
 #   BAY_OPENSEARCH_PROXY_PORT:    Port that the aws-es-proxy should bind to.
 #   BAY_OPENSEARCH_PROXY_TIMEOUT: Timeout for incoming connections.
-#   BAY_OPENSEARCH_PROXY_FLAGS:   See [aws-es-proxy docs](https://github.com/abutaha/aws-es-proxy?tab=readme-ov-file#usage-example)
-#                                 for supported options here.
-#
-# If verbose or debug logs are required, set env var BAY_OPENSEARCH_PROXY_FLAGS="-debug -verbose"
+#   BAY_OPENSEARCH_PROXY_VERBOSE: "true" to enable proxy verbose logs
+#   BAY_OPENSEARCH_PROXY_DEBUG:   "true" to enable proxy debug logs
 
 set -euo pipefail
 
@@ -33,11 +31,26 @@ if [ -z "${BAY_OPENSEARCH_ROLE:-}" ]; then
   exit 1
 fi
 
+# Configure debug and verbose flags
+AWS_ES_PROXY_DEBUG_FLAG=""
+AWS_ES_PROXY_VERBOSE_FLAG=""
+
+if [ "${BAY_OPENSEARCH_PROXY_DEBUG:-false}" = "true" ]; then
+  AWS_ES_PROXY_DEBUG_FLAG="-debug"
+fi
+
+if [ "${BAY_OPENSEARCH_PROXY_VERBOSE:-false}" = "true" ]; then
+  AWS_ES_PROXY_VERBOSE_FLAG="-verbose"
+fi
+
+
 # Ensure AWS credentials exist and are valid
 AWS_PAGER="" aws sts get-caller-identity || (echo "Error: AWS credentials invalid" && exit 1)
 
 # Rest of your script here
-aws-es-proxy "${BAY_OPENSEARCH_PROXY_FLAGS:-}" \
+aws-es-proxy \
+  ${AWS_ES_PROXY_DEBUG_FLAG} \
+  ${AWS_ES_PROXY_VERBOSE_FLAG} \
   -listen "0.0.0.0:${BAY_OPENSEARCH_PROXY_PORT:-3000}" \
   -timeout "${BAY_OPENSEARCH_PROXY_TIMEOUT:-60}" \
   -assume "${BAY_OPENSEARCH_ROLE}" \
