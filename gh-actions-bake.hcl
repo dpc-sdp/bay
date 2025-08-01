@@ -100,7 +100,9 @@ target "aws-es-proxy" {
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
-
+  labels = {
+    "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/6.x/images/aws-es-proxy/Dockerfile"
+  }
 }
 target "ripple-static" {
   inherits = ["docker-metadata-action"]
