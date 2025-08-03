@@ -51,7 +51,7 @@ AWS_PAGER="" aws sts get-caller-identity || (echo "Error: AWS credentials invali
 aws-es-proxy \
   ${AWS_ES_PROXY_DEBUG_FLAG} \
   ${AWS_ES_PROXY_VERBOSE_FLAG} \
-  -listen "0.0.0.0:${BAY_OPENSEARCH_PROXY_PORT:-3000}" \
+  -listen "0.0.0.0:${BAY_OPENSEARCH_PROXY_PORT:-9200}" \
   -timeout "${BAY_OPENSEARCH_PROXY_TIMEOUT:-60}" \
   -assume "${BAY_OPENSEARCH_ROLE}" \
   -endpoint "${BAY_OPENSEARCH_ENDPOINT}"

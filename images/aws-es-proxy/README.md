@@ -24,7 +24,7 @@ services:
       BAY_OPENSEARCH_ENDPOINT=https://your-opensearch-endpoint.amazonaws.com
       BAY_OPENSEARCH_ROLE=arn:aws:iam::123456789012:role/your-role 
     ports: 
-      - "3000:3000"
+      - "9200:9200"
 ```
 
 
@@ -34,10 +34,10 @@ services:
 |---------------------------|---------------|-----------------------------------------------------------------|
 | `BAY_OPENSEARCH_ENDPOINT` | _(required)_  | The AWS OpenSearch domain endpoint to proxy requests to.        |
 | `BAY_OPENSEARCH_ROLE`     | _(required)_  | The AWS IAM role to assume for accessing the OpenSearch domain. |
-| `BAY_OPENSEARCH_PROXY_PORT`    | `3000`        | The port that the proxy listens on, inside the container.       |
+| `BAY_OPENSEARCH_PROXY_PORT`    | `9200`        | The port that the proxy listens on, inside the container.       |
 | `BAY_OPENSEARCH_PROXY_TIMEOUT` | `60`          | Timeout (in seconds) for incoming connections.                  |
-| `BAY_OPENSEARCH_PROXY_VERBOSE` | `false`        | enables verbose logging                                         |
-| `BAY_OPENSEARCH_PROXY_DEBUG` |    `false`       | enables debug logging                                           |
+| `BAY_OPENSEARCH_PROXY_VERBOSE` | `false`       | enables verbose logging                                         |
+| `BAY_OPENSEARCH_PROXY_DEBUG` | `false`       | enables debug logging                                           |
 
 ### Example: Enabling Debug and Verbose Logging
 
@@ -47,7 +47,7 @@ BAY_OPENSEARCH_PROXY_FLAGS=-debug -verbose
 
 ## Ports
 
-- **3000** (default, can be customized with `BAY_OPENSEARCH_PROXY_PORT`) – Proxy HTTP port
+- **9200** (default, can be customized with `BAY_OPENSEARCH_PROXY_PORT`) – Proxy HTTP port
 
 ## Entrypoint
 
