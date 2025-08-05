@@ -7,7 +7,6 @@ EXPOSE 8080
 EXPOSE 50000
 
 COPY helpers/ /etc/nginx/helpers/
-COPY prepend/ /etc/nginx/conf.d/drupal/
 COPY content /etc/nginx/conf.d/drupal/content
 
 # Add server append directives.
