@@ -26,9 +26,7 @@ services:
 
 ## Environment Variables
 
-| Name | Default Value | Description |
-|------|---------------|-------------|
-| _None_ | _N/A_ | _All previous ingress protection variables have been removed._ |
+None.
 
 ## Ports
 
