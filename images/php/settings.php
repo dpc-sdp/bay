@@ -411,7 +411,5 @@ if (file_exists($deployment_metadata_path)) {
     $label = ($tag !== 'No tag found') ? "$msg - $authorName ($short_sha)" : $short_sha;
 
     $config['environment_indicator.indicator']['name'] = "Deployed: $label";
-    $config['environment_indicator.indicator']['bg_color'] = '#fff176';
-    $config['environment_indicator.indicator']['fg_color'] = '#000000';
   }
 }
