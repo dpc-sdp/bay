@@ -3,8 +3,7 @@ collections:
   - ansible.posix
   - ansible.utils
   - awx.awx
-  - community.general
-    source: https://galaxy.ansible.com
+  - name: community.general
     version: "11.1.2"
   - kubernetes.core
   - name: lagoon.api
