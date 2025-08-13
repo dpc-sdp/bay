@@ -4,6 +4,7 @@ collections:
   - ansible.utils
   - awx.awx
   - community.general
+    version: 11.1.2
   - kubernetes.core
   - name: lagoon.api
     source: https://github.com/salsadigitalauorg/lagoon_ansible_collection.git
