@@ -11,6 +11,13 @@ target "ci-builder" {
 
   platforms     = ["linux/amd64", "linux/arm64"]
 }
+target "opensearch" {
+  inherits = ["docker-metadata-action"]
+  context       = "${CONTEXT}/opensearch"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+}
 target "elasticsearch" {
   inherits = ["docker-metadata-action"]
   context       = "${CONTEXT}/elasticsearch"
