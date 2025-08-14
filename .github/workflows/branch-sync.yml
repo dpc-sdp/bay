@@ -44,7 +44,6 @@ jobs:
           fi
 
           # Paths that 7.x "owns" and should NOT be overridden by 6.x syncs.
-          # Start conservative; expand as you learn which ones regularly conflict.
           OWNED_PATHS_REGEX='^(images/ci-builder/Dockerfile|images/php/Dockerfile\.fpm|images/php/Dockerfile\.cli|images/awx-ee/execution-environment\.yml)$'
 
           HAD_SKIPS=false
