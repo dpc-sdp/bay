@@ -2,9 +2,13 @@ name: build-deploy-bay-images
 run-name: Build and deploy Bay images
 on:
   pull_request:
-    types: [closed, opened, synchronize]
+    types: 
+      - closed
+      - opened
+      - synchronize
   issue_comment:
-    types: [created]
+    types:
+      - created
   schedule:
     - cron: '23 20 * * 0'
   workflow_dispatch:
@@ -56,13 +60,14 @@ jobs:
           tags: |
             # PR images (not merged): pr-<num>
             type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
-            # Tag with the PR base branch name on merge (e.g., 6.x or 7.x)
+            # Tag with the PR base branch name on merge
             type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
-            # Manual/scheduled runs tag by branch ref (when the run targets 6.x or 7.x)
+            # Manual/scheduled runs tag by branch ref (for whichever release branch the run targets)
             type=ref,event=branch,enable=${{ contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) }}
             # Comment-triggered builds: pr-<num>
             type=raw,event=default,value=pr-${{ github.event.issue.number }},enable=${{ github.event.issue.pull_request != null }}
-            # --- explicit safety rails for branch tags ---
+            # Supported release branches
+            type=raw,value=5.x,enable=${{ github.ref == 'refs/heads/5.x' || github.event.pull_request.base.ref == '5.x' }}
             type=raw,value=6.x,enable=${{ github.ref == 'refs/heads/6.x' || github.event.pull_request.base.ref == '6.x' }}
             type=raw,value=7.x,enable=${{ github.ref == 'refs/heads/7.x' || github.event.pull_request.base.ref == '7.x' }}
             # Always add an immutable sha tag
