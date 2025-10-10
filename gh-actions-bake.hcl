@@ -20,7 +20,7 @@ target "opensearch" {
 }
 target "elasticsearch" {
   inherits = ["docker-metadata-action"]
-  context       = "${CONTEXT}/elasticsearch"
+  context       = "${CONTEXT}/opensearch"
   dockerfile    = "Dockerfile"
 
   platforms     = ["linux/amd64", "linux/arm64"]
