@@ -7,8 +7,8 @@ collections:
     version: "11.1.2"
   - kubernetes.core
   - name: lagoon.api
-    source: https://github.com/GROwen/lagoon_ansible_collection.git
-    version: patch-1
+    source: https://github.com/salsadigitalauorg/lagoon_ansible_collection.git
+    version: "2.2.4" 
     type: git
   - name: section.api
     source: https://github.com/salsadigitalauorg/section_ansible_collection.git
