@@ -4,6 +4,7 @@ RUN apk add --no-cache git
 RUN git clone https://github.com/abutaha/aws-es-proxy.git /go/src/github.com/abutaha/aws-es-proxy
 WORKDIR /go/src/github.com/abutaha/aws-es-proxy
 
+RUN go get -u && go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -o aws-es-proxy
 
 FROM alpine:latest
