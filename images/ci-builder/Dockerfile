@@ -3,7 +3,6 @@ FROM ghcr.io/dpc-sdp/sumocli:v0.11.1 AS sumocli
 FROM php:8.3-cli-alpine
 ARG AHOY_VERSION=2.4.0
 ARG GOJQ_VERSION=0.12.17
-ARG HUB_VERSION=2.14.2
 ARG LAGOON_CLI_VERSION=0.32.0
 ARG SHIPSHAPE_VERSION=1.0.0-alpha.1.5.1
 
@@ -36,12 +35,6 @@ RUN apk add --update --no-cache \
     py3-pip \
     python3 \
     python3-dev
-
-## Install GitHub CLI tool.
-RUN curl -sL "https://github.com/mislav/hub/releases/download/v${HUB_VERSION}/hub-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')-${HUB_VERSION}.tgz" -o /tmp/hub.tgz && \
-    tar -C /tmp -xzvf /tmp/hub.tgz && \
-    mv /tmp/hub-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')-${HUB_VERSION}/bin/hub /usr/local/bin && \
-    chmod 755 /usr/local/bin
 
 ## Install required PHP extensions for Drupal and python packages.
 RUN apk add --no-cache \

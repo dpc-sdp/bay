@@ -29,7 +29,6 @@ additional_build_steps:
     - ARG NVM_DIR="/runner/.nvm"
     - ARG PHP_VERSION="8.3"
     - ARG COMPOSER_VERSION="2.7.7"
-    - ARG HUB_VERSION="2.14.2"
     - ARG GOJQ_VERSION="0.12.17"
     - ARG HELM_VERSION="3.18.3"
     - ARG YAMLFMT_VERSION="0.17.2"
@@ -67,8 +66,6 @@ additional_build_steps:
 
     - RUN curl -L "https://github.com/uselagoon/lagoon-cli/releases/download/${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-linux-amd64" -o /usr/local/bin/lagoon
     - RUN chmod +x /usr/local/bin/lagoon
-    - RUN curl -L "https://github.com/github/hub/releases/download/v${HUB_VERSION}/hub-linux-amd64-${HUB_VERSION}.tgz" -o /tmp/hub && tar -xvf /tmp/hub -C /tmp && mv /tmp/hub-linux-amd64-${HUB_VERSION}/bin/hub /usr/local/bin
-    - RUN chmod +x /usr/local/bin/hub
     - RUN lagoon config feature --enable-local-dir-check false --force
     - RUN curl -sS "https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar" --output composer.phar
     - RUN chmod +x composer.phar
