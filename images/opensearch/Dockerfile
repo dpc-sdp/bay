@@ -5,5 +5,3 @@ RUN for plugin in \
   analysis-icu; do \
     /usr/share/opensearch/bin/opensearch-plugin install $plugin; \
   done
-
-COPY opensearch.yml /usr/share/opensearch/config
