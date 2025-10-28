@@ -364,7 +364,7 @@ if ($opensearch_profile == 'sdp-elastic') {
     'suffix' => '',
   ];
   $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = $endpoint;
-  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['prefix'] = sprintf('%s__pipeline_', $index_prefix);
+  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['prefix'] = sprintf('%s__sdp_data_pipelines_', $index_prefix);
 }
 
 
