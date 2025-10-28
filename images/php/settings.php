@@ -314,37 +314,60 @@ $config['clamav.settings']['scan_mode'] = $clamav_scan;
 $config['clamav.settings']['mode_daemon_tcpip']['hostname'] = $clamav_host;
 $config['clamav.settings']['mode_daemon_tcpip']['port'] = $clamav_port;
 
-// Configure elasticsearch connections from environment variables.
-if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
-} else {
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] =  "http://elasticsearch:9200";
-}
+$opensearch_profile = getenv('BAY_OPENSEARCH_PROFILE') ?: 'sdp-elastic';
+if ($opensearch_profile == 'sdp-elastic') {
+  // Configuration for legacy sdp-elastic integration.
+  // @todo remove this sdp-elastic block when all applications migrated to opensearch.
+  if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
+  } else {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = "http://elasticsearch:9200";
+  }
 
-if (getenv('SEARCH_INDEX')) {
+  if (getenv('SEARCH_INDEX')) {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['rewrite_index'] = 1;
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
+      'prefix' => getenv('SEARCH_INDEX'),
+      'suffix' => '',
+    ];
+  } else {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
+      'prefix' => 'elasticsearch_index_default_',
+      'suffix' => '',
+    ];
+  }
+
+  if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['username'] = getenv('SEARCH_AUTH_USERNAME');
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 1;
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
+  } else {
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
+  }
+  // Override data_pipelines url.
+  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
+} else {
+  // Configuration for bay opensearch integration.
+
+  // Connect to a proxy service that handles AWS IAM auth.
+  $endpoint = "http://aws-es-proxy:9200";
+
+  // Default index prefix looks like "${PROJECT}__${ENVIRONMENT}__". This can be overridden with BAY_OPENSEARCH_PREFIX.
+  $environment = getenv('LAGOON_ENVIRONMENT') ?: 'default';
+  $index_prefix = getenv('BAY_OPENSEARCH_PREFIX') ?: sprintf('%s__%s', getenv('LAGOON_PROJECT'), $environment);
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = $endpoint;
+  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = FALSE;
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['rewrite_index'] = 1;
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
-    'prefix' => getenv('SEARCH_INDEX'),
+    'prefix' => sprintf('%s__%s_', $index_prefix, "sapi"),
     'suffix' => '',
   ];
-} else {
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
-    'prefix' => 'elasticsearch_index_default_',
-    'suffix' => '',
-  ];
+  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = $endpoint;
+  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['prefix'] = sprintf('%s__pipeline_', $index_prefix);
 }
 
-if (getenv('SEARCH_AUTH_USERNAME') && getenv('SEARCH_AUTH_PASSWORD')) {
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['username'] = getenv('SEARCH_AUTH_USERNAME');
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['password'] = getenv('SEARCH_AUTH_PASSWORD');
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 1;
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['authentication_type'] = 'Basic';
-} else {
-  $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = 0;
-}
 
-// Override data_pipelines url.
-$config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) ? sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL')) : "http://elasticsearch:9200";
 
 // Configure tide_logs.
 if (getenv('TIDE_LOGS_UDPLOG_HOST')) {
