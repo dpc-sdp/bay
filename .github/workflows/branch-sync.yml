@@ -26,6 +26,7 @@ jobs:
 
 
       - name: Create a pull request from sync branch to 7.x
+        id: create-pr
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,3 +40,19 @@ jobs:
           labels: sync, automated
           draft: false
           sign-commits: true
+
+
+      - name: Send Slack notification
+        id: notify_slack
+        uses: slackapi/slack-github-action@v2.1.1
+        if: steps.create-pr.outputs.exitcode > 0
+        env:
+          REPO_NAME: ${{ github.repository }}
+          REPO_URL: ${{ github.event.repository.html_url }}
+          LINK: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SDP_PLATFORM_SLACK_TOKEN }}
+          payload: |
+            channel: ${{ secrets.SLACK_CHANNEL_ID }}
+            text: "GitHub Action - ${{ github.action }} failed. \n${{ env.LINK }}"
