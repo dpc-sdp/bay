@@ -25,7 +25,7 @@ RUN apk add --update --no-cache \
     docker \
     docker-compose \
     git \
-    github-cli
+    github-cli \
     libffi-dev \
     musl-dev \
     ncurses \
