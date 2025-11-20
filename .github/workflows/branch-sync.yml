@@ -76,10 +76,9 @@ jobs:
           REPO_URL: ${{ github.event.repository.html_url }}
           LINK: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
-          method: chat.postMessage
-          token: ${{ secrets.SDP_PLATFORM_SLACK_TOKEN }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
           payload: |
-            channel: ${{ secrets.SLACK_CHANNEL_ID }}
             text: "GitHub Action - ${{ github.action }} requires manual intervention. \n${{ env.LINK }}"
             blocks:
               - type: "section"
@@ -97,8 +96,8 @@ jobs:
           REPO_URL: ${{ github.event.repository.html_url }}
           LINK: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
-          method: chat.postMessage
-          token: ${{ secrets.SDP_PLATFORM_SLACK_TOKEN }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
             text: "GitHub Action - ${{ github.action }} failed. \n${{ env.LINK }}"
