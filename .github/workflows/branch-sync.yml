@@ -44,8 +44,11 @@ jobs:
           
           if [[ $no_diff == "true" ]]; then
             echo "There are no commits between the base and HEAD branches." >> $GITHUB_STEP_SUMMARY
-            $COMMAND_STATUS=0  
+            TEST_VAR=0
+            echo "test_var=$TEST_VAR" >> "$GITHUB_OUTPUT"
+            COMMAND_STATUS=0
           
+          echo "command_status=$COMMAND_STATUS" >> "$GITHUB_OUTPUT"
           exit $COMMAND_STATUS
         shell: bash
         env:
@@ -95,15 +98,15 @@ jobs:
                   text: "${{ github.workflow }} needs conflicts resolved." 
           
 
-      - name: Send Slack notification if PR creation failed for a reason other than "no commits"
-        id: notify_slack_failed
-        uses: slackapi/slack-github-action@v2.1.1
-        if: always() && (steps.create-pr.conclusion == 'failure' || env.FAILED)
-        env:
-          LINK: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "GitHub Action ${{ github.workflow }} failed. \n${{ env.LINK }}"
+#      - name: Send Slack notification if PR creation failed for a reason other than "no commits"
+#        id: notify_slack_failed
+#        uses: slackapi/slack-github-action@v2.1.1
+#        if: never() && (steps.create-pr.conclusion == 'failure' || env.FAILED)
+#        env:
+#          LINK: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
+#        with:
+#          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+#          webhook-type: incoming-webhook
+#          payload: |
+#            channel: ${{ secrets.SLACK_CHANNEL_ID }}
+#            text: "GitHub Action ${{ github.workflow }} failed. \n${{ env.LINK }}"
