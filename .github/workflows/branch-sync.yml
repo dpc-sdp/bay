@@ -44,23 +44,21 @@ jobs:
           
           if [[ $no_diff == "true" ]]; then
             echo "There are no commits between the base and HEAD branches." >> $GITHUB_STEP_SUMMARY
-            TEST_VAR=0
-            echo "test_var=$TEST_VAR" >> "$GITHUB_OUTPUT"
             COMMAND_STATUS=0
           fi
           
           echo "no_diff=$no_diff" >> "$GITHUB_OUTPUT"
-          echo "command_status=$COMMAND_STATUS" >> "$GITHUB_OUTPUT"
+          
           exit $COMMAND_STATUS
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: If successful set PR number to env var
-        if: steps.create-pr.conclusion == 'success'
+        if: steps.create-pr.conclusion == 'success' && !steps.create-pr.outputs.no_diff
         run: |
           output="${{ steps.create-pr.outputs.stdout }}"
-          pr=$(echo $output | grep -o "https.*[0-9]" | cut -d "/" -f 7)
+          pr=$(echo $output | grep -o "^https.*[0-9]" | cut -d "/" -f 7)
           echo "PR_NUMBER=$pr" >> $GITHUB_ENV
 
       - name: Successful, check for conflicts
@@ -70,17 +68,6 @@ jobs:
           echo "CONFLICTS=$conflicts" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: If unsuccessful parse response
-        if: always() && steps.create-pr.conclusion == 'failure'
-        run: |
-          output="${{ steps.create-pr.outputs.stdout }}"
-          no_diff=$(echo "$output" | grep -q "No commits" && echo "true" || echo "false")
-          if [[ $no_diff == "true" ]]; then
-            echo "There are no commits between the base and HEAD branches." >> $GITHUB_STEP_SUMMARY
-          else
-            echo "FAILED=true" >> $GITHUB_ENV
-          fi
 
       - name: Send Slack notification if pr created but conflicts exist
         id: notify_slack_conflicts
@@ -100,15 +87,15 @@ jobs:
                   text: "${{ github.workflow }} needs conflicts resolved." 
           
 
-#      - name: Send Slack notification if PR creation failed for a reason other than "no commits"
-#        id: notify_slack_failed
-#        uses: slackapi/slack-github-action@v2.1.1
-#        if: never() && (steps.create-pr.conclusion == 'failure' || env.FAILED)
-#        env:
-#          LINK: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
-#        with:
-#          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-#          webhook-type: incoming-webhook
-#          payload: |
-#            channel: ${{ secrets.SLACK_CHANNEL_ID }}
-#            text: "GitHub Action ${{ github.workflow }} failed. \n${{ env.LINK }}"
+      - name: Send Slack notification if PR creation failed for a reason other than "no commits"
+        id: notify_slack_failed
+        uses: slackapi/slack-github-action@v2.1.1
+        if: always() && (steps.create-pr.conclusion == 'failure' && !steps.create-pr.outputs.no_diff)
+        env:
+          LINK: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            channel: ${{ secrets.SLACK_CHANNEL_ID }}
+            text: "GitHub Action ${{ github.workflow }} failed. \n${{ env.LINK }}"
