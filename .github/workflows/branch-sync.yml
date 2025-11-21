@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          ref: 7.x
+          ref: 6.x
 
       - name: Set ownership of the workspace
         run: chown -R $(id -u):$(id -g) $PWD
