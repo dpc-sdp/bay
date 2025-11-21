@@ -40,6 +40,8 @@ jobs:
           echo $output | tee -a "$GITHUB_OUTPUT"
           ( echo ; echo "EOF" ) | tee -a "$GITHUB_OUTPUT"
           
+          echo "no_diff=$no_diff" >> "$GITHUB_OUTPUT"
+          
           if [[ $no_diff == "true" ]]; then
             echo "There are no commits between the base and HEAD branches." >> $GITHUB_STEP_SUMMARY
             $COMMAND_STATUS=0  
