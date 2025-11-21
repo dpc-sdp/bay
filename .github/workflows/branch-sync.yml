@@ -72,32 +72,28 @@ jobs:
         uses: slackapi/slack-github-action@v2.1.1
         if: always() && env.CONFLICTS
         env:
-          REPO_NAME: ${{ github.repository }}
-          REPO_URL: ${{ github.event.repository.html_url }}
-          LINK: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          LINK: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "GitHub Action - ${{ github.action }} requires manual intervention. \n${{ env.LINK }}"
+            text: "GitHub Action - ${{ github.workflow }} requires manual intervention. \n${{ env.LINK }}"
             blocks:
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: "${{ github.action }} needs conflicts resolved." 
+                  text: "${{ github.workflow }} needs conflicts resolved." 
           
 
-      - name: Send Slack notification if pr creation failed for a reason other than "no commits"
+      - name: Send Slack notification if PR creation failed for a reason other than "no commits"
         id: notify_slack_failed
         uses: slackapi/slack-github-action@v2.1.1
         if: always() && (steps.create-pr.conclusion == 'failure' || env.FAILED)
         env:
-          REPO_NAME: ${{ github.repository }}
-          REPO_URL: ${{ github.event.repository.html_url }}
-          LINK: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          LINK: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "GitHub Action - ${{ github.action }} failed. \n${{ env.LINK }}"
+            text: "GitHub Action ${{ github.workflow }} failed. \n${{ env.LINK }}"
