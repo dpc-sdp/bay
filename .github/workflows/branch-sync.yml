@@ -53,7 +53,7 @@ jobs:
         if: env.PR_NUMBER
         run: |
           conflicts=$(gh pr view ${{ env.PR_NUMBER }} --json mergeStateStatus --jq 'if .mergeStateStatus == "DIRTY" then true else false end')
-          echo "CONFLICTS=$conflicts >> $GITHUB_ENV
+          echo "CONFLICTS=$conflicts" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
