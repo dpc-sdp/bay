@@ -47,6 +47,7 @@ jobs:
             TEST_VAR=0
             echo "test_var=$TEST_VAR" >> "$GITHUB_OUTPUT"
             COMMAND_STATUS=0
+          fi
           
           echo "no_diff=$no_diff" >> "$GITHUB_OUTPUT"
           echo "command_status=$COMMAND_STATUS" >> "$GITHUB_OUTPUT"
