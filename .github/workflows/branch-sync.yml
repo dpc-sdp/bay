@@ -38,6 +38,7 @@ jobs:
           ( echo ; echo "EOF" ) | tee -a "$GITHUB_OUTPUT"
           exit $COMMAND_STATUS
         shell: bash
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
