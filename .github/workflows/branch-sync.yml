@@ -55,7 +55,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: If successful set PR number to env var
-        if: steps.create-pr.conclusion == 'success' && !steps.create-pr.outputs.no_diff
+        if: steps.create-pr.conclusion == 'success' && steps.create-pr.outputs.no_diff != 'false'
         run: |
           output="${{ steps.create-pr.outputs.stdout }}"
           pr=$(echo $output | grep -o "^https.*[0-9]" | cut -d "/" -f 7)
@@ -90,7 +90,7 @@ jobs:
       - name: Send Slack notification if PR creation failed for a reason other than "no commits"
         id: notify_slack_failed
         uses: slackapi/slack-github-action@v2.1.1
-        if: always() && (steps.create-pr.conclusion == 'failure' && !steps.create-pr.outputs.no_diff)
+        if: always() && (steps.create-pr.conclusion == 'failure' && steps.create-pr.outputs.no_diff != 'false')
         env:
           LINK: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
         with:
