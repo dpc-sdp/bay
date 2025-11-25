@@ -1,6 +1,6 @@
 FROM hashicorp/terraform:latest AS terraform
 FROM ghcr.io/dpc-sdp/sumocli:v0.11.1 AS sumocli
-FROM php:8.3-cli-alpine
+FROM php:8.4-cli-alpine
 ARG AHOY_VERSION=2.4.0
 ARG GOJQ_VERSION=0.12.17
 ARG LAGOON_CLI_VERSION=0.32.0
