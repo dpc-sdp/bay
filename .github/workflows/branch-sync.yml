@@ -58,7 +58,7 @@ jobs:
         run: |
           output="${{ steps.create-pr.outputs.stdout }}"
           pr_url=$(echo $output | grep -o "^https.*[0-9]")
-          pr=(echo $pr_url | cut -d "/" -f 7)
+          pr=$(echo $pr_url | cut -d "/" -f 7)
           
           echo "PR_URL=$pr_url" >> GITHUB_ENV
           echo "PR_NUMBER=$pr" >> $GITHUB_ENV
