@@ -1,5 +1,5 @@
 FROM uselagoon/node-24:latest
-ARG BAY_CLI_VERSION=v1.4.1
+ARG BAY_CLI_VERSION=v1.4.4
 
 
 RUN apk --update add curl git findutils openssh-client && \
