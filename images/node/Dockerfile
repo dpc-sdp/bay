@@ -1,4 +1,4 @@
-FROM uselagoon/node-20:latest
+FROM uselagoon/node-24:latest
 ARG BAY_CLI_VERSION=v1.4.1
 
 
