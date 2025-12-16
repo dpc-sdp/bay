@@ -18,7 +18,8 @@ RUN apk add --no-cache bash aws-cli
 
 RUN wget "https://github.com/dpc-sdp/uri-rewriter/releases/download/${URI_REWRITER_VERSION}/uri-rewriter_$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '_').tar.gz" -O /tmp/uri-rewriter.tgz && \
     cd /bin && \
-    tar -vxxzf /tmp/uri-rewriter.tgz
+    tar -vxxzf /tmp/uri-rewriter.tgz && \
+    rm -rf /tmp/uri-rewriter.tgz
 
 ENV BAY_OPENSEARCH_ENDPOINT=
 ENV BAY_OPENSEARCH_ROLE=
