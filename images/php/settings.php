@@ -321,7 +321,7 @@ if ($opensearch_profile == 'sdp-elastic') {
   if (getenv('SEARCH_HASH') && getenv('SEARCH_URL')) {
     $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = sprintf('http://%s.%s', getenv('SEARCH_HASH'), getenv('SEARCH_URL'));
   } else {
-    $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = "http://elasticsearch:9200";
+    $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = "http://opensearch:9200";
   }
 
   if (getenv('SEARCH_INDEX')) {
