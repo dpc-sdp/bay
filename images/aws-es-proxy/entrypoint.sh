@@ -4,9 +4,11 @@
 # using the aws-es-proxy tool. It performs the following steps:
 #   1. Validates that required environment variables (BAY_OPENSEARCH_ENDPOINT and BAY_OPENSEARCH_ROLE)
 #      are set and not empty.
-#   2. Verifies that valid AWS credentials are present. If credentials are invalid or missing, the
+#   2. If BAY_OPENSEARCH_ENDPOINT is a custom domain, rewrites to the AWS
+#      endpoint to ensure sigv4 request signing works.
+#   3. Verifies that valid AWS credentials are present. If credentials are invalid or missing, the
 #      script exits with an error.
-#   3. Starts the aws-es-proxy service.
+#   4. Starts the aws-es-proxy service.
 #
 # The following environment variables can be used to configure the behavior of this script:
 #   BAY_OPENSEARCH_ENDPOINT:      The AWS opensearch domain endpoint.
@@ -43,6 +45,11 @@ if [ "${BAY_OPENSEARCH_PROXY_VERBOSE:-false}" = "true" ]; then
   AWS_ES_PROXY_VERBOSE_FLAG="-verbose"
 fi
 
+if ! [[ "$BAY_OPENSEARCH_ENDPOINT" == *amazonaws.com* ]]; then
+  echo "endpoint appears to be a custom domain - adjusting to aws endpoint"
+  BAY_OPENSEARCH_ENDPOINT=$(uri-rewriter hostname-cname "${BAY_OPENSEARCH_ENDPOINT}")
+  echo " - updated endpoint to ${BAY_OPENSEARCH_ENDPOINT}"
+fi
 
 # Ensure AWS credentials exist and are valid
 AWS_PAGER="" aws sts get-caller-identity || (echo "Error: AWS credentials invalid" && exit 1)
