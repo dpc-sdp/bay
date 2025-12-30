@@ -57,6 +57,7 @@ jobs:
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.images }}
+          context: ${{ github.event.issue.pull_request && 'workflow' || 'git' }}
           tags: |
             # PR images (not merged): pr-<num>
             type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
@@ -71,7 +72,8 @@ jobs:
             type=raw,value=6.x,enable=${{ github.ref == 'refs/heads/6.x' || github.event.pull_request.base.ref == '6.x' }}
             type=raw,value=7.x,enable=${{ github.ref == 'refs/heads/7.x' || github.event.pull_request.base.ref == '7.x' }}
             # Always add an immutable sha tag
-            type=raw,value=sha-${{ github.sha }}
+            type=raw,value=sha-${{ github.event.issue.pull_request && 'manual' || github.sha }},enable=false
+            type=raw,value=sha-${{ github.event.pull_request.head.sha || github.sha }},enable=${{ github.event_name == 'pull_request' || github.event.issue.pull_request != null }}
           labels: |
             maintainer=Digital Victoria
             repository=${{ github.repositoryUrl }}
