@@ -75,9 +75,9 @@ jobs:
             type=raw,value=sha-${{ github.event.issue.pull_request && 'manual' || github.sha }},enable=false
             type=raw,value=sha-${{ github.event.pull_request.head.sha || github.sha }},enable=${{ github.event_name == 'pull_request' || github.event.issue.pull_request != null }}
           labels: |
-            maintainer=Digital Victoria
+            maintainer=Victorian Department of Government Services
             repository=${{ github.repositoryUrl }}
-            org.opencontainers.image.authors=Digital Victoria
+            org.opencontainers.image.authors=Victorian Department of Government Services
             org.opencontainers.image.source=https://github.com/${{ github.repository }}/tree/${{ (contains(fromJson('["opened","synchronize"]'), github.event.action)) && github.head_ref || github.event.action == 'closed' && github.base_ref || github.ref_name }}/images/${{ matrix.images }}/Dockerfile
             org.opencontainers.image.title=${{ matrix.images }}
             org.opencontainers.image.description=${{ matrix.images }} image for Bay container platform
