@@ -16,15 +16,6 @@ on:
 env:
   REGISTRY: ghcr.io
 jobs:
-  debug:
-    if: (github.event.issue.pull_request && contains(github.event.comment.body, '/debug'))
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get PR branch
-        id: pr-branch
-        uses: xt0rted/pull-request-comment-branch@v3
-      - name: Echo PR Base Branch
-        run: echo "The base branch for this PR is ${{ toJson(steps.pr-branch.outputs) }}"
   buildx:
     if: |
       github.event.pull_request.merged == true || 
