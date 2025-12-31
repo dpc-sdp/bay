@@ -27,6 +27,11 @@ jobs:
       matrix:
         images: ${{ fromJson(vars.IMAGES) }}
     steps:
+      - name: Get PR branch
+        if: github.event.issue.pull_request
+        id: pr-branch
+        uses: xt0rted/pull-request-comment-branch@v3
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -63,17 +68,16 @@ jobs:
             type=ref,event=pr,enable=${{ github.event.pull_request.merged == false }}
             # Tag with the PR base branch name on merge
             type=raw,value=${{ github.event.pull_request.base.ref }},enable=${{ github.event.pull_request.merged == true }}
-            # Manual/scheduled runs tag by branch ref (for whichever release branch the run targets)
+            # Manual/scheduled runs tag by branch ref
             type=ref,event=branch,enable=${{ contains(fromJson('["schedule", "workflow_dispatch"]'), github.event_name) }}
             # Comment-triggered builds: pr-<num>
-            type=raw,event=default,value=pr-${{ github.event.issue.number }},enable=${{ github.event.issue.pull_request != null }}
-            # Supported release branches
-            type=raw,value=5.x,enable=${{ github.ref == 'refs/heads/5.x' || github.event.pull_request.base.ref == '5.x' }}
-            type=raw,value=6.x,enable=${{ github.ref == 'refs/heads/6.x' || github.event.pull_request.base.ref == '6.x' }}
-            type=raw,value=7.x,enable=${{ github.ref == 'refs/heads/7.x' || github.event.pull_request.base.ref == '7.x' }}
+            type=raw,value=pr-${{ github.event.issue.number }},enable=${{ github.event.issue.pull_request != null }}
+            # Supported release branches - use the fetched branch name for comments
+            type=raw,value=5.x,enable=${{ github.ref_name == '5.x' || github.event.pull_request.base.ref == '5.x' || steps.pr-branch.outputs.base_ref == '5.x' }}
+            type=raw,value=6.x,enable=${{ github.ref_name == '6.x' || github.event.pull_request.base.ref == '6.x' || steps.pr-branch.outputs.base_ref == '6.x' }}
+            type=raw,value=7.x,enable=${{ github.ref_name == '7.x' || github.event.pull_request.base.ref == '7.x' || steps.pr-branch.outputs.base_ref == '7.x' }}
             # Always add an immutable sha tag
-            type=raw,value=sha-${{ github.event.issue.pull_request && 'manual' || github.sha }},enable=false
-            type=raw,value=sha-${{ github.event.pull_request.head.sha || github.sha }},enable=${{ github.event_name == 'pull_request' || github.event.issue.pull_request != null }}
+            type=raw,value=sha-${{ github.event.pull_request.head.sha || steps.pr-branch.outputs.head_sha || github.sha }}
           labels: |
             maintainer=Victorian Department of Government Services
             repository=${{ github.repositoryUrl }}
