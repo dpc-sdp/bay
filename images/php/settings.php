@@ -436,5 +436,3 @@ if (file_exists($deployment_metadata_path)) {
     $config['environment_indicator.indicator']['name'] = "Deployed: $label";
   }
 }
-
-// Test comment SDPPE-91
