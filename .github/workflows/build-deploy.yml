@@ -73,9 +73,9 @@ jobs:
             # Comment-triggered builds: pr-<num>
             type=raw,value=pr-${{ github.event.issue.number }},enable=${{ github.event.issue.pull_request != null }}
             # Supported release branches - use the fetched branch name for comments
-            type=raw,value=5.x,enable=${{ github.ref_name == '5.x' || github.event.pull_request.base.ref == '5.x' || steps.pr-branch.outputs.base_ref == '5.x' }}
-            type=raw,value=6.x,enable=${{ github.ref_name == '6.x' || github.event.pull_request.base.ref == '6.x' || steps.pr-branch.outputs.base_ref == '6.x' }}
-            type=raw,value=7.x,enable=${{ github.ref_name == '7.x' || github.event.pull_request.base.ref == '7.x' || steps.pr-branch.outputs.base_ref == '7.x' }}
+            type=raw,value=5.x,enable=${{ github.ref_name == '5.x' || github.event.pull_request.base.ref == '5.x' || ! steps.pr-branch.outputs.head_ref }}
+            type=raw,value=6.x,enable=${{ github.ref_name == '6.x' || github.event.pull_request.base.ref == '6.x' || ! steps.pr-branch.outputs.head_ref }}
+            type=raw,value=7.x,enable=${{ github.ref_name == '7.x' || github.event.pull_request.base.ref == '7.x' || ! steps.pr-branch.outputs.head_ref }}
             # Always add an immutable sha tag
             type=raw,value=sha-${{ github.event.pull_request.head.sha || steps.pr-branch.outputs.head_sha || github.sha }}
           labels: |
