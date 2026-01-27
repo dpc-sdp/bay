@@ -27,6 +27,7 @@ RUN apk add --update --no-cache \
     git \
     github-cli \
     libffi-dev \
+    make \
     musl-dev \
     ncurses \
     npm \
