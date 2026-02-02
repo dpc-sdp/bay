@@ -35,6 +35,7 @@ $connection_info = [
   'host' => getenv('MARIADB_HOST') ?: 'mariadb',
   'port' => 3306,
   'prefix' => '',
+  'collation' => 'utf8mb4_general_ci',
 ];
 
 $databases['default']['default'] = $connection_info;
