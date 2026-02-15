@@ -35,6 +35,7 @@ $connection_info = [
   'host' => getenv('MARIADB_HOST') ?: 'mariadb',
   'port' => 3306,
   'prefix' => '',
+  'collation' => 'utf8mb4_general_ci',
 ];
 
 $databases['default']['default'] = $connection_info;
@@ -355,16 +356,16 @@ if ($opensearch_profile == 'sdp-elastic') {
 
   // Default index prefix looks like "${PROJECT}__${ENVIRONMENT}__". This can be overridden with BAY_OPENSEARCH_PREFIX.
   $environment = getenv('LAGOON_ENVIRONMENT') ?: 'default';
-  $index_prefix = getenv('BAY_OPENSEARCH_PREFIX') ?: sprintf('%s__%s', getenv('LAGOON_PROJECT'), $environment);
+  $index_prefix = getenv('BAY_OPENSEARCH_PREFIX') ?: sprintf('%s__%s__', getenv('LAGOON_PROJECT'), $environment);
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['url'] = $endpoint;
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['use_authentication'] = FALSE;
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['rewrite_index'] = 1;
   $config['elasticsearch_connector.cluster.elasticsearch_bay']['options']['rewrite']['index'] = [
-    'prefix' => sprintf('%s__%s_', $index_prefix, "sapi"),
+    'prefix' => sprintf('%s%s_', $index_prefix, "sapi"),
     'suffix' => '',
   ];
   $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['url'] = $endpoint;
-  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['prefix'] = sprintf('%s__sdp_data_pipelines_', $index_prefix);
+  $config['data_pipelines.dataset_destination.sdp_elasticsearch']['destinationSettings']['prefix'] = sprintf('%ssdp_data_pipelines_', $index_prefix);
 }
 
 
