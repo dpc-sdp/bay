@@ -122,9 +122,9 @@ if (getenv('ENABLE_REDIS') && !\Drupal\Core\Installer\InstallerKernel::installat
   $settings['redis.connection']['read_timeout'] = $redis_timeout;
   $settings['redis.connection']['timeout'] = $redis_timeout;
   $settings['cache']['default'] = 'cache.backend.redis';
-  $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
-  $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
-  $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+  $settings['cache']['bins']['bootstrap'] = 'cache.backend.redis';
+  $settings['cache']['bins']['discovery'] = 'cache.backend.redis';
+  $settings['cache']['bins']['config'] = 'cache.backend.redis';
 
   $settings['cache_prefix']['default'] = getenv('REDIS_CACHE_PREFIX') ?: getenv('LAGOON_PROJECT') . '_' . getenv('LAGOON_GIT_SAFE_BRANCH');
 
