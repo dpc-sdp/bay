@@ -6,3 +6,4 @@ max_connections = 5461
 max_heap_table_size = 16M
 table_open_cache = 20000
 tmp_table_size = 16M
+collation-server=utf8mb4_general_ci
