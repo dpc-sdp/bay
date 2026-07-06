@@ -46,6 +46,13 @@ target "mariadb" {
 
   platforms     = ["linux/amd64", "linux/arm64"]
 }
+target "mysql" {
+  inherits = ["docker-metadata-action"]
+  context       = "${CONTEXT}/mysql"
+  dockerfile    = "Dockerfile"
+
+  platforms     = ["linux/amd64", "linux/arm64"]
+}
 target "nginx" {
   inherits = ["docker-metadata-action"]
   context       = "${CONTEXT}/nginx"
