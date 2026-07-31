@@ -1,5 +1,6 @@
 FROM hashicorp/terraform:latest AS terraform
 FROM ghcr.io/dpc-sdp/sumocli:v0.11.2 AS sumocli
+FROM composer:2 AS composer
 FROM php:8.3-cli-alpine
 ARG AHOY_VERSION=2.4.0
 ARG GOJQ_VERSION=0.12.17
@@ -21,7 +22,6 @@ RUN apk add --update --no-cache \
     aws-cli \
     bash \
     cargo \
-    composer \
     docker \
     docker-compose \
     git \
@@ -38,6 +38,10 @@ RUN apk add --update --no-cache \
     python3 \
     python3-dev
 
+# Install Composer from the official Composer image so it uses env php
+# and resolves to the same binary as `which php`.
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+
 ## Install required PHP extensions for Drupal and python packages.
 RUN apk add --no-cache \
     py3-flake8 \
@@ -52,7 +56,11 @@ RUN apk add --no-cache \
     zlib-dev \
     && docker-php-ext-install soap \
     && docker-php-ext-configure gd --enable-gd --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) gd \
+    && apk add --no-cache --virtual .pecl-build-deps $PHPIZE_DEPS \
+    && pecl install igbinary \
+    && docker-php-ext-enable igbinary \
+    && apk del .pecl-build-deps
 
 # Install Lagoon CLI.
 RUN curl -L "https://github.com/uselagoon/lagoon-cli/releases/download/v${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')" -o /usr/local/bin/lagoon && \
