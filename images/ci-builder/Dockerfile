@@ -1,5 +1,6 @@
 FROM hashicorp/terraform:latest AS terraform
 FROM ghcr.io/dpc-sdp/sumocli:v0.11.2 AS sumocli
+FROM composer:2 AS composer
 FROM php:8.3-cli-alpine
 ARG AHOY_VERSION=2.4.0
 ARG GOJQ_VERSION=0.12.17
@@ -21,7 +22,6 @@ RUN apk add --update --no-cache \
     aws-cli \
     bash \
     cargo \
-    composer \
     docker \
     docker-compose \
     git \
@@ -37,6 +37,10 @@ RUN apk add --update --no-cache \
     py3-pip \
     python3 \
     python3-dev
+
+# Install Composer from the official Composer image so it uses env php
+# and resolves to the same binary as `which php`.
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
 ## Install required PHP extensions for Drupal and python packages.
 RUN apk add --no-cache \
