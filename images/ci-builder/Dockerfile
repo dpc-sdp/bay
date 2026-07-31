@@ -52,7 +52,11 @@ RUN apk add --no-cache \
     zlib-dev \
     && docker-php-ext-install soap \
     && docker-php-ext-configure gd --enable-gd --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) gd \
+    && apk add --no-cache --virtual .pecl-build-deps $PHPIZE_DEPS \
+    && pecl install igbinary \
+    && docker-php-ext-enable igbinary \
+    && apk del .pecl-build-deps
 
 # Install Lagoon CLI.
 RUN curl -L "https://github.com/uselagoon/lagoon-cli/releases/download/v${LAGOON_CLI_VERSION}/lagoon-cli-${LAGOON_CLI_VERSION}-$(echo ${TARGETPLATFORM:-linux/amd64} | tr '/' '-')" -o /usr/local/bin/lagoon && \
