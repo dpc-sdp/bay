@@ -1,5 +1,5 @@
 FROM uselagoon/node-20:latest
-ARG BAY_CLI_VERSION=v1.4.1
+ARG BAY_CLI_VERSION=v1.4.11
 
 
 RUN apk --update add curl git findutils openssh-client && \
@@ -15,5 +15,5 @@ RUN mv /tmp/bay /bin/bay
 COPY entrypoints/ /lagoon/entrypoints
 
 # Prevents installation of large binaries only used for development.
-ENV CYPRESS_INSTALL_BINARY 0
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
+ENV CYPRESS_INSTALL_BINARY=0
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1

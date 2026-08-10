@@ -2,10 +2,10 @@ FROM hashicorp/terraform:latest AS terraform
 FROM ghcr.io/dpc-sdp/sumocli:v0.11.2 AS sumocli
 FROM composer:2 AS composer
 FROM php:8.3-cli-alpine
-ARG AHOY_VERSION=2.4.0
-ARG GOJQ_VERSION=0.12.17
-ARG LAGOON_CLI_VERSION=0.32.0
-ARG SHIPSHAPE_VERSION=1.0.0-alpha.1.5.1
+ARG AHOY_VERSION=2.5.0
+ARG GOJQ_VERSION=0.12.19
+ARG LAGOON_CLI_VERSION=0.33.0
+ARG SHIPSHAPE_VERSION=1.0.0-alpha.1.5.2
 
 # Ensure temp files dont end up in image.
 VOLUME /tmp
