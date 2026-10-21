@@ -133,6 +133,44 @@ jobs:
             echo "::endgroup::"
           done
 
+      # Guard against the rebuild silently dropping anything Lagoon layers on
+      # top of the official php image (extensions, ini/fpm config, entrypoints,
+      # tools, OS packages). Package versions are ignored: Lagoon does not pin
+      # apk packages, so a rebuild picks up newer Alpine security updates.
+      - name: Compare with upstream Lagoon release
+        env:
+          PHP_VERSION: ${{ inputs.php_version }}
+          MINOR: ${{ steps.vars.outputs.minor }}
+          LAGOON_REF: ${{ inputs.lagoon_ref }}
+        run: |
+          set -euo pipefail
+          inventory() {
+            docker image inspect "$1" --format '{{json .Config.Entrypoint}} {{json .Config.Cmd}} {{.Config.WorkingDir}} {{json .Config.ExposedPorts}}'
+            docker image inspect "$1" --format '{{range .Config.Env}}{{println .}}{{end}}' | grep -vE '^(PHP_VERSION|PHP_SHA256|PHP_URL|PHP_ASC_URL)=' | sort
+            # shellcheck disable=SC2016 # expanded inside the container
+            docker run --rm --entrypoint sh "$1" -c '
+              php -m
+              ls /usr/local/etc/php/conf.d /usr/local/etc/php-fpm.d "$(php -r "echo ini_get(\"extension_dir\");")"
+              ls /usr/local/bin /usr/local/sbin /bin /sbin
+              find /lagoon /home -maxdepth 3 -not -path "/home/.pie/*" | sort
+              apk info | sort
+            '
+          }
+          for variant in fpm cli-drupal; do
+            upstream="docker.io/uselagoon/php-${MINOR}-${variant}:${LAGOON_REF}"
+            rebuilt="${PUSH_REPO}/php-${MINOR}-${variant}:${PHP_VERSION}"
+            if ! docker pull -q --platform linux/amd64 "$upstream"; then
+              echo "::warning::$upstream not published (lagoon_ref is not a release tag?), skipping comparison"
+              continue
+            fi
+            echo "::group::$upstream vs $rebuilt"
+            if ! diff <(inventory "$upstream") <(inventory "$rebuilt"); then
+              echo "::error::$rebuilt differs from $upstream beyond the PHP version"
+              exit 1
+            fi
+            echo "::endgroup::"
+          done
+
       - name: Build and push all platforms
         working-directory: lagoon-images
         env:
