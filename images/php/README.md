@@ -43,12 +43,15 @@ services:
 
 ## Emergency PHP security releases
 
-These images build on the upstream Lagoon PHP images (`uselagoon/php-<minor>-fpm` and `uselagoon/php-<minor>-cli-drupal`). When a PHP security release ships before Lagoon publishes a new release, rebuild the Lagoon images ourselves:
+These images build on `uselagoon/php-8.3-fpm:latest` and `uselagoon/php-8.3-cli-drupal:latest`, which only move when Lagoon cuts a release. To ship a PHP security release sooner:
 
 1. Wait for the official `php:<version>-fpm-alpine<x.y>` tag to appear on Docker Hub.
-2. Run the `build-lagoon-php` workflow with `php_version` (e.g. `8.3.36`) and `lagoon_ref` (the current Lagoon release tag). It bumps the php base image in `uselagoon/lagoon-images`, smoke tests the result and publishes `ghcr.io/dpc-sdp/bay/lagoon/php-<minor>-{fpm,cli-drupal}:<version>`.
-3. In a `build/` branch, set the `LAGOON_BASE_REPO` and `LAGOON_BASE_TAG` defaults in `gh-actions-bake.hcl` to the published repo and version, verify the PR images, then merge.
-4. Once Lagoon releases a version containing the fix, revert the defaults to `uselagoon` / `latest`.
+2. Set the `PHP_PATCH_VERSION` repository variable (Settings → Secrets and variables → Actions → Variables) to the new version, e.g. `8.3.36`. Optionally set `LAGOON_IMAGES_REF` to pin a `uselagoon/lagoon-images` tag (defaults to the latest release).
+3. Run the `build-deploy-bay-images` workflow on `6.x` (or wait for the next merge or scheduled build).
+
+While the variable is set, `php-cli` and `php-fpm` builds rebuild the Lagoon PHP image chain from source with the php base bumped (see `lagoon-php-patch.hcl`) and push to the usual tags. Nothing else is published. Before pushing, an amd64 build is checked to run the new PHP version and to match the current `6.x` image in everything else.
+
+If the Lagoon release already ships that version or newer, the override switches itself off. Unset the variable once Lagoon has released the fix.
 
 
 - 9000 - PHP FPM port

@@ -1,10 +1,6 @@
 ARG PHP_VERSION=8.3
-# Override to build from self-built Lagoon PHP images when an upstream PHP
-# security release has not yet been shipped by Lagoon. See README.md.
-ARG LAGOON_BASE_REPO=uselagoon
-ARG LAGOON_BASE_TAG=latest
 FROM ghcr.io/dpc-sdp/bay/php-fpm-exporter:6.x AS php-fpm-exporter
-FROM ${LAGOON_BASE_REPO}/php-${PHP_VERSION}-fpm:${LAGOON_BASE_TAG}
+FROM uselagoon/php-${PHP_VERSION}-fpm:latest
 
 ARG BAY_CLI_VERSION=v1.4.1
 

@@ -1,11 +1,7 @@
 ARG PHP_VERSION=8.3
-# Override to build from self-built Lagoon PHP images when an upstream PHP
-# security release has not yet been shipped by Lagoon. See README.md.
-ARG LAGOON_BASE_REPO=uselagoon
-ARG LAGOON_BASE_TAG=latest
 FROM php:${PHP_VERSION}-cli-alpine AS php-cli
 FROM ghcr.io/skpr/mtk:v2.1.1 AS mtk
-FROM ${LAGOON_BASE_REPO}/php-${PHP_VERSION}-cli-drupal:${LAGOON_BASE_TAG}
+FROM uselagoon/php-${PHP_VERSION}-cli-drupal:latest
 
 # Remove unnecessary packages that increase our attack surface area.
 RUN apk del postgresql-client

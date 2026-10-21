@@ -103,13 +103,43 @@ jobs:
           path: ./images/awx-ee/context
           retention-days: 1
 
+      # Emergency PHP patching: when the PHP_PATCH_VERSION repository variable
+      # is set (e.g. 8.3.36), php-cli / php-fpm are built on the Lagoon PHP
+      # image chain rebuilt from uselagoon/lagoon-images with that php base,
+      # instead of uselagoon/*:latest. Unset it once Lagoon releases the fix.
+      # See lagoon-php-patch.hcl.
+      - name: Prepare PHP patch overlay
+        id: php-patch
+        if: contains(fromJson('["php-cli", "php-fpm"]'), matrix.images) && vars.PHP_PATCH_VERSION != ''
+        env:
+          PHP_PATCH_VERSION: ${{ vars.PHP_PATCH_VERSION }}
+          LAGOON_IMAGES_REF: ${{ vars.LAGOON_IMAGES_REF }}
+          GH_TOKEN: ${{ github.token }}
+        run: ./.github/scripts/lagoon-php-patch.sh prepare
+
+      - name: Verify PHP patch build
+        if: steps.php-patch.outputs.enabled == 'true'
+        env:
+          PHP_PATCH_VERSION: ${{ vars.PHP_PATCH_VERSION }}
+          LAGOON_VERSION: ${{ steps.php-patch.outputs.lagoon_ref }}
+          IMAGE: ${{ matrix.images }}
+        run: |
+          docker buildx bake -f gh-actions-bake.hcl -f lagoon-images/docker-bake.hcl -f lagoon-php-patch.hcl \
+            --set "*.platform=linux/amd64" --set "${IMAGE}.tags=bay-verify/${IMAGE}:candidate" --load "$IMAGE"
+          ./.github/scripts/lagoon-php-patch.sh verify "${REGISTRY}/${GITHUB_REPOSITORY}/${IMAGE}:6.x" "bay-verify/${IMAGE}:candidate"
+
       - name: Build and push the images
         uses: docker/bake-action@v5
+        env:
+          PHP_PATCH_VERSION: ${{ vars.PHP_PATCH_VERSION }}
+          LAGOON_VERSION: ${{ steps.php-patch.outputs.lagoon_ref }}
         with:
           push: true
           source: .
           files: |
             ./gh-actions-bake.hcl
+            ${{ steps.php-patch.outputs.enabled == 'true' && './lagoon-images/docker-bake.hcl' || '' }}
+            ${{ steps.php-patch.outputs.enabled == 'true' && './lagoon-php-patch.hcl' || '' }}
             ${{ steps.meta.outputs.bake-file }}
           # Target the default group - probably unnecessary.
           targets: ${{ matrix.images }}
