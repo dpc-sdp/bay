@@ -2,6 +2,17 @@ variable "CONTEXT" {
   default = "images"
 }
 
+# Base image for the php-cli and php-fpm targets. Defaults to the upstream
+# Lagoon release. Point at images published by the build-lagoon-php workflow
+# (e.g. ghcr.io/dpc-sdp/bay/lagoon + 8.3.35) to ship a PHP security release
+# before Lagoon does.
+variable "LAGOON_BASE_REPO" {
+  default = "uselagoon"
+}
+variable "LAGOON_BASE_TAG" {
+  default = "latest"
+}
+
 target "docker-metadata-action" {}
 
 target "ci-builder" {
@@ -79,6 +90,11 @@ target "php-cli" {
 
   platforms     = ["linux/amd64", "linux/arm64"]
 
+  args = {
+    LAGOON_BASE_REPO = "${LAGOON_BASE_REPO}"
+    LAGOON_BASE_TAG  = "${LAGOON_BASE_TAG}"
+  }
+
   labels = {
     "org.opencontainers.image.description" = "PHP Drupal CLI image for Bay container platform"
     "org.opencontainers.image.source" = "https://github.com/dpc-sdp/bay/blob/6.x/images/bay-php/Dockerfile.cli"
@@ -90,6 +106,11 @@ target "php-fpm" {
   dockerfile    = "Dockerfile.fpm"
 
   platforms     = ["linux/amd64", "linux/arm64"]
+
+  args = {
+    LAGOON_BASE_REPO = "${LAGOON_BASE_REPO}"
+    LAGOON_BASE_TAG  = "${LAGOON_BASE_TAG}"
+  }
 
   labels = {
     "org.opencontainers.image.description" = "PHP-FPM image for Bay container platform"

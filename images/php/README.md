@@ -41,7 +41,15 @@ services:
 | `PHP_CLI_MEMORY_LIMIT` | `1024M`           | Default memory_limit for CLI container.                                                          |
 | `PHP_FPM_EXPORTER_ENABLED` | `false`           | Toggle for php-fpm metrics exporter.                                                             |
 
-## Ports
+## Emergency PHP security releases
+
+These images build on the upstream Lagoon PHP images (`uselagoon/php-<minor>-fpm` and `uselagoon/php-<minor>-cli-drupal`). When a PHP security release ships before Lagoon publishes a new release, rebuild the Lagoon images ourselves:
+
+1. Wait for the official `php:<version>-fpm-alpine<x.y>` tag to appear on Docker Hub.
+2. Run the `build-lagoon-php` workflow with `php_version` (e.g. `8.3.36`) and `lagoon_ref` (the current Lagoon release tag). It bumps the php base image in `uselagoon/lagoon-images`, smoke tests the result and publishes `ghcr.io/dpc-sdp/bay/lagoon/php-<minor>-{fpm,cli-drupal}:<version>`.
+3. In a `build/` branch, set the `LAGOON_BASE_REPO` and `LAGOON_BASE_TAG` defaults in `gh-actions-bake.hcl` to the published repo and version, verify the PR images, then merge.
+4. Once Lagoon releases a version containing the fix, revert the defaults to `uselagoon` / `latest`.
+
 
 - 9000 - PHP FPM port
 - 9253 - php-fpm_exporter metrics endpoint
