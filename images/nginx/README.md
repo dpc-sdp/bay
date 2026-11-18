@@ -4,6 +4,7 @@ Provides a nginx image optimised for the Bay container platform with the followi
 
 - Drupal compatible server block
 - Optimised health checks for section.io
+- Drupal installer (`/install.php`, `/core/install.php`) blocked with a 404
 
 ## Usage
 
