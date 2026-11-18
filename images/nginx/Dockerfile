@@ -11,6 +11,7 @@ COPY content /etc/nginx/conf.d/drupal/content
 
 # Add server append directives.
 COPY append/server_append-healthz.conf /etc/nginx/conf.d/drupal/server_append-healthz.conf
+COPY append/server_prepend-block-install.conf /etc/nginx/conf.d/drupal/server_prepend-block-install.conf
 COPY append/http-log-format.conf /etc/nginx/conf.d/http-log-format.conf
 
 RUN fix-permissions /etc/nginx \
